@@ -1,9 +1,9 @@
 package Xanadu.Repositories;
 
-import Xanadu.Entities.User;
+import Xanadu.Entities.Discount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DiscountRepository extends JpaRepository<Long, User> {
+public interface DiscountRepository extends JpaRepository<Discount,Long> {
 }

@@ -1,9 +1,9 @@
 package Xanadu.Repositories;
 
-import Xanadu.Entities.User;
+import Xanadu.Entities.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CollectionRepository extends JpaRepository<Long, User> {
+public interface CollectionRepository extends JpaRepository<Collection,Long> {
 }

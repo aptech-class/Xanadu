@@ -1,9 +1,9 @@
 package Xanadu.Repositories;
 
-import Xanadu.Entities.User;
+import Xanadu.Entities.ProductType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductTypeRepository extends JpaRepository<Long, User> {
+public interface ProductTypeRepository extends JpaRepository<ProductType,Long> {
 }
