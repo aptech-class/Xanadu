@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
+@Entity(name = "option_table")
 public class Option extends EntityBasic{
 
     @Column(nullable = false)

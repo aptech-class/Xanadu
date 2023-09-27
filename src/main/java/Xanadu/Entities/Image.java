@@ -19,6 +19,7 @@ public class Image extends  EntityBasic{
 
     private String alt;
     private String height;
+    @Column(name = "with_size")
     private String with;
     private Integer position;
 
