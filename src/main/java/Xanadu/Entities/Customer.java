@@ -10,9 +10,10 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Table(indexes = {@Index(columnList = "username")})
 public class Customer extends EntityBasic {
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String username;
 
     @Column(nullable = false)

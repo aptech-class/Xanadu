@@ -3,21 +3,24 @@ package Xanadu.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Table(indexes = {@Index(columnList = "title")})
 public class Category extends EntityBasic{
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String title;
 
     @Column(nullable = false)
     private Boolean status;
 
-    @Column(nullable = false,length = 10000)
+    @Column(length = 10000)
     @Lob
     private String description;
 

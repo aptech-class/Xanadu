@@ -1,9 +1,6 @@
 package Xanadu.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,6 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Table(indexes = {@Index(columnList = "value",unique = true)})
 public class CustomerTag extends EntityBasic{
 
     @Lob

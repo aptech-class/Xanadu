@@ -1,5 +1,6 @@
 package Xanadu.Entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ProductType extends EntityBasic{
-
+    @Column(unique = true)
     private String title;
 
     @OneToMany(mappedBy = "productType")

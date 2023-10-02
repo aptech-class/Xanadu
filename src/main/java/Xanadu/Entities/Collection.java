@@ -1,9 +1,6 @@
 package Xanadu.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,17 +9,20 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Collection extends  EntityBasic{
+@Table(indexes = {@Index(columnList = "handle")})
+public class Collection extends EntityBasic {
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String handle;
 
-    @Column(nullable = false,length = 10000)
+    @Column(length = 10000)
     @Lob
     private String description;
+
+    private Boolean status = true;
 
     @ManyToMany(mappedBy = "collections")
     private List<Product> products;

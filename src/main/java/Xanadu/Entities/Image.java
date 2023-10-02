@@ -14,13 +14,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Image extends  EntityBasic{
 
-    @Column(nullable = false,length = 1000)
+    @Column(nullable = false,length = 1000,unique = true)
     private String src;
 
     private String alt;
     private String height;
-    @Column(name = "with_size")
-    private String with;
+    private String width;
     private Integer position;
 
     @ManyToOne

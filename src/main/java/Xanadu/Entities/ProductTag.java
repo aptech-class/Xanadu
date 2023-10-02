@@ -14,12 +14,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ProductTag extends  EntityBasic{
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String value;
 
-    @Column(nullable = false,length = 10000)
+    @Column(length = 10000)
     @Lob
-    private String descriptions;
+    private String descriptions="";
 
     @ManyToMany(mappedBy = "productTags")
     private List<Product> products;

@@ -38,4 +38,7 @@ public class Variant extends  EntityBasic{
 
     @OneToMany(mappedBy = "variant")
     private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "variant")
+    private List<OrderItem> orderItems;
 }

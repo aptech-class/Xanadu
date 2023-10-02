@@ -1,8 +1,6 @@
 package Xanadu.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Table(indexes = {@Index(columnList = "name",unique = true)})
 public class Vendor extends EntityBasic{
 
     @Column(nullable = false)

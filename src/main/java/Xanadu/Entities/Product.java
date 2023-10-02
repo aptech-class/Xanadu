@@ -1,6 +1,10 @@
 package Xanadu.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,15 +13,23 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Product extends EntityBasic{
+@Table(indexes = {@Index(columnList = "handle", unique = true)})
+public class Product extends EntityBasic {
 
     @Column(nullable = false, length = 1000)
     private String title;
     private Integer rating = 5;
     private Boolean published = false;
 
+    @Column(nullable = false,unique = true)
+    private String handle;
+
+    @Lob
+    @Column(length = 10000)
+    private String bodyHtml = "";
+
     @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name="product_id"),inverseJoinColumns = @JoinColumn(name = "product_tag_id"))
+    @JoinTable(joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "product_tag_id"))
     private List<ProductTag> productTags;
 
     @OneToMany(mappedBy = "product")
@@ -27,8 +39,8 @@ public class Product extends EntityBasic{
     private List<Review> reviews;
 
     @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "product_id"),inverseJoinColumns = @JoinColumn(name = "collection_id"))
-    private  List<Collection> collections;
+    @JoinTable(joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "collection_id"))
+    private List<Collection> collections;
 
     @ManyToOne
     private Vendor vendor;
