@@ -123,7 +123,8 @@ public class ProductCrawler {
                     variant.setTitle(variant_.getTitle());
                     variant.setInventory(100);
                     variant.setPrice(variant_.getPrice());
-                    variant.setPrePrice(variant_.getPrice() + new Random().nextFloat(10) + 10);
+                    float loi = Math.round(variant_.getPrice() * 0.3f * 100) / 100f;
+                    variant.setPrePrice(variant_.getPrice() - loi);
                     String sku = product.getTitle();
                     String option1 = variant_.getOption1();
                     String option2 = variant_.getOption2();
