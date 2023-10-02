@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductTagRepository extends JpaRepository<ProductTag,Long> {
+    ProductTag findByValue(String value);
 }
