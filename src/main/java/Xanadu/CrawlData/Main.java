@@ -4,6 +4,7 @@ import Xanadu.Entities.*;
 import Xanadu.Entities.Collection;
 import Xanadu.Services.*;
 
+import Xanadu.XanaduApplication;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -21,7 +23,13 @@ import java.util.*;
 
 @Slf4j
 @SpringBootApplication
-@ComponentScan(basePackages = {"Xanadu", "Xanadu/CrawlData"})
+@ComponentScan(
+        basePackages = {"Xanadu", "Xanadu/CrawlData"},
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.CUSTOM,
+                classes = XanaduApplication.class
+        )
+)
 @EnableJpaAuditing
 @EnableTransactionManagement
 public class Main implements ApplicationRunner {
@@ -62,6 +70,7 @@ public class Main implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws URISyntaxException, InterruptedException {
         crawling();
+        log.info("crawled.");
     }
 
     private void crawling() throws InterruptedException, URISyntaxException {
