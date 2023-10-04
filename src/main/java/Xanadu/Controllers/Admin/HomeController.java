@@ -18,7 +18,7 @@ public class HomeController {
         return "admin/index";
     }
 
-    @RequestMapping(value = {"/home", "/home/**", "", "'index", "index.html"})
+    @RequestMapping(value = {"/home", "/home/**", "/", "", "'index", "index.html"})
     public String redirectToHomePage() {
         return "redirect:/admin/home.html";
     }
