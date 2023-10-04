@@ -129,15 +129,26 @@ public class ProductCrawler {
                     String option1 = variant_.getOption1();
                     String option2 = variant_.getOption2();
                     String option3 = variant_.getOption3();
+                    List<OptionValue> optionValues = new ArrayList<>();
                     if (option1 != null) {
+                        OptionValue optionValue = new OptionValue();
+                        optionValue.setValue(option1);
+                        optionValues.add(optionValue);
                         sku = sku + "_" + optionsMap.get(option1) + ":" + option1;
                     }
                     if (option2 != null) {
+                        OptionValue optionValue = new OptionValue();
+                        optionValue.setValue(option2);
+                        optionValues.add(optionValue);
                         sku = sku + "_" + optionsMap.get(option2) + ":" + option2;
                     }
                     if (option3 != null) {
+                        OptionValue optionValue = new OptionValue();
+                        optionValue.setValue(option3);
+                        optionValues.add(optionValue);
                         sku = sku + "_" + optionsMap.get(option3) + ":" + option3;
                     }
+                    variant.setOptionValues(optionValues);
                     variant.setSku(sku);
                     variants.add(variant);
                 });

@@ -24,13 +24,8 @@ import java.util.*;
 @Slf4j
 @SpringBootApplication
 @ComponentScan(
-        basePackages = {"Xanadu", "Xanadu/CrawlData"},
-        excludeFilters = @ComponentScan.Filter(
-                type = FilterType.CUSTOM,
-                classes = XanaduApplication.class
-        )
+        basePackages = {"Xanadu", "Xanadu/CrawlData"}
 )
-@EnableJpaAuditing
 @EnableTransactionManagement
 public class Main implements ApplicationRunner {
     @Autowired
@@ -199,6 +194,13 @@ public class Main implements ApplicationRunner {
                     Image imageSaved = imageService.findBySrc(variant.getImage().getSrc());
                     variant.setImage(imageSaved);
                 }
+                List<OptionValue> optionValuesSaved = new ArrayList<>();
+                for (OptionValue optionValue : variant.getOptionValues()) {
+
+                    OptionValue  optionValueSaved = optionValueService.findByValueAndProduct(optionValue.getValue(),productSaved);
+                    optionValuesSaved.add(optionValueSaved);
+                }
+                variant.setOptionValues(optionValuesSaved);
                 Variant variantSaved = variantService.save(variant);
             }
         }
