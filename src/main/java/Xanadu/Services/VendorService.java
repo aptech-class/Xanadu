@@ -23,4 +23,8 @@ public class VendorService {
     public Vendor findByName(String name) {
         return vendorRepository.findByName(name);
     }
+
+    public List<Vendor> findAll() {
+        return vendorRepository.findAll();
+    }
 }

@@ -27,4 +27,8 @@ public class CollectionService {
         products.add(product);
         return collectionRepository.findByProductsIn(products);
     }
+
+    public List<Collection> findAll() {
+        return collectionRepository.findAll();
+    }
 }

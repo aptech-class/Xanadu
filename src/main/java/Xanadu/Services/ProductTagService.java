@@ -23,4 +23,8 @@ public class ProductTagService {
     public ProductTag findByValue(String value) {
         return productTagRepository.findByValue(value);
     }
+
+    public List<ProductTag> findAll() {
+        return productTagRepository.findAll();
+    }
 }
