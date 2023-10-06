@@ -12,6 +12,4 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findByHandle(String handle);
 
-    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.images")
-    Page<Product> findAllWithImages(Pageable pageable);
 }

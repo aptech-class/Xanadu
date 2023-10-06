@@ -22,22 +22,12 @@
         .imageFirst img{
             width:40%;
         }
-        .text-right{
-            text-align: right;
-        }
     </style>
     <nav layout:replace="admin/components/breadcrumb :: breadcrumb"></nav>
     <div class="row">
         <div class="">
             <div class="card mb-4">
-                <div class="row">
-                    <div class="col-6">
-                        <h5 class=" card-header ">Product</h5>
-                    </div>
-                    <div class="col-6 demo-inline-spacing text-right" >
-                        <a th:href="@{'/admin/products/edit/' + ${product.handle} + '.html'}" class="btn btn-warning">Edit</a>
-                    </div>
-                </div>
+                <h5 class="card-header text-center">Product</h5>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
@@ -46,7 +36,6 @@
                                 class="form-control"
                                 id="title"
                                 th:attr="value=${product.title}"
-                                disabled
                         />
                     </div>
                     <div class="mb-3">
@@ -66,18 +55,18 @@
                                 class="form-control"
                                 id="handle"
                                 th:attr="value=${product.handle}"
-                                disabled
                         />
                     </div>
                     <div class="mb-3">
                         <label for="vendor" class="form-label">Vendor</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                id="vendor"
-                                th:value="${product.vendor.name}"
-                                disabled
-                        />
+                        <select name="vendor.id" class="form-select" id="vendor" aria-label="Default select example">
+                            <option th:each="vendor : ${vendors}"
+                                    th:object="${vendor}"
+                                    th:attr="value=*{id}"
+                                    th:text="*{name}"
+                                    th:selected="${product.vendor.id == vendor.id}"
+                            ></option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label style="width:100%;" class="form-label">Collections</label>
@@ -85,7 +74,18 @@
                             <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 my-1 mr-1"
                                  th:each="collection : ${product.collections}">
                                 <span th:text="${collection.title}"></span>
-                                <input disabled type="hidden" name="collections[].id" th:attr="value=${collection.id}">
+                                <input type="hidden" name="collections[].id" th:attr="value=${collection.id}">
+                                <span class="px-1" role="button">&times;</span>
+                            </div>
+                            <div class="row ">
+                                <div class="col-10">
+                                    <input class="form-control " type="text" list="collections">
+                                    <datalist id="collections">
+                                        <option th:value="${collection.title}" th:each="collection : ${collections}">
+                                    </datalist>
+                                </div>
+                                <button type="button" class="btn col-2 btn-sm btn-outline-primary">Add to collection
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -95,12 +95,22 @@
                             <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 my-1 mr-1"
                                  th:each="productTag : ${product.productTags}">
                                 <span th:text="${productTag.value}"></span>
-                                <input disabled type="hidden" name="productTags[].id" th:attr="value=${productTag.id}">
+                                <input type="hidden" name="productTags[].id" th:attr="value=${productTag.id}">
+                                <span class="px-1" role="button">&times;</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <input class="form-control " type="text" list="productTags">
+                                    <datalist id="productTags">
+                                        <option th:value="${productTag.value}" th:each="productTag : ${productTags}">
+                                    </datalist>
+                                </div>
+                                <button type="button" class="btn col-2 btn-sm btn-outline-primary">Add Tag</button>
                             </div>
                         </div>
                     </div>
                     <div class="form-check form-switch mb-3">
-                        <input disabled th:checked="${product.published}" name="product.published"
+                        <input th:checked="${product.published}" name="product.published"
                                class="form-check-input" type="checkbox" id="publish">
                         <label class="form-check-label" for="publish">Published</label>
                     </div>
@@ -113,13 +123,19 @@
                                 <img th:src="${image.src}" src="" alt="">
                             </div>
                         </div>
+                        <input class="form-control " type="file" multiple>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bodyHtml" class="form-label">Body html</label>
+                        <textarea name="product.bodyHtml" th:text="${product.bodyHtml}" class="form-control"
+                                  id="bodyHtml" rows="6"></textarea>
                     </div>
                     <div class="pt-1 mp-3">
-                        <label class="form-label">Desctiption</label>
+                        <label for="bodyHtml" class="form-label">Preview body html</label>
                         <div class="px-3" th:utext="${product.bodyHtml}"></div>
                     </div>
                     <div class="mp-3">
-                        <label  class="form-label">Variants</label>
+                        <label for="bodyHtml" class="form-label">Variants</label>
                         <div class="accordion mt-3" id="accordionExample">
                             <div th:each="variant,stat : ${product.variants}" class="card accordion-item ">
                                 <h2 class="accordion-header" id="headingOne">
@@ -151,7 +167,6 @@
                                             <div class="col-md-10">
                                                 <input th:value="${variant.title}"
                                                        class="form-control-sm  form-control"
-                                                       disabled
                                                        type="text"
                                                        id="variantTitle">
                                             </div>
@@ -162,7 +177,6 @@
                                                 <div class="input-group inputGroupSm">
                                                     <input th:value="${variant.price}"
                                                            class="form-control-sm  form-control"
-                                                           disabled
                                                            type="text"
                                                            aria-label="Dollar amount (with dot and two decimal places)"
                                                            id="variantPrice">
@@ -178,7 +192,6 @@
                                                 <div class="input-group inputGroupSm">
                                                     <input th:value="${variant.prePrice}"
                                                            class="form-control-sm  form-control"
-                                                           disabled
                                                            aria-label="Dollar amount (with dot and two decimal places)"
                                                            type="text"
                                                            id="variantPrePrice">
@@ -193,7 +206,6 @@
                                                 <input th:value="${variant.inventory}"
                                                        class="form-control-sm  form-control"
                                                        type="text"
-                                                       disabled
                                                        id="variantInventory">
                                             </div>
                                         </div>
@@ -203,7 +215,6 @@
                                                 <input th:value="${variant.sku}"
                                                        class="form-control-sm  form-control"
                                                        type="text"
-                                                       disabled
                                                        id="variantSku"
                                                        readonly
                                                 >
@@ -242,15 +253,6 @@
                                      alt="collapse-image" height="125"
                                      class="me-4 mb-sm-0 mb-2">
                                 <span th:text="review.content"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mp-3">
-                        <div class="row">
-                            <div class="col-6">
-                            </div>
-                            <div class="col-6 demo-inline-spacing text-right" >
-                                <a th:href="@{'/admin/products/edit/' + ${product.handle} + '.html'}" class="btn btn-warning">Edit</a>
                             </div>
                         </div>
                     </div>

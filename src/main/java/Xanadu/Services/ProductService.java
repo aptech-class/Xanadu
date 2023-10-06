@@ -29,7 +29,9 @@ public class ProductService {
 
     public Page<Product> findAllWithImages(Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return productRepository.findAllWithImages(pageable);
+        Page<Product> products =  productRepository.findAll(pageable);
+        products.stream().parallel().forEach(product -> product.getImages());
+        return products;
     }
 
     public Product findByHandleFetchEagerAll(String handle) {
