@@ -6,11 +6,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class OptionValue extends  EntityBasic{
 

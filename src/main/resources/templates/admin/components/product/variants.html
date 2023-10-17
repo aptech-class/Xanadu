@@ -1,0 +1,157 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productVariants(variants, view)" class="mb-3 productVariants ">
+    <input type="hidden" th:value="${product.id}" th:name="id">
+    <label for="" class="form-label">Variants</label>
+    <div class="accordion mt-3" id="">
+        <div th:each="variant,stat : ${variants}" class="card accordion-item ">
+            <input type="hidden"
+                   th:value="${variant.id}"
+                   th:name="${'variants[' + stat.index + '].id'}"
+            >
+            <h2 class="accordion-header" id="headingOne">
+                <button
+                        type="button"
+                        class="accordion-button"
+                        data-bs-toggle="collapse"
+                        th:attr="data-bs-target=${'#variant' + stat.index},aria-controls=${'variant' + stat.index}"
+                        aria-expanded="true"
+                        th:text="${'Variant item ' + (stat.index + 1)}"
+                >
+                    Accordion Item
+                </button>
+            </h2>
+
+            <div
+                    th:id="${'variant' + stat.index}"
+                    class="accordion-collapse collapse px-3"
+                    data-bs-parent="#accordionExample"
+            >
+                <div class="accordion-body">
+                    <div class="mb-3  variantImage imageGroup">
+                        <div class="text-center imageFirst ">
+                            <img  class="mx-auto imagePrevView" th:src="${variant.image != null ? variant.image.src : ''}" alt="" src="">
+                            <input th:if="${view == 'edit'}" class="variantImageId" type="hidden"
+                                   th:value="${variant.image !=null ? variant.image.id : ''}"
+                                   th:name="${'variants['+ stat.index + '].image.id'}"
+                            >
+                        </div>
+
+                        <div class="row my-3">
+                            <label th:for="${'variantImage'+ stat.index}" class="col-md-2 small">Select image</label>
+                            <div th:if="${view == 'edit'}" id="imageList" class="imageList col-md-10">
+                                <div class=" px-2 boxImageItem" th:each="image,stat : ${product.images}">
+                                    <div class="imageEdit">
+                                        <img th:id="${'image'+image.id}" class="imageItem" role="button"
+                                             th:src="${image.src}" src="" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantTitle">
+                        <label th:for="${'variantTitle'+ stat.index}" class="col-md-2 small">Title</label>
+                        <div class="col-md-10">
+                            <input th:value="${variant.title}"
+                                   class="form-control-sm  form-control"
+                                   type="text"
+                                   th:id="${'variantTitle'+ stat.index}"
+                                   th:name="${'variants['+ stat.index + '].title'}"
+                                   th:disabled="${view == null}"
+                            >
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantPrice">
+                        <label th:for="${'variantPrice'+ stat.index}" class="col-md-2 small">Price</label>
+                        <div class="col-md-10">
+                            <div class="input-group inputGroupSm">
+                                <input th:value="${variant.price}"
+                                       th:name="${'variants['+ stat.index + '].price'}"
+                                       th:disabled="${view == null}"
+                                       th:id="${'variantPrice'+ stat.index}"
+                                       class="form-control-sm  form-control"
+                                       type="text"
+                                       aria-label="Dollar amount (with dot and two decimal places)"
+                                >
+                                <span class="input-group-text">$</span>
+                                <span class="input-group-text">0.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantPrePrice">
+                        <label th:for="${'variantPrePrice'+ stat.index}" class="col-md-2 small">Pre
+                            price</label>
+                        <div class="col-md-10">
+                            <div class="input-group inputGroupSm">
+                                <input th:value="${variant.prePrice}"
+                                       th:disabled="${view == null}"
+                                       th:name="${'variants['+ stat.index + '].prePrice'}"
+                                       class="form-control-sm  form-control"
+                                       aria-label="Dollar amount (with dot and two decimal places)"
+                                       type="text"
+                                       th:id="${'variantPrePrice'+ stat.index}">
+                                <span class="input-group-text">$</span>
+                                <span class="input-group-text">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantInventory">
+                        <label th:for="${'variantInventory'+ stat.index}"
+                               class="col-md-2 small">Inventory</label>
+                        <div class="col-md-10">
+                            <input th:value="${variant.inventory}"
+                                   th:name="${'variants['+ stat.index + '].inventory'}"
+                                   th:disabled="${view == null}"
+                                   class="form-control-sm  form-control"
+                                   type="text"
+                                   th:id="${'variantInventory'+ stat.index}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantSku">
+                        <label th:for="${'variantSku'+ stat.index}"
+                               class="col-md-2 small">Sku</label>
+                        <div class="col-md-10">
+                            <input th:value="${variant.sku}"
+                                   th:name="${'variants['+ stat.index + '].sku'}"
+                                   class="form-control-sm  form-control"
+                                   type="text"
+                                   th:id="${'variantSku'+ stat.index}"
+                                   readonly
+                            >
+                        </div>
+                    </div>
+                    <div class="mb-3 row variantOptions">
+                        <label class="col-md-2 small">Option</label>
+                        <div class="col-md-10">
+                            <ul>
+                                <li th:each="optionValue,stat_ : ${variant.optionValues}"
+                                    th:text="${optionValue.option.name + ': ' + optionValue.value}"
+                                >
+                                    <input type="hidden"
+                                           th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index +'].id}"
+                                           th:value="${optionValue.id}">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div th:if="${view == null}" class="mp-3 ">
+                        <div class="row">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6 demo-inline-spacing text-right">
+                                <a th:href="@{'/admin/products/' + ${product.handle} + '/variants/edit.html'}"
+                                   class="btn btn-warning btn-sm">Edit variants</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

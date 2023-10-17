@@ -1,5 +1,6 @@
 package Xanadu.Controllers.Admin;
 
+import Xanadu.Models.Admin.MenuActive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,8 @@ public class HomeController {
 
     @GetMapping(value = {"home.html"})
     public String home(Model model) {
+        MenuActive  menuActive = new MenuActive("dashboard","none");
+        model.addAttribute("menuActive",menuActive);
         model.addAttribute("pageTitle", "Home");
         return "admin/index";
     }

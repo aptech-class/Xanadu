@@ -29,14 +29,14 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item">
+        <li th:class="${menuActive.name == 'dashboard' ? 'menu-item active open' : 'menu-item'}">
             <a href="/admin/index.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
 
-        <li th:class="${menuActive.name == 'products' ? 'menu-item active open' : menu-item}">
+        <li th:class="${menuActive.name == 'products' ? 'menu-item active open' : 'menu-item'}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Products</div>
@@ -48,6 +48,11 @@
                         <div data-i18n="Without menu">List</div>
                     </a>
                 </li>
+                <li th:class="${menuActive.subName == 'itemProduct' ? 'menu-item active' : 'menu-item'}">
+                    <a href="/admin/products/item.html" class="menu-link">
+                        <div data-i18n="Without menu">Item</div>
+                    </a>
+                </li>
                 <li th:class="${menuActive.subName == 'createProduct' ? 'menu-item active' : 'menu-item'}">
                     <a href="/admin/products/create.html" class="menu-link">
                         <div data-i18n="Without menu">Create</div>
@@ -56,6 +61,11 @@
                 <li th:class="${menuActive.subName == 'editProduct' ? 'menu-item active' : 'menu-item'}">
                     <a href="/admin/products/edit.html" class="menu-link">
                         <div data-i18n="Without menu">Edit</div>
+                    </a>
+                </li>
+                <li th:class="${menuActive.subName == 'variantsProduct' ? 'menu-item active' : 'menu-item'}">
+                    <a href="/admin/products/variants/edit.html" class="menu-link">
+                        <div data-i18n="Without menu">Variants</div>
                     </a>
                 </li>
             </ul>

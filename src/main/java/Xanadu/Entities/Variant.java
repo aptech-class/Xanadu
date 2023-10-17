@@ -3,11 +3,13 @@ package Xanadu.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @Entity
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Variant extends  EntityBasic{
 

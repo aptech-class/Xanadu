@@ -1,0 +1,17 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productRating(rating)" class="mb-3 productRating">
+    <label for="rating" class="form-label">Rating</label>
+    <input
+            type="text"
+            class="form-control"
+            id="rating"
+            disabled
+            th:value="${rating}"
+            name="rating"
+    />
+</div>
+
+</html>

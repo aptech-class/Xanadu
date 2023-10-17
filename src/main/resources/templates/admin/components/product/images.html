@@ -1,0 +1,47 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productImages(images, view)" class="productImages imageGroup mb-3  px-3 "
+     style="border: #ccc solid 1px;border-radius: 2px;padding-top: 10px;">
+    <div class="text-center imageFirst">
+        <img  class="mx-auto imagePrevView" th:src="${images[0].src}" alt="" src="">
+    </div>
+
+    <div id="imageList" class="imageList m-3">
+        <div class=" px-2 boxImageItem" th:each="image,stat : ${images}">
+
+            <div class="imageEdit">
+                <img class="imageItem" role="button" th:src="${image.src}" src="" alt="">
+                <img th:if="${view == 'edit'}" class="btnRemoveImage m-2" role="button"
+                     src="\admin\assets\img\icons\myicon\delete.svg" alt="">
+            </div>
+            <input class="src" type="hidden" th:name="${'images[' + stat.index + '].src'}"
+                   th:value="${image.src}">
+            <input class="id" type="hidden" th:name="${'images[' + stat.index + '].id'}"
+                   th:value="${image.id}">
+        </div>
+    </div>
+    <div th:if="${view == 'edit'}" style="text-align: right;" class="mx-3 mb-3">
+        <span id="removeAllImageItems" class="btn btn-sm btn-outline-danger">Remove all</span>
+    </div>
+
+    <div th:if="${view == 'edit'}" class="row mx-3">
+        <div class="col-10">
+            <input id="inputImageSrc" class="form-control " type="text">
+        </div>
+        <button id="addImageSrc" type="button" class="btn col-2 btn-sm btn-outline-primary">Add
+            by src
+        </button>
+    </div>
+    <div th:if="${view == 'edit'}" style="text-align: right;">
+        <label class="btn btn-primary m-3" for="imageFiles">
+            <span>Upload images</span>
+            <input id="imageFiles"
+                   th:name="imageFiles" class="form-control " type="file" hidden
+                   multiple>
+        </label>
+    </div>
+</div>
+
+</html>

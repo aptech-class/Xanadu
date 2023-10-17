@@ -6,10 +6,12 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
+@ToString(callSuper = true)
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ProductTag extends  EntityBasic{

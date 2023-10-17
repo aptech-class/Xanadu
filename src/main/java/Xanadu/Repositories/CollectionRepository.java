@@ -12,4 +12,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
     Collection findByHandle(String handle);
 
     List<Collection> findByProductsIn(List<Product> products);
+
+    Collection findByTitle(String title);
 }

@@ -3,10 +3,12 @@ package Xanadu.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ShippingAddress extends EntityBasic{

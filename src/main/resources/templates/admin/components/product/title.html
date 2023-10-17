@@ -1,0 +1,16 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productTitle(title,view)" class="mb-3 productTitle">
+    <label for="title" class="form-label">Title</label>
+    <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            th:value="${title}"
+            th:disabled="${view == null}"
+    />
+</div>
+</html>

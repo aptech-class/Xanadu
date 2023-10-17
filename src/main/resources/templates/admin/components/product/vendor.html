@@ -1,0 +1,22 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productVendor(vendorSelected, view)" class="mb-3 productVendor">
+    <label for="vendor" class="form-label">Vendor</label>
+    <select th:if="${view == 'edit'}" name="vendor.id" class="form-select" id="vendor"
+            aria-label="Default select example">
+        <option th:each="vendor : ${vendors}"
+                th:value="${vendor.id}"
+                th:text="${vendor.name}"
+                th:selected="${vendorSelected.id == vendor.id}"
+        ></option>
+    </select>
+    <input th:if="${view == null}"
+           type="text"
+           class="form-control"
+           disabled
+           th:value="${vendorSelected.name}"
+    />
+</div>
+</html>

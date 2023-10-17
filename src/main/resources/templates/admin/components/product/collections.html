@@ -1,0 +1,36 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div  layout:fragment="productCollections(collectionsOfProduct, view)"
+      id="productCollections"
+      class="mb-3 productCollections">
+    <label style="width:100%;" class="form-label">Collections</label>
+    <div class="px-1" id="collectionsList">
+        <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 m-1 collectionItemBox"
+             th:each="collection,stat : ${collectionsOfProduct}">
+            <span th:text="${collection.title}"></span>
+            <input class="inputCollectionId" type="hidden"
+                   th:name="${'collections[' + stat.index + '].id'}"
+                   th:value="${collection.id}"
+            >
+            <input class="inputCollectionTitle" type="hidden"
+                   th:name="${'collections[' + stat.index + '].title'}"
+                   th:value="${collection.title}"
+            >
+            <span th:if="${view == 'edit'}" class="px-1 removeCollectionItem" role="button">&times;</span>
+        </div>
+    </div>
+    <div th:if="${view == 'edit'}" class="row ">
+        <div class="col-10">
+            <input id="inputNewCollection" class="form-control " type="text" list="collections">
+            <datalist id="collections">
+                <option th:value="${collection.title}"
+                        th:each="collection : ${collections}">
+            </datalist>
+        </div>
+        <button id="addToCollectionBtn" type="button" class="btn col-2 btn-sm btn-outline-primary">Add to collection
+        </button>
+    </div>
+</div>
+</html>

@@ -5,28 +5,6 @@
 <body>
 
 <div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
-    <style>
-        .imageList {
-            display: flex;
-            overflow: auto;
-        }
-        .imageItem img{
-            max-width: 100px;
-        }
-        .inputGroupSm{
-            height: 80%;
-        }
-        .inputGroupSm span,input{
-            height: 100%;
-        }
-        .imageFirst img{
-            width:40%;
-        }
-        .text-right{
-            text-align: right;
-        }
-    </style>
-    <nav layout:replace="admin/components/breadcrumb :: breadcrumb"></nav>
     <div class="row">
         <div class="">
             <div class="card mb-4">
@@ -34,201 +12,35 @@
                     <div class="col-6">
                         <h5 class=" card-header ">Product</h5>
                     </div>
-                    <div class="col-6 demo-inline-spacing text-right" >
-                        <a th:href="@{'/admin/products/edit/' + ${product.handle} + '.html'}" class="btn btn-warning">Edit</a>
+                    <div class="col-6 demo-inline-spacing text-right">
+                        <a th:href="@{'/admin/products/' + ${product.handle} + '/edit.html'}" class="btn btn-warning">Edit</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                id="title"
-                                th:attr="value=${product.title}"
-                                disabled
-                        />
+                    <div layout:replace="~{/admin/components/product/title :: productTitle(${product.title})}"></div>
+                    <div layout:replace="~{/admin/components/product/rating :: productRating(${product.rating})}"></div>
+                    <div layout:replace="~{/admin/components/product/handle :: productHandle(${product.handle})}"></div>
+                    <div layout:replace="~{/admin/components/product/vendor :: productVendor(${product.vendor})}"></div>
+                    <div layout:replace="~{/admin/components/product/productType :: productType(${product.productType})}"></div>
+                    <div layout:replace="~{/admin/components/product/collections :: productCollections(${product.collections})}"></div>
+                    <div layout:replace="~{/admin/components/product/productTags :: productTags(${product.productTags})}"></div>
+                    <div layout:replace="~{/admin/components/product/published :: productPublished(${product.published})}"></div>
+                    <div layout:replace="~{/admin/components/product/images :: productImages(${product.images})}"></div>
+                    <div layout:replace="~{/admin/components/product/prevBodyHtml :: productPrevBodyHtml(${product.bodyHtml})}"></div>
+                    <div class="mb-3 productOptions">
+                        <label  class="form-label">Options</label>
+                        <ul>
+                            <li th:each="option: ${product.options}"
+                            >
+                                <span th:text="${option.name}"></span>:
+                                <span th:each="optionValue,stat : ${option.optionValues}" th:text="${stat.index > 0} ? ', ' + ${optionValue.value} : ${optionValue.value}"></span>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                id="rating"
-                                disabled
-                                th:attr="value=${product.rating}"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="handle" class="form-label">Handle</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                id="handle"
-                                th:attr="value=${product.handle}"
-                                disabled
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="vendor" class="form-label">Vendor</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                id="vendor"
-                                th:value="${product.vendor.name}"
-                                disabled
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label style="width:100%;" class="form-label">Collections</label>
-                        <div class="px-1">
-                            <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 my-1 mr-1"
-                                 th:each="collection : ${product.collections}">
-                                <span th:text="${collection.title}"></span>
-                                <input disabled type="hidden" name="collections[].id" th:attr="value=${collection.id}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label style="width:100%" class="form-label">Tags</label>
-                        <div class="px-1">
-                            <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 my-1 mr-1"
-                                 th:each="productTag : ${product.productTags}">
-                                <span th:text="${productTag.value}"></span>
-                                <input disabled type="hidden" name="productTags[].id" th:attr="value=${productTag.id}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-check form-switch mb-3">
-                        <input disabled th:checked="${product.published}" name="product.published"
-                               class="form-check-input" type="checkbox" id="publish">
-                        <label class="form-check-label" for="publish">Published</label>
-                    </div>
-                    <div class="mb-3">
-                        <div class="text-center imageFirst">
-                            <img class="mx-auto" th:src="${product.images[0].src}" alt="" src="">
-                        </div>
-                        <div class="imageList m-3">
-                            <div class="imageItem px-2" role="button" th:each="image : ${product.images}">
-                                <img th:src="${image.src}" src="" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-1 mp-3">
-                        <label class="form-label">Desctiption</label>
-                        <div class="px-3" th:utext="${product.bodyHtml}"></div>
-                    </div>
-                    <div class="mp-3">
-                        <label  class="form-label">Variants</label>
-                        <div class="accordion mt-3" id="accordionExample">
-                            <div th:each="variant,stat : ${product.variants}" class="card accordion-item ">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button
-                                            type="button"
-                                            class="accordion-button"
-                                            data-bs-toggle="collapse"
-                                            th:attr="data-bs-target=${'#variant' + stat.index},aria-controls=${'variant' + stat.index}"
-                                            aria-expanded="true"
-                                            th:text="${'Variant item ' + (stat.index + 1)}"
-                                    >
-                                        Accordion Item
-                                    </button>
-                                </h2>
-
-                                <div
-                                        th:id="${'variant' + stat.index}"
-                                        class="accordion-collapse collapse px-3"
-                                        data-bs-parent="#accordionExample"
-                                >
-                                    <div class="accordion-body">
-                                        <div class="mb-3 row">
-                                            <div class="text-center imageFirst">
-                                                <img class="mx-auto" th:src="${variant.image.src}" alt="" src="">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="variantTitle" class="col-md-2 small">Title</label>
-                                            <div class="col-md-10">
-                                                <input th:value="${variant.title}"
-                                                       class="form-control-sm  form-control"
-                                                       disabled
-                                                       type="text"
-                                                       id="variantTitle">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="variantPrice" class="col-md-2 small">Price</label>
-                                            <div class="col-md-10">
-                                                <div class="input-group inputGroupSm">
-                                                    <input th:value="${variant.price}"
-                                                           class="form-control-sm  form-control"
-                                                           disabled
-                                                           type="text"
-                                                           aria-label="Dollar amount (with dot and two decimal places)"
-                                                           id="variantPrice">
-                                                    <span class="input-group-text">$</span>
-                                                    <span class="input-group-text">0.00</span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="variantPrePrice" class="col-md-2 small">Pre price</label>
-                                            <div class="col-md-10">
-                                                <div class="input-group inputGroupSm">
-                                                    <input th:value="${variant.prePrice}"
-                                                           class="form-control-sm  form-control"
-                                                           disabled
-                                                           aria-label="Dollar amount (with dot and two decimal places)"
-                                                           type="text"
-                                                           id="variantPrePrice">
-                                                    <span class="input-group-text">$</span>
-                                                    <span class="input-group-text">0.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="variantInventory" class="col-md-2 small">Inventory</label>
-                                            <div class="col-md-10">
-                                                <input th:value="${variant.inventory}"
-                                                       class="form-control-sm  form-control"
-                                                       type="text"
-                                                       disabled
-                                                       id="variantInventory">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="variantSku" class="col-md-2 small">Sku</label>
-                                            <div class="col-md-10">
-                                                <input th:value="${variant.sku}"
-                                                       class="form-control-sm  form-control"
-                                                       type="text"
-                                                       disabled
-                                                       id="variantSku"
-                                                       readonly
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-md-2 small">Option</label>
-                                            <div class="col-md-10">
-                                                <ul>
-                                                    <li th:each="optionValue : ${variant.optionValues}"
-                                                        th:text="${optionValue.option.name + ': ' + optionValue.value}"
-                                                    ></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div th:if="${!product.reviews.isEmpty()}" class="mp-3">
-
+                    <div layout:replace="~{/admin/components/product/variants :: productVariants(${product.variants})}"></div>
+                    <div class="mp-3 productReviews"
+                         th:if="${!product.reviews.isEmpty()}">
                         <p class="demo-inline-spacing">
-
                             <button class="btn btn-primary me-1 collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseExample" aria-expanded="false"
                                     aria-controls="collapseExample">
@@ -245,12 +57,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mp-3">
+                    <div class="mp-3 ">
                         <div class="row">
                             <div class="col-6">
                             </div>
-                            <div class="col-6 demo-inline-spacing text-right" >
-                                <a th:href="@{'/admin/products/edit/' + ${product.handle} + '.html'}" class="btn btn-warning">Edit</a>
+                            <div class="col-6 demo-inline-spacing text-right">
+                                <a th:href="@{'/admin/products/' + ${product.handle} + '/edit.html'}"
+                                   class="btn btn-warning">Edit</a>
                             </div>
                         </div>
                     </div>

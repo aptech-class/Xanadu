@@ -1,0 +1,32 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productTags(productTagsOfProduct, view)" class="mb-3 productTags">
+    <label style="width:100%" class="form-label">Tags</label>
+    <div id="productTagsList" class="px-1">
+        <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 m-1 productTagItemBox"
+             th:each="productTag,stat : ${productTagsOfProduct}">
+            <span th:text="${productTag.value}"></span>
+            <input class="inputProductTagId" type="hidden"
+                   th:name="${'productTags[' + stat.index + '].id'}"
+                   th:value="${productTag.id}">
+            <input class="inputProductTagValue" type="hidden"
+                   th:name="${'productTags[' + stat.index + '].value'}"
+                   th:value="${productTag.value}">
+            <span th:if="${view == 'edit'}" class="px-1 removeProductTagItem" role="button">&times;</span>
+        </div>
+    </div>
+    <div th:if="${view == 'edit'}" class="row">
+        <div class="col-10">
+            <input id="inputNewProductTag" class="form-control " type="text" list="productTags">
+            <datalist id="productTags">
+                <option th:value="${productTag.value}"
+                        th:each="productTag : ${productTags}">
+            </datalist>
+        </div>
+        <button id="addTagBtn" type="button" class="btn col-2 btn-sm btn-outline-primary">Add Tag</button>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,23 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="productType(productTypeSelected, view)" class="mb-3 productType">
+    <label for="productType" class="form-label">Product type</label>
+    <select th:if="${view == 'edit'}" name="productType.id" class="form-select" id="productType"
+            aria-label="Default select example">
+        <option th:each="productType : ${productTypes}"
+                th:value="${productType.id}"
+                th:text="${productType.title}"
+                th:selected="${productTypeSelected.id == productType.id}"
+        ></option>
+    </select>
+    <input th:if="${view == null}"
+            type="text"
+            class="form-control"
+            disabled
+            th:value="${productTypeSelected.title}"
+    />
+</div>
+
+</html>

@@ -24,4 +24,8 @@ public class ProductTypeService {
     public ProductType findByTitle(String title) {
         return productTypeRepository.findByTitle(title);
     }
+
+    public List<ProductType> findAll() {
+        return productTypeRepository.findAll();
+    }
 }

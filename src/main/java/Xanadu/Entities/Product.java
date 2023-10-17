@@ -3,11 +3,14 @@ package Xanadu.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Entity
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = {@Index(columnList = "handle", unique = true)})
 public class Product extends EntityBasic {
@@ -53,5 +56,7 @@ public class Product extends EntityBasic {
     @ManyToOne
     private ProductType productType;
 
+    @Transient
+    List<MultipartFile> imageFiles;
 
 }
