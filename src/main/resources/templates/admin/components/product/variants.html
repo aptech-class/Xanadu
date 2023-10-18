@@ -32,7 +32,8 @@
                 <div class="accordion-body">
                     <div class="mb-3  variantImage imageGroup">
                         <div class="text-center imageFirst ">
-                            <img  class="mx-auto imagePrevView" th:src="${variant.image != null ? variant.image.src : ''}" alt="" src="">
+                            <img class="mx-auto imagePrevView"
+                                 th:src="${variant.image != null ? variant.image.src : ''}" alt="" src="">
                             <input th:if="${view == 'edit'}" class="variantImageId" type="hidden"
                                    th:value="${variant.image !=null ? variant.image.id : ''}"
                                    th:name="${'variants['+ stat.index + '].image.id'}"
@@ -126,14 +127,15 @@
                     <div class="mb-3 row variantOptions">
                         <label class="col-md-2 small">Option</label>
                         <div class="col-md-10">
+                            <input type="hidden"
+                                   th:each="optionValue,stat_ : ${variant.optionValues}"
+                                   th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index + '].id'}"
+                                   th:value="${optionValue.id}"
+                            >
                             <ul>
                                 <li th:each="optionValue,stat_ : ${variant.optionValues}"
                                     th:text="${optionValue.option.name + ': ' + optionValue.value}"
-                                >
-                                    <input type="hidden"
-                                           th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index +'].id}"
-                                           th:value="${optionValue.id}">
-                                </li>
+                                ></li>
                             </ul>
                         </div>
                     </div>

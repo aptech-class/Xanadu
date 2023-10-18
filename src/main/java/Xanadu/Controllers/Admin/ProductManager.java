@@ -97,12 +97,8 @@ public class ProductManager {
 
     @PostMapping("/products/edit")
     public String editProduct(@ModelAttribute Product product, Model model) {
-        List<MultipartFile> imageFiles = product.getImageFiles();
-        for (MultipartFile imageFile : imageFiles) {
-            log.info(imageFile.getOriginalFilename());
-        }
 
-        log.info(product.getOptions().toString());
+
         Product productEdited = productService.edit(product);
         model.addAttribute("product",productEdited);
         MenuActive menuActive = new MenuActive("products", "editProduct");

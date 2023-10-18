@@ -99,22 +99,31 @@ public class ProductService {
 
     private List<Variant> generateVariants(Product product, List<Variant> variants, Map<String, String> simpleVariant, int index) {
         List<Option> options = product.getOptions();
+        if (options.isEmpty()) {
+            return variants;
+        }
 
         if (index == options.size()) {
             boolean alreadyVariant = false;
-            for (Variant variant : product.getVariants()) {
-                Map<String, String> simpleVariantExists = new HashMap<>();
-                for (OptionValue optionValue : variantRepository.findById(variant.getId()).get().getOptionValues()) {
-                    simpleVariantExists.put(optionValue.getOption().getName(), optionValue.getValue());
-                }
-                StringBuilder check = new StringBuilder();
-                simpleVariant.forEach((optionName, value) -> {
-                    check.append(Objects.equals(simpleVariantExists.get(optionName), value));
-                });
-                if (!check.toString().contains("false")) {
-                    variants.add(variant);
-                    alreadyVariant = true;
-                    break;
+            List<Variant> variantsExists = product.getVariants();
+            if (variantsExists != null && !variantsExists.isEmpty()) {
+                for (Variant variant : variantsExists) {
+                    Map<String, String> simpleVariantExists = new HashMap<>();
+                    for (OptionValue optionValue : variantRepository.findById(variant.getId()).get().getOptionValues()) {
+                        simpleVariantExists.put(optionValue.getOption().getName(), optionValue.getValue());
+                    }
+                    StringBuilder check = new StringBuilder();
+                    simpleVariant.forEach((optionName, value) -> {
+                        check.append(Objects.equals(simpleVariantExists.get(optionName), value));
+                    });
+                    log.info(simpleVariant.toString());
+                    log.info(simpleVariantExists.toString());
+                    log.info(check.toString());
+                    if (!check.isEmpty() && !check.toString().contains("false")) {
+                        variants.add(variant);
+                        alreadyVariant = true;
+                        break;
+                    }
                 }
             }
 
@@ -124,7 +133,7 @@ public class ProductService {
                 StringBuilder title = new StringBuilder();
                 simpleVariant.forEach((optionName, value) -> {
                     sku.append("_").append(optionName).append(":").append(value);
-                    title.append(title.toString().isEmpty()?"":" / ").append(value);
+                    title.append(title.toString().isEmpty() ? "" : " / ").append(value);
                 });
 
                 variant.setTitle(title.toString());
@@ -137,7 +146,7 @@ public class ProductService {
                 List<OptionValue> optionValues = new ArrayList<>();
                 options.forEach(option -> {
                     option.getOptionValues().forEach(optionValue -> {
-                        if(Objects.equals(simpleVariant.get(option.getName()), optionValue.getValue())){
+                        if (Objects.equals(simpleVariant.get(option.getName()), optionValue.getValue())) {
                             optionValues.add(optionValue);
                         }
                     });
@@ -146,6 +155,8 @@ public class ProductService {
 
                 variants.add(variantRepository.save(variant));
             }
+
+
         } else {
             Option option = options.get(index);
             option.getOptionValues().forEach(optionValue -> {
@@ -153,13 +164,32 @@ public class ProductService {
                 generateVariants(product, variants, simpleVariant, index + 1);
             });
         }
+        variantRepository.deleteByProductAndIdNotIn(product,variants.stream().map(Variant::getId).toList());
         return variants;
     }
 
 
     private List<Option> saveOptionsOfProduct(Product product) {
         List<Option> optionsSaved = new ArrayList<>();
-        product.getOptions().forEach(option -> {
+        List<Option> options = product.getOptions();
+
+        List<Long> optionsIds = (options == null || options.isEmpty()) ? new ArrayList<>() : options.stream().map(Option::getId).toList();
+
+        List<Option> optionsNeedDelete = optionsIds.isEmpty() ? optionRepository.findByProduct(product) : optionRepository.findByProductAndIdInNotIn(product, optionsIds);
+        List<OptionValue> optionValuesNeedDelete = new ArrayList<>(optionValueRepository.findByOptionIn(optionsNeedDelete));
+        List<Variant> variantsNeedDelete = new ArrayList<>(variantRepository.findByProductAndNotExistOptionValue(product));
+
+        if (options == null || options.isEmpty()) {
+            optionValuesNeedDelete.forEach(optionValueNeedDelete -> {
+                optionValueNeedDelete.getVariants().forEach(Variant::getId);
+                variantsNeedDelete.addAll(optionValueNeedDelete.getVariants());
+            });
+            variantRepository.deleteAllInBatch(variantsNeedDelete);
+            optionValueRepository.deleteAllInBatch(optionValuesNeedDelete);
+            optionRepository.deleteAllInBatch(optionsNeedDelete);
+            return optionsSaved;
+        }
+        options.forEach(option -> {
             option.setProduct(product);
             Option optionSaved = optionRepository.save(option);
             List<OptionValue> optionValuesSaved = new ArrayList<>();
@@ -170,26 +200,30 @@ public class ProductService {
                 optionValuesSaved.add(optionValueSaved);
                 optionValuesIds.add(optionValueSaved.getId());
             });
+            optionValuesNeedDelete.addAll(optionValueRepository.findByOptionAndIdNotIn(optionSaved, optionValuesIds));
             optionSaved.setOptionValues(optionValuesSaved);
-
-            List<OptionValue> optionValuesNeedDelete = optionValueRepository.findByOptionAndIdNotIn(optionSaved, optionValuesIds);
-            List<Variant> variantsNeedDelete = new ArrayList<>();
-            optionValuesNeedDelete.forEach(optionValueNeedDelete -> {
-                optionValueNeedDelete.getVariants().forEach(Variant::getId);
-                variantsNeedDelete.addAll(optionValueNeedDelete.getVariants());
-            });
-            optionValueRepository.deleteAllInBatch(optionValuesNeedDelete);
-            variantRepository.deleteAllInBatch(variantsNeedDelete);
-
             optionsSaved.add(optionSaved);
 
         });
+
+        optionValuesNeedDelete.forEach(optionValueNeedDelete -> {
+            optionValueNeedDelete.getVariants().forEach(Variant::getId);
+            variantsNeedDelete.addAll(optionValueNeedDelete.getVariants());
+        });
+        variantRepository.deleteAllInBatch(variantsNeedDelete);
+        optionValueRepository.deleteAllInBatch(optionValuesNeedDelete);
+        optionRepository.deleteAllInBatch(optionsNeedDelete);
+
         return optionsSaved;
     }
 
     private List<Collection> saveCollectionOfProduct(Product product) {
         List<Collection> collectionsSaved = new ArrayList<>();
-        product.getCollections().forEach(collection -> {
+        List<Collection> collections = product.getCollections();
+        if (collections == null || collections.isEmpty()) {
+            return collectionsSaved;
+        }
+        collections.forEach(collection -> {
             if (collection.getId() == null) {
                 Collection collectionExists = collectionRepository.findByTitle(collection.getTitle());
                 collectionsSaved.add(Objects.requireNonNullElseGet(collectionExists, () -> {
@@ -211,7 +245,11 @@ public class ProductService {
 
     private List<ProductTag> saveProductTagsOfProduct(Product product) {
         List<ProductTag> productTagsSaved = new ArrayList<>();
-        product.getProductTags().forEach(productTag -> {
+        List<ProductTag> productTags = product.getProductTags();
+        if (productTags == null || productTags.isEmpty()) {
+            return productTagsSaved;
+        }
+        productTags.forEach(productTag -> {
             if (productTag.getId() == null) {
                 ProductTag productTagExists = productTagRepository.findByValue(productTag.getValue());
                 productTagsSaved.add(Objects.requireNonNullElseGet(productTagExists, () -> productTagRepository.save(productTag)));
@@ -225,7 +263,11 @@ public class ProductService {
     private List<Image> saveImagesOfProduct(Product product) {
         List<Image> imagesSaved = new ArrayList<>();
         List<Long> imagesIds = new ArrayList<>();
-        product.getImages().forEach(image -> {
+        List<Image> images = product.getImages();
+        if (images == null || images.isEmpty()) {
+            return imagesSaved;
+        }
+        images.forEach(image -> {
             image.setProduct(product);
             if (image.getId() == null) {
                 boolean srcIsBase64 = image.getSrc().contains("base64");
@@ -272,5 +314,9 @@ public class ProductService {
         });
         imageRepository.deleteAllInBatch(imagesNeedDelete);
         return imagesSaved;
+    }
+
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
     }
 }
