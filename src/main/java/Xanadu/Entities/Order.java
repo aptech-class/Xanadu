@@ -8,10 +8,10 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"customer", "shippingAddress", "voucherItem", "transactions", "orderItems"})
+@ToString(callSuper = true, exclude = {"customer", "shippingAddress", "voucherItem", "transactions", "orderItems"})
 @Entity(name = "order_table")
-public class Order extends EntityBasic{
+public class Order extends EntityBasic {
 
     @Column(nullable = false)
     private Float totalPrice;

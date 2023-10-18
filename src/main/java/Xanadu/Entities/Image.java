@@ -11,9 +11,9 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true,exclude = {"product","variants"})
 @Entity
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,exclude = {"product","variants"})
 public class Image extends  EntityBasic{
 
     @Column(nullable = false,length = 1000,unique = true)

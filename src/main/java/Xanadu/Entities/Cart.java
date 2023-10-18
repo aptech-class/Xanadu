@@ -12,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Cart extends EntityBasic{
+@ToString(callSuper = true, exclude = {"cartItems", "customer"})
+@EqualsAndHashCode(callSuper = true, exclude = {"cartItems", "customer"})
+public class Cart extends EntityBasic {
 
     @Column(nullable = false)
     private Float totalPrice;

@@ -9,8 +9,8 @@ import lombok.ToString;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"voucher", "order"})
+@ToString(callSuper = true, exclude = {"voucher", "order"})
 public class VoucherItem extends EntityBasic {
 
     private Boolean status;

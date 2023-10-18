@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true,exclude = {"products"})
+@EqualsAndHashCode(callSuper = true,exclude = {"products"})
 public class ProductType extends EntityBasic{
     @Column(unique = true)
     private String title;

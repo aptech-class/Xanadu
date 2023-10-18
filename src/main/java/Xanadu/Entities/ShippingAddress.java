@@ -8,8 +8,8 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true,exclude = {"customer","orders"})
+@EqualsAndHashCode(callSuper = true,exclude = {"customer","orders"})
 @Data
 public class ShippingAddress extends EntityBasic{
     @Column(nullable = false)

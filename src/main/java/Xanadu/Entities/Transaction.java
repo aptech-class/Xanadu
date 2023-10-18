@@ -10,9 +10,9 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Transaction extends EntityBasic{
+@ToString(callSuper = true, exclude = {"order", "customer"})
+@EqualsAndHashCode(callSuper = true, exclude = {"order", "customer"})
+public class Transaction extends EntityBasic {
 
     private Float amount;
 

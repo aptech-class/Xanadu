@@ -8,9 +8,9 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"logs"})
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"logs"})
 public class User extends EntityBasic {
 
     @Column(nullable = false)

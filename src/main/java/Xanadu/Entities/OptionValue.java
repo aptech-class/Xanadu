@@ -12,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class OptionValue extends  EntityBasic{
+@ToString(callSuper = true, exclude = {"option", "variants"})
+@EqualsAndHashCode(callSuper = true, exclude = {"option", "variants"})
+public class OptionValue extends EntityBasic {
 
     @Column(nullable = false)
     private String value;

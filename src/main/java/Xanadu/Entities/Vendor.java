@@ -9,10 +9,10 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@Table(indexes = {@Index(columnList = "name",unique = true)})
-public class Vendor extends EntityBasic{
+@EqualsAndHashCode(callSuper = true, exclude = {"products"})
+@ToString(callSuper = true, exclude = {"products"})
+@Table(indexes = {@Index(columnList = "name", unique = true)})
+public class Vendor extends EntityBasic {
 
     @Column(nullable = false)
     private String name;

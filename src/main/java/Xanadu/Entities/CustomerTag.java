@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true,exclude = {"customers"})
+@ToString(callSuper = true,exclude = {"customers"})
 @Table(indexes = {@Index(columnList = "value",unique = true)})
 public class CustomerTag extends EntityBasic{
 

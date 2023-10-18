@@ -10,11 +10,11 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Review extends  EntityBasic{
+@ToString(callSuper = true, exclude = {"customer", "product"})
+@EqualsAndHashCode(callSuper = true, exclude = {"customer", "product"})
+public class Review extends EntityBasic {
 
-    @Column(nullable = false,length = 10000)
+    @Column(nullable = false, length = 10000)
     @Lob
     private String content;
 

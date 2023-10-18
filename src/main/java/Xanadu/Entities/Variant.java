@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 @Entity
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Variant extends  EntityBasic{
+@ToString(callSuper = true, exclude = {"image", "product", "optionValues", "cartItems", "orderItems"})
+@EqualsAndHashCode(callSuper = true, exclude = {"image", "product", "optionValues", "cartItems", "orderItems"})
+public class Variant extends EntityBasic {
 
     @Column(nullable = false)
     private Float price;
@@ -35,7 +35,7 @@ public class Variant extends  EntityBasic{
     private Product product;
 
     @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "variant_id"),inverseJoinColumns = @JoinColumn(name = "option_value_id"))
+    @JoinTable(joinColumns = @JoinColumn(name = "variant_id"), inverseJoinColumns = @JoinColumn(name = "option_value_id"))
     private List<OptionValue> optionValues;
 
     @OneToMany(mappedBy = "variant")

@@ -11,9 +11,9 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@ToString(callSuper = true)
+@ToString(callSuper = true,exclude = {"products"})
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,exclude = {"products"})
 public class ProductTag extends  EntityBasic{
 
     @Column(nullable = false,unique = true)

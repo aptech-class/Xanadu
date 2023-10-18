@@ -8,10 +8,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"order", "variant"})
+@ToString(callSuper = true, exclude = {"order", "variant"})
 @Entity
-public class OrderItem extends EntityBasic{
+public class OrderItem extends EntityBasic {
 
     @Column(nullable = false)
     private Integer quantity;
@@ -20,7 +20,7 @@ public class OrderItem extends EntityBasic{
     private Float subTotalPrice;
 
     @ManyToOne
-    private Variant variant ;
+    private Variant variant;
 
     @ManyToOne
     private Order order;

@@ -8,9 +8,9 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"products", "categories"})
 @Entity
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"products", "categories"})
 @Table(indexes = {@Index(columnList = "handle")})
 public class Collection extends EntityBasic {
 

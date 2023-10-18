@@ -10,9 +10,9 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class Log extends EntityBasic{
+@ToString(callSuper = true, exclude = {"user"})
+@EqualsAndHashCode(callSuper = true, exclude = "user")
+public class Log extends EntityBasic {
 
     @Column(length = 10000)
     @Lob

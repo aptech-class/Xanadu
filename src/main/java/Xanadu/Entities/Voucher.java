@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true,exclude = {"voucherItems","discount"})
+@EqualsAndHashCode(callSuper = true,exclude = {"voucherItems","discount"})
 public class Voucher extends EntityBasic{
 
     private Integer inventory;

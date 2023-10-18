@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true,exclude = {"vouchers","products"})
+@ToString(callSuper = true,exclude = {"vouchers","products"})
 @Table(indexes = {@Index(columnList = "code")})
 public class Discount extends  EntityBasic{
     @Column(nullable = false,unique = true)

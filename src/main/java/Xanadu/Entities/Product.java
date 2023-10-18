@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = {"images", "options", "variants", "productTags", "collections", "reviews", "vendor", "discount", "productType"})
+@EqualsAndHashCode(callSuper = true, exclude = {"images", "options", "variants", "productTags", "collections", "reviews", "vendor", "discount", "productType"})
 @Table(indexes = {@Index(columnList = "handle", unique = true)})
 public class Product extends EntityBasic {
 
@@ -20,7 +20,7 @@ public class Product extends EntityBasic {
     private Integer rating = 5;
     private Boolean published = false;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String handle;
 
     @Lob

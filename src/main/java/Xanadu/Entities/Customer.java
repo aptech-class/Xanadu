@@ -10,12 +10,12 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "carts", "voucherItems"})
+@ToString(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "carts", "voucherItems"})
 @Table(indexes = {@Index(columnList = "username")})
 public class Customer extends EntityBasic {
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -55,12 +55,12 @@ public class Customer extends EntityBasic {
 
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
-//
-//    @OneToMany(mappedBy = "customer")
-//    private List<Cart> carts;
-//
-//    @OneToMany(mappedBy = "customer")
-//    private List<VoucherItem> voucherItems;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Cart> carts;
+
+    @OneToMany(mappedBy = "customer")
+    private List<VoucherItem> voucherItems;
 }
 
 
