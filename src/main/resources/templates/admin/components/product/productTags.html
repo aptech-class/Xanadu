@@ -6,7 +6,9 @@
     <label style="width:100%" class="form-label">Tags</label>
     <div id="productTagsList" class="px-1">
         <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 m-1 productTagItemBox"
-             th:each="productTag,stat : ${productTagsOfProduct}">
+             th:if="${productTag != null}"
+             th:each="productTag,stat : ${productTagsOfProduct}"
+        >
             <span th:text="${productTag.value}"></span>
             <input class="inputProductTagId" type="hidden"
                    th:name="${'productTags[' + stat.index + '].id'}"

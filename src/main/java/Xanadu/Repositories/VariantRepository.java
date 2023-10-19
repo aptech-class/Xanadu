@@ -24,4 +24,6 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {
 
     @Query("SELECT v FROM Variant v WHERE v.product = :product AND v.optionValues IS EMPTY")
     List<Variant> findByProductAndNotExistOptionValue(@Param("product") Product product);
+
+    void deleteByProduct(Product product);
 }

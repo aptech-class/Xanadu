@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +35,6 @@ public class FilesProcessor {
 
     public static String saveFileByDataUrl(String dataUrl) throws Exception {
         String fileType = dataUrl.substring(dataUrl.indexOf(":") + 1, dataUrl.indexOf("/"));
-        log.info(fileType);
         if (!fileType.equals("image")) {
             throw new Exception("Invalid file format!");
         }

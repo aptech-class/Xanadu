@@ -34,9 +34,13 @@
                         <div class="text-center imageFirst ">
                             <img class="mx-auto imagePrevView"
                                  th:src="${variant.image != null ? variant.image.src : ''}" alt="" src="">
-                            <input th:if="${view == 'edit'}" class="variantImageId" type="hidden"
+                            <input class="variantImageId" type="hidden"
                                    th:value="${variant.image !=null ? variant.image.id : ''}"
-                                   th:name="${'variants['+ stat.index + '].image.id'}"
+                                   th:name="${'variants['+ stat.index + (variant.image !=null ? '].image.id' : '].img.id')}"
+                            >
+                            <input class="variantImageSrc" type="hidden"
+                                   th:value="${variant.image !=null ? variant.image.src : ''}"
+                                   th:name="${'variants['+ stat.index + (variant.image !=null ? '].image.src' : '].img.src')}"
                             >
                         </div>
 
@@ -60,7 +64,7 @@
                                    type="text"
                                    th:id="${'variantTitle'+ stat.index}"
                                    th:name="${'variants['+ stat.index + '].title'}"
-                                   th:disabled="${view == null}"
+                                   th:readonly="${view == null}"
                             >
                         </div>
                     </div>
@@ -70,7 +74,7 @@
                             <div class="input-group inputGroupSm">
                                 <input th:value="${variant.price}"
                                        th:name="${'variants['+ stat.index + '].price'}"
-                                       th:disabled="${view == null}"
+                                       th:readonly="${view == null}"
                                        th:id="${'variantPrice'+ stat.index}"
                                        class="form-control-sm  form-control"
                                        type="text"
@@ -88,7 +92,7 @@
                         <div class="col-md-10">
                             <div class="input-group inputGroupSm">
                                 <input th:value="${variant.prePrice}"
-                                       th:disabled="${view == null}"
+                                       th:readonly="${view == null}"
                                        th:name="${'variants['+ stat.index + '].prePrice'}"
                                        class="form-control-sm  form-control"
                                        aria-label="Dollar amount (with dot and two decimal places)"
@@ -105,7 +109,7 @@
                         <div class="col-md-10">
                             <input th:value="${variant.inventory}"
                                    th:name="${'variants['+ stat.index + '].inventory'}"
-                                   th:disabled="${view == null}"
+                                   th:readonly="${view == null}"
                                    class="form-control-sm  form-control"
                                    type="text"
                                    th:id="${'variantInventory'+ stat.index}">
@@ -127,11 +131,20 @@
                     <div class="mb-3 row variantOptions">
                         <label class="col-md-2 small">Option</label>
                         <div class="col-md-10">
-                            <input type="hidden"
-                                   th:each="optionValue,stat_ : ${variant.optionValues}"
-                                   th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index + '].id'}"
-                                   th:value="${optionValue.id}"
-                            >
+                            <div th:each="optionValue,stat_ : ${variant.optionValues}">
+                                <input type="hidden"
+                                       th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index + '].id'}"
+                                       th:value="${optionValue.id}"
+                                >
+                                <input type="hidden"
+                                       th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index + '].value'}"
+                                       th:value="${optionValue.value}"
+                                >
+                                <input type="hidden"
+                                       th:name="${'variants['+ stat.index + '].optionValues[' + stat_.index + '].option.name'}"
+                                       th:value="${optionValue.option.name}"
+                                >
+                            </div>
                             <ul>
                                 <li th:each="optionValue,stat_ : ${variant.optionValues}"
                                     th:text="${optionValue.option.name + ': ' + optionValue.value}"

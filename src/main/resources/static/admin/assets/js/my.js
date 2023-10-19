@@ -24,6 +24,7 @@ const imageHandler = () => {
       }
       const imageId = e.target.id.replace("image", "");
       variantImageId.value = imageId;
+      variantImageId.name = variantImageId.name.replace("img","image")
     };
   });
   // remove image item when edit product
@@ -35,20 +36,9 @@ const imageHandler = () => {
     btnRemove.onclick = (e) => {
       box.remove();
       imageLength = imageLength - 1;
-      reloadImageItemIndex();
+      imageHandler();
     };
   });
-  const reloadImageItemIndex = () => {
-    const currentBoxImageItems = document.querySelectorAll(".boxImageItem");
-    currentBoxImageItems.forEach((currentBox, index) => {
-      const inputSrcImage = currentBox.querySelector(".src");
-      const inputIdImage = currentBox.querySelector(".id");
-      inputSrcImage.name = `images[${index}].src`;
-      if (inputIdImage) {
-        inputIdImage.name = `images[${index}].id`;
-      }
-    });
-  };
 
   const removeAllBtn = document.querySelector("#removeAllImageItems");
   if (!removeAllBtn) {
@@ -58,6 +48,7 @@ const imageHandler = () => {
     const imageList = document.querySelectorAll(".boxImageItem");
     imageLength = 0;
     imageList.forEach((box) => box.remove());
+    imageHandler();
   };
   // add image by src
   const addImageSrc = document.getElementById("addImageSrc");
@@ -97,7 +88,6 @@ const imageHandler = () => {
     const fileUploadItemBox = imageList.querySelectorAll(".fileUploadItemBox");
     fileUploadItemBox.forEach((i) => i.remove());
     imageLength = imageLength - fileUploadItemBox.length;
-    reloadImageItemIndex();
     const files = e.target.files;
     Array.from(files).map((file) => {
       var reader = new FileReader();
@@ -108,7 +98,7 @@ const imageHandler = () => {
                             <img class="imageItem" role="button" src="${newSrc}" alt="">
                             <img class="btnRemoveImage m-2" role="button" src="/admin/assets/img/icons/myicon/delete.svg" alt="">
                           </div>
-                          <input type="hidden" name="images[${imageLength}].src" value="${newSrc}">
+                          <input class="src" type="hidden" name="images[${imageLength}].src" value="${newSrc}">
                         </div>`;
         imageList.innerHTML += content;
         imageHandler();
@@ -116,6 +106,19 @@ const imageHandler = () => {
       reader.readAsDataURL(file);
     });
   };
+
+  const reloadImageItemIndex = () => {
+    const currentBoxImageItems = document.querySelectorAll(".boxImageItem");
+    currentBoxImageItems.forEach((currentBox, index) => {
+      const inputSrcImage = currentBox.querySelector(".src");
+      const inputIdImage = currentBox.querySelector(".id");
+      inputSrcImage.name = `images[${index}].src`;
+      if (inputIdImage) {
+        inputIdImage.name = `images[${index}].id`;
+      }
+    });
+  };
+  reloadImageItemIndex();
 };
 const collectionHandler = () => {
   const collectionsList = document.getElementById("collectionsList");
@@ -344,7 +347,7 @@ const optionsHandler = () => {
         ".inputOptionNameItem"
       );
       const inputOptionIdItem = currentBox.querySelector(".inputOptionIdItem");
-      
+
       inputOptionNameItem.name = `options[${index}].name`;
       if (inputOptionIdItem) {
         inputOptionIdItem.name = `options[${index}].id`;
@@ -369,11 +372,36 @@ const optionsHandler = () => {
   };
   reloadOptionIndex();
 };
+const bodyHtmlHandler = () => {
+  const bodyHtmlInput = document.querySelector(".productBodyHtml textarea");
+  if (!bodyHtmlInput) {
+    return;
+  }
+  const prevBodyHtml = document.querySelector(".productPrevBodyHtml div");
+  bodyHtmlInput.oninput = (e) => {
+    const content = e.target.value;
+    prevBodyHtml.innerHTML = content;
+  };
+};
+const reloadImage = () => {
+  const images = document.querySelectorAll(".imageList img");
+  const startTime = performance.now();
+
+  images.forEach((image) => {
+    image.src = image.src;
+    image.onerror = (e) => {
+      console.log("reloadImage")
+      if (performance.now() - startTime < 10000) image.src = e.target.src;
+    };
+  });
+};
 const load = () => {
   imageHandler();
   collectionHandler();
   productTagsHandler();
   optionsHandler();
+  bodyHtmlHandler();
+  reloadImage();
 
   const forms = document.querySelectorAll("form");
   forms.forEach((item) => {

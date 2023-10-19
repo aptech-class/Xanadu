@@ -21,4 +21,6 @@ public interface OptionValueRepository extends JpaRepository<OptionValue, Long> 
 
     @Query("SELECT ov FROM OptionValue ov WHERE ov.option IN :options")
     List<OptionValue> findByOptionIn(@Param("options") List<Option> options);
+
+    List<OptionValue> findByOption(Option optionSaved);
 }

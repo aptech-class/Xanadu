@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/admin/products")
 @Slf4j
 public class VariantManager {
-
     @Autowired
     private ProductService productService;
     @Autowired
@@ -36,13 +35,12 @@ public class VariantManager {
     @PostMapping("/variants/edit")
     public String editVariants(@ModelAttribute Product product, Model model){
         List<Variant> variants = product.getVariants();
-        for (Variant variant : variants) {
+            for (Variant variant : variants) {
             variant.setProduct(product);
         }
-        Product productSaved = productService.findById(product.getId()).get();
         List<Variant> variantsSaved =  variantService.saveAll(variants);
 
-        return "redirect:/admin/products/"+productSaved.getHandle()+".html";
+        return "redirect:/admin/products/"+product.getHandle()+".html";
     }
 
 }

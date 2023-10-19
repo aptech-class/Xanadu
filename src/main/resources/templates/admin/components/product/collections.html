@@ -7,7 +7,7 @@
       class="mb-3 productCollections">
     <label style="width:100%;" class="form-label">Collections</label>
     <div class="px-1" id="collectionsList">
-        <div style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 m-1 collectionItemBox"
+        <div th:if="${collectionsOfProduct != null}" style="display:inline-block; border:2px solid #ccc;" class="rounded px-1 m-1 collectionItemBox"
              th:each="collection,stat : ${collectionsOfProduct}">
             <span th:text="${collection.title}"></span>
             <input class="inputCollectionId" type="hidden"

@@ -5,7 +5,7 @@
 <div layout:fragment="productOptions(options)" class="mb-3 productOptions">
     <label class="form-label">Options</label>
     <div th:id="optionsList" class="accordion mb-3" id="options">
-        <div th:each="option,stat : ${options}" class="card accordion-item optionItemBox">
+        <div th:if="${options != null}" th:each="option,stat : ${options}" class="card accordion-item optionItemBox">
             <input class="inputOptionIdItem" type="hidden"
                    th:value="${option.id}"
                    th:name="${'options[' + stat.index + '].id'}"

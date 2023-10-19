@@ -14,7 +14,7 @@
                         <input type="hidden" th:value="${product.id}" name="id">
                         <div layout:replace="~{/admin/components/product/title :: productTitle(${product.title}, 'edit')}"></div>
                         <div layout:replace="~{/admin/components/product/rating :: productRating(${product.rating})}"></div>
-                        <div layout:replace="~{/admin/components/product/handle :: productHandle(${product.handle}, 'edit')}"></div>
+                        <div layout:replace="~{/admin/components/product/handle :: productHandle(${product.handle})}"></div>
                         <div layout:replace="~{/admin/components/product/vendor :: productVendor(${product.vendor}, 'edit')}"></div>
                         <div layout:replace="~{/admin/components/product/productType :: productType(${product.productType}, 'edit')}"></div>
                         <div layout:replace="~{/admin/components/product/collections :: productCollections(${product.collections}, 'edit')}"></div>

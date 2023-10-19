@@ -9,7 +9,7 @@
         <option th:each="vendor : ${vendors}"
                 th:value="${vendor.id}"
                 th:text="${vendor.name}"
-                th:selected="${vendorSelected.id == vendor.id}"
+                th:selected="${vendorSelected !=null && vendorSelected.id == vendor.id}"
         ></option>
     </select>
     <input th:if="${view == null}"

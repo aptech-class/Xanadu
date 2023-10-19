@@ -4,7 +4,7 @@
 >
 <div layout:fragment="productPublished(published, view)" class="mb-3 productPublished form-check form-switch mb-3">
     <input th:checked="${published}" name="published"
-           th:disabled="${view == null}"
+           th:readonly="${view == null}"
            class="form-check-input" type="checkbox" id="published">
     <label class="form-check-label" for="published">Published</label>
 </div>

@@ -64,26 +64,9 @@ public class ProductManager {
 
     @GetMapping("/products/create.html")
     public String createProduct(Model model) {
-        return "admin/product.create";
-    }
-
-    @PostMapping("/products/create")
-    public String createProduct(@RequestBody Product product, Model model) {
-
-        return "admin/product.create";
-    }
-
-    @GetMapping("/products/{handle}/edit.html")
-    public String editProduct(
-            @PathVariable(value = "handle", required = true) String handle,
-            RedirectAttributes redirectAttributes,
-            Model model
-    ) {
-        MenuActive menuActive = new MenuActive("products", "editProduct");
+        MenuActive menuActive = new MenuActive("products", "createProduct");
         model.addAttribute("menuActive", menuActive);
 
-        Product product = productService.findByHandleFetchEagerAll(handle);
-        model.addAttribute("product", product);
         List<ProductTag> productTags = productTagService.findAll();
         model.addAttribute("productTags", productTags);
         List<Collection> collections = collectionService.findAll();
@@ -92,19 +75,57 @@ public class ProductManager {
         model.addAttribute("vendors", vendors);
         List<ProductType> productTypes = productTypeService.findAll();
         model.addAttribute("productTypes", productTypes);
+
+        return "/admin/product.create";
+    }
+
+    @PostMapping("/products/create")
+    public String createProduct(@ModelAttribute Product product, Model model) {
+        Product productCreated = productService.saveSpread(product);
+        model.addAttribute("product", product);
+        MenuActive menuActive = new MenuActive("products", "createProduct");
+        model.addAttribute("menuActive", menuActive);
+
+        return "redirect:/admin/products/" + product.getHandle() + ".html";
+    }
+
+    @GetMapping("/products/{handle}/edit.html")
+    public String editProduct(
+            @PathVariable(value = "handle", required = true) String handle,
+            @ModelAttribute("redirectProduct") Product redirectProduct,
+            Model model
+    ) {
+        MenuActive menuActive = new MenuActive("products", "editProduct");
+        model.addAttribute("menuActive", menuActive);
+        List<ProductTag> productTags = productTagService.findAll();
+        model.addAttribute("productTags", productTags);
+        List<Collection> collections = collectionService.findAll();
+        model.addAttribute("collections", collections);
+        List<Vendor> vendors = vendorService.findAll();
+        model.addAttribute("vendors", vendors);
+        List<ProductType> productTypes = productTypeService.findAll();
+        model.addAttribute("productTypes", productTypes);
+
+        if (redirectProduct.getId() != null) {
+            model.addAttribute("product", redirectProduct);
+            return "/admin/product.edit";
+        }
+
+        Product productExists = productService.findByHandleFetchEagerAll(handle);
+        model.addAttribute("product", productExists);
         return "/admin/product.edit";
     }
 
     @PostMapping("/products/edit")
-    public String editProduct(@ModelAttribute Product product, Model model) {
+    public String editProduct(
+            @ModelAttribute Product product,
+            RedirectAttributes redirectAttributes
+    ) {
+//        redirectAttributes.addFlashAttribute("redirectProduct", product);
+//        return "redirect:/admin/products/" + product.getHandle() + "/edit.html";
 
-
-        Product productEdited = productService.edit(product);
-        model.addAttribute("product",productEdited);
-        MenuActive menuActive = new MenuActive("products", "editProduct");
-        model.addAttribute("menuActive", menuActive);
-        return "redirect:/admin/products/" + product.getHandle() + "/edit.html";
-//        return "/admin/product.edit";
+        productService.saveSpread(product);
+        return "redirect:/admin/products/" + product.getHandle() + "/variants/edit.html";
     }
 
     @GetMapping(value = {"/products", "products/*"})

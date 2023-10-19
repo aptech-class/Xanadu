@@ -22,4 +22,6 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     @Query("SELECT i FROM Image i WHERE i.product = :product AND i.id NOT IN :imagesIds")
     List<Image> findByProductAndIdNotIn(@Param("product") Product product,@Param("imagesIds") List<Long> imagesIds);
+
+    List<Image> findByProduct(Product product);
 }

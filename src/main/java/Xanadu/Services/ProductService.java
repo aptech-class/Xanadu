@@ -76,7 +76,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product edit(Product product) {
+    public Product saveSpread(Product product) {
         List<Collection> collectionsSaved = saveCollectionOfProduct(product);
         product.setCollections(collectionsSaved);
 
@@ -90,7 +90,7 @@ public class ProductService {
         List<Option> optionsSaved = saveOptionsOfProduct(product);
         product.setOptions(optionsSaved);
 
-        List<Variant> variantsGenerated = generateVariants(product, new ArrayList<>(), new HashMap<String, String>(), 0);
+        List<Variant> variantsGenerated = generateVariants(product, new ArrayList<>(), new HashMap<>(), 0);
 
         product.setVariants(variantsGenerated);
 
@@ -102,22 +102,34 @@ public class ProductService {
         if (options.isEmpty()) {
             return variants;
         }
+        if (index != options.size()) {
 
-        if (index == options.size()) {
+            Option option = options.get(index);
+            List<OptionValue> optionValues = option.getOptionValues();
+            if (optionValues == null || optionValues.isEmpty()) {
+                generateVariants(product, variants, simpleVariant, index + 1);
+            } else {
+                option.getOptionValues().forEach(optionValue -> {
+                    simpleVariant.put(option.getName(), optionValue.getValue());
+                    generateVariants(product, variants, simpleVariant, index + 1);
+                });
+            }
+        } else {
+
             boolean alreadyVariant = false;
             List<Variant> variantsExists = product.getVariants();
             if (variantsExists != null && !variantsExists.isEmpty()) {
                 for (Variant variant : variantsExists) {
                     Map<String, String> simpleVariantExists = new HashMap<>();
-                    for (OptionValue optionValue : variantRepository.findById(variant.getId()).get().getOptionValues()) {
+                    for (OptionValue optionValue : variant.getOptionValues()) {
                         simpleVariantExists.put(optionValue.getOption().getName(), optionValue.getValue());
                     }
                     StringBuilder check = new StringBuilder();
                     simpleVariant.forEach((optionName, value) -> {
                         check.append(Objects.equals(simpleVariantExists.get(optionName), value));
                     });
-                    log.info(simpleVariant.toString());
-                    log.info(simpleVariantExists.toString());
+                    log.info("variant: {}", simpleVariant);
+                    log.info("variantExists: {}", simpleVariantExists);
                     log.info(check.toString());
                     if (!check.isEmpty() && !check.toString().contains("false")) {
                         variants.add(variant);
@@ -127,9 +139,9 @@ public class ProductService {
                 }
             }
 
-            if (!alreadyVariant) {
+            if (!alreadyVariant && !simpleVariant.isEmpty()) {
                 Variant variant = new Variant();
-                StringBuilder sku = new StringBuilder(product.getTitle());
+                StringBuilder sku = new StringBuilder(product.getHandle());
                 StringBuilder title = new StringBuilder();
                 simpleVariant.forEach((optionName, value) -> {
                     sku.append("_").append(optionName).append(":").append(value);
@@ -152,19 +164,18 @@ public class ProductService {
                     });
                 });
                 variant.setOptionValues(optionValues);
-
                 variants.add(variantRepository.save(variant));
             }
-
-
-        } else {
-            Option option = options.get(index);
-            option.getOptionValues().forEach(optionValue -> {
-                simpleVariant.put(option.getName(), optionValue.getValue());
-                generateVariants(product, variants, simpleVariant, index + 1);
-            });
         }
-        variantRepository.deleteByProductAndIdNotIn(product,variants.stream().map(Variant::getId).toList());
+
+        if (index == 0) {
+            List<Long> variantsIds = variants.stream().map(Variant::getId).toList();
+            if (variantsIds.isEmpty()) {
+                variantRepository.deleteByProduct(product);
+            } else {
+                variantRepository.deleteByProductAndIdNotIn(product, variantsIds);
+            }
+        }
         return variants;
     }
 
@@ -177,14 +188,8 @@ public class ProductService {
 
         List<Option> optionsNeedDelete = optionsIds.isEmpty() ? optionRepository.findByProduct(product) : optionRepository.findByProductAndIdInNotIn(product, optionsIds);
         List<OptionValue> optionValuesNeedDelete = new ArrayList<>(optionValueRepository.findByOptionIn(optionsNeedDelete));
-        List<Variant> variantsNeedDelete = new ArrayList<>(variantRepository.findByProductAndNotExistOptionValue(product));
 
         if (options == null || options.isEmpty()) {
-            optionValuesNeedDelete.forEach(optionValueNeedDelete -> {
-                optionValueNeedDelete.getVariants().forEach(Variant::getId);
-                variantsNeedDelete.addAll(optionValueNeedDelete.getVariants());
-            });
-            variantRepository.deleteAllInBatch(variantsNeedDelete);
             optionValueRepository.deleteAllInBatch(optionValuesNeedDelete);
             optionRepository.deleteAllInBatch(optionsNeedDelete);
             return optionsSaved;
@@ -194,23 +199,21 @@ public class ProductService {
             Option optionSaved = optionRepository.save(option);
             List<OptionValue> optionValuesSaved = new ArrayList<>();
             List<Long> optionValuesIds = new ArrayList<>();
-            option.getOptionValues().forEach(optionValue -> {
+
+            List<OptionValue> optionValues = option.getOptionValues();
+            if (optionValues != null) optionValues.forEach(optionValue -> {
                 optionValue.setOption(optionSaved);
                 OptionValue optionValueSaved = optionValueRepository.save(optionValue);
                 optionValuesSaved.add(optionValueSaved);
                 optionValuesIds.add(optionValueSaved.getId());
             });
-            optionValuesNeedDelete.addAll(optionValueRepository.findByOptionAndIdNotIn(optionSaved, optionValuesIds));
+            optionValuesNeedDelete.addAll(optionValuesIds.isEmpty() ? optionValueRepository.findByOption(optionSaved) : optionValueRepository.findByOptionAndIdNotIn(optionSaved, optionValuesIds));
             optionSaved.setOptionValues(optionValuesSaved);
             optionsSaved.add(optionSaved);
 
         });
 
-        optionValuesNeedDelete.forEach(optionValueNeedDelete -> {
-            optionValueNeedDelete.getVariants().forEach(Variant::getId);
-            variantsNeedDelete.addAll(optionValueNeedDelete.getVariants());
-        });
-        variantRepository.deleteAllInBatch(variantsNeedDelete);
+
         optionValueRepository.deleteAllInBatch(optionValuesNeedDelete);
         optionRepository.deleteAllInBatch(optionsNeedDelete);
 
@@ -264,10 +267,7 @@ public class ProductService {
         List<Image> imagesSaved = new ArrayList<>();
         List<Long> imagesIds = new ArrayList<>();
         List<Image> images = product.getImages();
-        if (images == null || images.isEmpty()) {
-            return imagesSaved;
-        }
-        images.forEach(image -> {
+        if (images != null) images.forEach(image -> {
             image.setProduct(product);
             if (image.getId() == null) {
                 boolean srcIsBase64 = image.getSrc().contains("base64");
@@ -295,8 +295,14 @@ public class ProductService {
             imagesSaved.add(image);
 
         });
-        List<Image> imagesNeedDelete = imageRepository.findByProductAndIdNotIn(product, imagesIds);
+        List<Image> imagesNeedDelete = images == null || images.isEmpty() ? imageRepository.findByProduct(product) : imageRepository.findByProductAndIdNotIn(product, imagesIds);
         List<Variant> variantsRelate = variantRepository.findByImageIn(imagesNeedDelete);
+
+        variantsRelate.forEach(variant -> {
+            variant.setImage(null);
+            variantRepository.saveAndFlush(variant);
+        });
+        imageRepository.deleteAllInBatch(imagesNeedDelete);
 
         imagesNeedDelete.forEach(image -> {
             String imageSrc = image.getSrc();
@@ -308,11 +314,6 @@ public class ProductService {
                 }
             }
         });
-        variantsRelate.forEach(variant -> {
-            variant.setImage(null);
-            variantRepository.saveAndFlush(variant);
-        });
-        imageRepository.deleteAllInBatch(imagesNeedDelete);
         return imagesSaved;
     }
 
