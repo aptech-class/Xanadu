@@ -1,26 +1,25 @@
 package Xanadu.Controllers.Admin;
 
 import Xanadu.Entities.*;
-import Xanadu.Models.Admin.MenuActive;
 import Xanadu.Models.Admin.PageOption;
 import Xanadu.Services.*;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/products")
 @Slf4j
-public class ProductManager {
+public class ProductManager extends AbstractManger {
     private final List<Integer> sizeOptions = Arrays.asList(20, 30, 50);
     @Autowired
     private ProductService productService;
@@ -32,8 +31,10 @@ public class ProductManager {
     private VendorService vendorService;
     @Autowired
     private ProductTypeService productTypeService;
+    @Autowired
+    private VariantService variantService;
 
-    @GetMapping("/products.html")
+    @GetMapping("/index.html")
     public String getProducts(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
             @RequestParam(value = "pageSize", required = false, defaultValue = "30") Integer pageSize,
@@ -41,96 +42,127 @@ public class ProductManager {
     ) {
         Page<Product> products = productService.findAllWithImages(pageNumber - 1, pageSize);
         model.addAttribute("products", products);
-        MenuActive menuActive = new MenuActive("products", "listProducts");
-        model.addAttribute("menuActive", menuActive);
+        setMenu(model, "products.list");
         PageOption pageOption = new PageOption(sizeOptions, pageSize, pageNumber, "/admin/products");
         model.addAttribute("pageOption", pageOption);
+        setMenu(model, "products.list");
         return "admin/products";
     }
 
-    @GetMapping("/products/{handle}.html")
+    @GetMapping("/{handle}.html")
     public String getProduct(
             @PathVariable(value = "handle", required = true) String handle,
             Model model
     ) {
         Product product = productService.findByHandleFetchEagerAll(handle);
+        if(product==null) return "admin/notFound";
         model.addAttribute("product", product);
+        setMenu(model,"products");
 
-        MenuActive menuActive = new MenuActive("products", "itemProduct");
-        model.addAttribute("menuActive", menuActive);
-
-        return "admin/product";
+        return "admin/product.view";
     }
 
-    @GetMapping("/products/create.html")
-    public String createProduct(Model model) {
-        MenuActive menuActive = new MenuActive("products", "createProduct");
-        model.addAttribute("menuActive", menuActive);
+    @GetMapping("/create.html")
+    public String createProduct(
+            Model model
+    ) {
+        setMenu(model,"products.create");
 
-        List<ProductTag> productTags = productTagService.findAll();
-        model.addAttribute("productTags", productTags);
-        List<Collection> collections = collectionService.findAll();
-        model.addAttribute("collections", collections);
-        List<Vendor> vendors = vendorService.findAll();
-        model.addAttribute("vendors", vendors);
-        List<ProductType> productTypes = productTypeService.findAll();
-        model.addAttribute("productTypes", productTypes);
+        model.addAttribute("product", new Product());
+        setObjectRelateToModel(model);
 
         return "/admin/product.create";
     }
 
-    @PostMapping("/products/create")
-    public String createProduct(@ModelAttribute Product product, Model model) {
-        Product productCreated = productService.saveSpread(product);
-        model.addAttribute("product", product);
-        MenuActive menuActive = new MenuActive("products", "createProduct");
-        model.addAttribute("menuActive", menuActive);
-
+    @PostMapping("/create")
+    public String createProduct(
+            @Valid @ModelAttribute Product product,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            setMenu(model,"products.create");
+            setObjectRelateToModel(model);
+            return "/admin/product.create";
+        }
+        productService.saveSpread(product);
         return "redirect:/admin/products/" + product.getHandle() + ".html";
     }
 
-    @GetMapping("/products/{handle}/edit.html")
+    @GetMapping("/{handle}/edit.html")
     public String editProduct(
-            @PathVariable(value = "handle", required = true) String handle,
-            @ModelAttribute("redirectProduct") Product redirectProduct,
+            @PathVariable("handle") String handle,
             Model model
     ) {
-        MenuActive menuActive = new MenuActive("products", "editProduct");
-        model.addAttribute("menuActive", menuActive);
-        List<ProductTag> productTags = productTagService.findAll();
-        model.addAttribute("productTags", productTags);
-        List<Collection> collections = collectionService.findAll();
-        model.addAttribute("collections", collections);
-        List<Vendor> vendors = vendorService.findAll();
-        model.addAttribute("vendors", vendors);
-        List<ProductType> productTypes = productTypeService.findAll();
-        model.addAttribute("productTypes", productTypes);
-
-        if (redirectProduct.getId() != null) {
-            model.addAttribute("product", redirectProduct);
-            return "/admin/product.edit";
-        }
+        setMenu(model,"products.edit");
+        setObjectRelateToModel(model);
 
         Product productExists = productService.findByHandleFetchEagerAll(handle);
         model.addAttribute("product", productExists);
         return "/admin/product.edit";
     }
 
-    @PostMapping("/products/edit")
+    @PostMapping("/edit")
     public String editProduct(
-            @ModelAttribute Product product,
-            RedirectAttributes redirectAttributes
+           @Valid @ModelAttribute Product product,
+            BindingResult bindingResult,
+            Model model
     ) {
-//        redirectAttributes.addFlashAttribute("redirectProduct", product);
-//        return "redirect:/admin/products/" + product.getHandle() + "/edit.html";
-
+        if (bindingResult.hasErrors()) {
+            setMenu(model,"products.edit");
+            setObjectRelateToModel(model);
+            return "/admin/product.edit";
+        }
         productService.saveSpread(product);
         return "redirect:/admin/products/" + product.getHandle() + "/variants/edit.html";
+    }
+    @GetMapping("/{handle}/variants/edit.html")
+    public String editVariants(@PathVariable("handle") String handle, Model model) {
+        Product product = productService.findByHandleWithVariantsAndImages( handle);
+        if(product==null) return "/admin/notFound";
+        model.addAttribute("product", product);
+        setMenu(model,"products.variant");
+        return "/admin/variants.edit";
+    }
+
+    @GetMapping("/edit.html")
+    public String findProductToEdit(Model model){
+        setMenu(model,"products.edit");
+        return "/admin/product.edit";
+    }
+    @GetMapping("/variant.html")
+    public String findProductToEditVariants(Model model){
+        setMenu(model,"products.variant");
+        return "/admin/product.variants.edit";
+    }
+    @PostMapping("/products/variants/edit")
+    public String editVariants(@ModelAttribute Product product,BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            setMenu(model,"products.variant");
+            return "/admin/variants.edit";
+        }
+        List<Variant> variants = product.getVariants();
+        for (Variant variant : variants) {
+            variant.setProduct(product);
+        }
+        variantService.saveAll(variants);
+
+        return "redirect:/admin/products/"+product.getHandle()+".html";
     }
 
     @GetMapping(value = {"/products", "products/*"})
     public String redirectToGetProducts() {
-        return "redirect:/admin/products.html";
+        return "redirect:/admin/products/products.html";
     }
 
+     protected void setObjectRelateToModel(Model model) {
+        List<ProductTag> productTags = productTagService.findAll();
+        model.addAttribute("productTags", productTags);
+        List<Collection> collections = collectionService.findAll();
+        model.addAttribute("collections", collections);
+        List<Vendor> vendors = vendorService.findAll();
+        model.addAttribute("vendors", vendors);
+        List<ProductType> productTypes = productTypeService.findAll();
+        model.addAttribute("productTypes", productTypes);
+    }
 }

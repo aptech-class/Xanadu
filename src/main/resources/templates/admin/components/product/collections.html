@@ -32,5 +32,6 @@
         <button id="addToCollectionBtn" type="button" class="btn col-2 btn-sm btn-outline-primary">Add to collection
         </button>
     </div>
+    <p th:if="${#fields.hasErrors('product.collections')}" th:errorclass="error" th:errors="${product.collections}"></p>
 </div>
 </html>

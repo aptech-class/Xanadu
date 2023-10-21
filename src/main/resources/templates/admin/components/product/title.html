@@ -6,11 +6,12 @@
     <label for="title" class="form-label">Title</label>
     <input
             type="text"
-            class="form-control"
+            class="form-control error"
             id="title"
             name="title"
             th:value="${title}"
             th:readonly="${view == null}"
     />
+    <p th:if="${#fields.hasErrors('product.title')}" th:errorclass="error" th:errors="${product.title}"></p>
 </div>
 </html>

@@ -5,6 +5,8 @@
 <div layout:fragment="productBodyHtml(bodyHtml)" class="mb-3 productBodyHtml">
     <label for="bodyHtml" class="form-label">Body html</label>
     <textarea name="bodyHtml" th:text="${bodyHtml}" class="form-control"
-              id="bodyHtml" rows="6"></textarea>
+              id="bodyHtml" rows="6">
+    </textarea>
+    <p th:if="${#fields.hasErrors('product.bodyHtml')}" th:errorclass="error" th:errors="${product.bodyHtml}"></p>
 </div>
 </html>

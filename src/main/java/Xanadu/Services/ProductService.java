@@ -58,6 +58,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product findByHandleFetchEagerAll(String handle) {
         Product product = productRepository.findByHandle(handle);
+        if(product==null) return null;
         product.getImages().forEach(Image::getId);
         product.getCollections().forEach(Collection::getId);
         product.getProductTags().forEach(ProductTag::getId);

@@ -4,6 +4,11 @@
         lang="en">
 
 <aside layout:fragment="menu" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <style>
+        .menu-link {
+          text-transform: capitalize;
+        }
+    </style>
     <div class="app-brand demo pb-4 border-bottom-2">
         <a href="/admin/index.html" class="app-brand-link">
             <span class="app-brand-logo demo">
@@ -24,52 +29,30 @@
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
-
     <div class="menu-inner-shadow"></div>
-
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li th:class="${menuActive.name == 'dashboard' ? 'menu-item active open' : 'menu-item'}">
-            <a href="/admin/index.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-            </a>
-        </li>
-
-        <li th:class="${menuActive.name == 'products' ? 'menu-item active open' : 'menu-item'}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Products</div>
+        <li th:each="navbar : ${menu.navbars}"
+            th:class="${navbar.status  ? 'menu-item active open' : 'menu-item'}"
+        >
+            <a th:href="${navbar.url != null ? navbar.url : 'javascript:void(0);'}"
+               th:class="${navbar.url != null ? 'menu-link' : 'menu-link menu-toggle'}">
+                <div th:text="${navbar.title}" >title</div>
             </a>
 
-            <ul class="menu-sub">
-                <li th:class="${menuActive.subName == 'listProducts' ? 'menu-item active' : 'menu-item'}">
-                    <a href="/admin/products.html" class="menu-link">
-                        <div data-i18n="Without menu">List</div>
-                    </a>
-                </li>
-                <li th:class="${menuActive.subName == 'itemProduct' ? 'menu-item active' : 'menu-item'}">
-                    <a href="/admin/products/item.html" class="menu-link">
-                        <div data-i18n="Without menu">Item</div>
-                    </a>
-                </li>
-                <li th:class="${menuActive.subName == 'createProduct' ? 'menu-item active' : 'menu-item'}">
-                    <a href="/admin/products/create.html" class="menu-link">
-                        <div data-i18n="Without menu">Create</div>
-                    </a>
-                </li>
-                <li th:class="${menuActive.subName == 'editProduct' ? 'menu-item active' : 'menu-item'}">
-                    <a href="/admin/products/edit.html" class="menu-link">
-                        <div data-i18n="Without menu">Edit</div>
-                    </a>
-                </li>
-                <li th:class="${menuActive.subName == 'variantsProduct' ? 'menu-item active' : 'menu-item'}">
-                    <a href="/admin/products/variants/edit.html" class="menu-link">
-                        <div data-i18n="Without menu">Variants</div>
+            <ul th:if="${navbar.navbars}" class="menu-sub">
+                <li th:each="navbar_ : ${navbar.navbars}"
+                    th:class="${navbar_.status  ? 'menu-item active' : 'menu-item'}"
+                >
+                    <a th:href="${navbar_.url != null ? navbar_.url : 'javascript:void(0);'}"
+                       th:class="${navbar_.url != null ? 'menu-link' : 'menu-link menu-toggle'}">
+                        <div th:text="${navbar_.title}" >title</div>
                     </a>
                 </li>
             </ul>
         </li>
+
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Setting</span>
         </li>

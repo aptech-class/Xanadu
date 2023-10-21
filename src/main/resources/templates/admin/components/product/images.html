@@ -48,6 +48,7 @@
             </label>
         </div>
     </div>
+    <p th:if="${#fields.hasErrors('product.images')}" th:errorclass="error" th:errors="${product.images}"></p>
 </div>
 
 </html>

@@ -337,6 +337,8 @@ const optionsHandler = () => {
                         </div>
                     </div>`;
     optionsList.innerHTML += content;
+    const lastBtnOptionItemBox = optionsList.querySelector(".optionItemBox:last-child button.accordion-button")
+    lastBtnOptionItemBox.click();
     optionsHandler();
   };
   const reloadOptionIndex = () => {
@@ -403,7 +405,7 @@ const load = () => {
   bodyHtmlHandler();
   reloadImage();
 
-  const forms = document.querySelectorAll("form");
+  const forms = document.querySelectorAll("form.enterDisable");
   forms.forEach((item) => {
     item.onkeydown = (e) => {
       if (e.code === "Enter") {

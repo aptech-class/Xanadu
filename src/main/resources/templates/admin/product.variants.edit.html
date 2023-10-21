@@ -7,9 +7,9 @@
 <div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
     <div class="row">
         <div class="">
-            <div class="card mb-4">
+            <div th:if="${product}" class="card mb-4">
                 <h5 class="card-header text-center" th:text="${product.title}">Product</h5>
-                <form th:action="@{/admin/products/variants/edit}" enctype="multipart/form-data" method="post">
+                <form th:action="@{/admin/products/variants/edit}" th:class="enterDisable"  enctype="multipart/form-data" method="post">
                     <div class="card-body">
                         <input type="hidden" th:value="${product.id}" name="id">
                         <input type="hidden" th:value="${product.handle}" name="handle">
@@ -23,6 +23,19 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </form>
+            </div>
+            <div th:else="${product==null}">
+                <form action="">
+                    <h5 th:class="text-center">Find product to edit variants</h5>
+                    <div class="mb-3 px-5">
+                        <input
+                                type="text"
+                                class="form-control border-0 shadow-none mx-5"
+                                placeholder="Search..."
+                                aria-label="Search..."
+                        />
                     </div>
                 </form>
             </div>

@@ -35,9 +35,16 @@
                             <input th:value="${option.name}"
                                    class="inputOptionNameItem form-control-sm  form-control"
                                    type="text"
-                                   th:id="${'optionName'+stat.index}"
-                                   th:name="${'options['+ stat.index + '].name'}"
+                                   th:id="${'optionName' + stat.index}"
+                                   th:name="${'options[' + stat.index + '].name'}"
                             >
+                        </div>
+                        <div th:if="${#fields.hasErrors('product.options['+stat.index+'].name')}" th:class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <p th:if="${#fields.hasErrors('product.options['+stat.index+'].name')}"
+                                   th:errorclass="error" th:errors="${product.options[__${stat.index}__].name}"></p>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -71,6 +78,9 @@
                                 <button type="button"
                                         class="addOptionValueBtn btn col-2 btn-sm btn-outline-primary">Add value
                                 </button>
+                                <p th:if="${#fields.hasErrors('product.options['+stat.index+'].optionValues')}"
+                                   th:errorclass="error"
+                                   th:errors="${product.options[__${stat.index}__].optionValues}"></p>
                             </div>
                         </div>
                     </div>
@@ -83,9 +93,10 @@
         </div>
     </div>
     <div style="text-align: right;" class="mb-3">
-        <button th:id="addOptionBtn" type="button" class="addOptionBtn btn btn-sm btn-outline-primary">Add option</button>
+        <button th:id="addOptionBtn" type="button" class="addOptionBtn btn btn-sm btn-outline-primary">Add option
+        </button>
     </div>
-
+    <p th:if="${#fields.hasErrors('product.options')}" th:errorclass="error" th:errors="${product.options}"></p>
 </div>
 
 </html>

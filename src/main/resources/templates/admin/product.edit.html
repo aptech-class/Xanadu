@@ -7,9 +7,11 @@
 <div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
     <div class="row">
         <div class="">
-            <div class="card mb-4">
+
+            <div th:if="${product!=null}" class="card mb-4">
                 <h5 class="card-header text-center">Product</h5>
-                <form th:action="@{/admin/products/edit}" enctype="multipart/form-data" method="post">
+                <form th:action="@{/admin/products/edit}" th:class="enterDisable" enctype="multipart/form-data"
+                      method="post">
                     <div class="card-body">
                         <input type="hidden" th:value="${product.id}" name="id">
                         <div layout:replace="~{/admin/components/product/title :: productTitle(${product.title}, 'edit')}"></div>
@@ -34,6 +36,19 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </form>
+            </div>
+            <div th:else="${product==null}">
+                <form action="">
+                    <h5 th:class="text-center">Find product to edit</h5>
+                    <div class="mb-3 px-5">
+                        <input
+                                type="text"
+                                class="form-control border-0 shadow-none mx-5"
+                                placeholder="Search..."
+                                aria-label="Search..."
+                        />
                     </div>
                 </form>
             </div>
