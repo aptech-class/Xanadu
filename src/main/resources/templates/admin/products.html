@@ -33,14 +33,14 @@
             <div class="col-6 " style="text-align: right;">
                 <div class="demo-inline-spacing">
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                             Page size
                         </button>
                         <ul class="dropdown-menu" style="">
                             <li th:each="sizeOption : ${pageOption.sizeOptions}">
                                 <a class="dropdown-item"
-                                   th:href="${menu.url + '?pageSize=' + sizeOption}"
+                                   th:href="${menu.url + '?pageSize=' + sizeOption + '&pageNumber=' + pageOption.pageNumber}"
                                    th:text="${sizeOption}"
                                    href="javascript:void(0);">Action</a>
                             </li>
@@ -67,8 +67,8 @@
                 <tbody>
                 <tr th:each="product,stat : ${products}" th:object="${product}">
                     <th scope="row" th:text="${stat.index + 1}"></th>
-                    <td th:text="*{id}"></td>
                     <td th:text="*{title}"></td>
+                    <td th:text="*{id}"></td>
                     <td>
                         <a th:href="*{'/admin/products/' + handle + '.html'}" th:text="*{handle}"></a>
                     </td>
@@ -118,7 +118,7 @@
                         </div>
                     </td>
                     <td>
-                        <a th:href="@{'/admin/products/' + ${product.handle} + '/edi''}" class="dropdown-item"
+                        <a th:href="@{'/admin/products/' + ${product.handle} + '/edit.html'}" class="dropdown-item"
                            href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>
                     </td>
                 </tr>

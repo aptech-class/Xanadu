@@ -1,0 +1,37 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}" lang="en"
+      xmlns:th="http://WWW.thymeleaf.org"
+>
+<body>
+
+<div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="">
+            <div class="card mb-4">
+                <h5 class="card-header text-center">Customer</h5>
+                <form th:action="@{/admin/customers/create}" th:class="enterDisable"  enctype="multipart/form-data" method="post">
+                    <div class="card-body">
+                        <div layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"></div>
+                        <div layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"></div>
+                        <div layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"></div>
+                        <div layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"></div>
+                        <div layout:replace="~{/admin/components/customer/password :: customerPassword(${customer.password})}"></div>
+                        <div layout:replace="~{/admin/components/customer/confirmPassword :: customerConfirmPassword(${customer.confirmPassword})}"></div>
+                        <div layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"></div>
+                        <div class="mb-3 productCreateAction">
+                            <div class="row">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6 demo-inline-spacing text-right">
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

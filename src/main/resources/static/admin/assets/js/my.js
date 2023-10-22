@@ -24,7 +24,7 @@ const imageHandler = () => {
       }
       const imageId = e.target.id.replace("image", "");
       variantImageId.value = imageId;
-      variantImageId.name = variantImageId.name.replace("img","image")
+      variantImageId.name = variantImageId.name.replace("img", "image");
     };
   });
   // remove image item when edit product
@@ -337,7 +337,9 @@ const optionsHandler = () => {
                         </div>
                     </div>`;
     optionsList.innerHTML += content;
-    const lastBtnOptionItemBox = optionsList.querySelector(".optionItemBox:last-child button.accordion-button")
+    const lastBtnOptionItemBox = optionsList.querySelector(
+      ".optionItemBox:last-child button.accordion-button"
+    );
     lastBtnOptionItemBox.click();
     optionsHandler();
   };
@@ -392,11 +394,50 @@ const reloadImage = () => {
   images.forEach((image) => {
     image.src = image.src;
     image.onerror = (e) => {
-      console.log("reloadImage")
+      console.log("reloadImage");
       if (performance.now() - startTime < 10000) image.src = e.target.src;
     };
   });
 };
+/**
+ * customer begin
+ */
+const uploadAvatar = () => {
+  const uploadInput = document.getElementById("uploadInput");
+  const avatarImage = document.getElementById("avatarImage");
+
+  if (!uploadInput) {
+    return;
+  }
+  uploadInput.onchange = (e) => {
+    const files = e.target.files;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      const newSrc = ev.target.result;
+      avatarImage.src = newSrc;
+    };
+    reader.readAsDataURL(files[0]);
+  };
+};
+const togglePwd = () => {
+  const togglePwd = document.querySelectorAll(".togglePassword ");
+  if(!togglePwd){
+    return;
+  }
+  togglePwd.forEach((item) => {
+    item.onclick = (e) => {
+      const input = e.target.closest("div").querySelector("input");
+      input.type = input.type == "text" ? "password" : "text";
+      e.target.closest("div")
+        .querySelector("i")
+        .classList.remove(input.type == "text" ? "bx-hide" : "bx-show");
+      e.target.closest("div")
+        .querySelector("i")
+        .classList.add(input.type == "text" ? "bx-show" : "bx-hide");
+    };
+  });
+};
+
 const load = () => {
   imageHandler();
   collectionHandler();
@@ -404,7 +445,9 @@ const load = () => {
   optionsHandler();
   bodyHtmlHandler();
   reloadImage();
-
+  // customer
+  uploadAvatar();
+  togglePwd();
   const forms = document.querySelectorAll("form.enterDisable");
   forms.forEach((item) => {
     item.onkeydown = (e) => {

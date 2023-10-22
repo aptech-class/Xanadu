@@ -3,6 +3,7 @@ package Xanadu.Controllers.Admin;
 import Xanadu.Entities.*;
 import Xanadu.Models.Admin.PageOption;
 import Xanadu.Services.*;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/products")
 @Slf4j
-public class ProductManager extends AbstractManger {
-    private final List<Integer> sizeOptions = Arrays.asList(20, 30, 50);
+public class ProductManager extends AbstractManager {
     @Autowired
     private ProductService productService;
     @Autowired
@@ -42,9 +42,7 @@ public class ProductManager extends AbstractManger {
     ) {
         Page<Product> products = productService.findAllWithImages(pageNumber - 1, pageSize);
         model.addAttribute("products", products);
-        setMenu(model, "products.list");
-        PageOption pageOption = new PageOption(sizeOptions, pageSize, pageNumber, "/admin/products");
-        model.addAttribute("pageOption", pageOption);
+        setPageOption(model, pageSize, pageNumber,"/admin/products/index.html");
         setMenu(model, "products.list");
         return "admin/products";
     }
@@ -55,22 +53,18 @@ public class ProductManager extends AbstractManger {
             Model model
     ) {
         Product product = productService.findByHandleFetchEagerAll(handle);
-        if(product==null) return "admin/notFound";
+        if (product == null) return "admin/notFound";
         model.addAttribute("product", product);
-        setMenu(model,"products");
+        setMenu(model, "products");
 
         return "admin/product.view";
     }
 
     @GetMapping("/create.html")
-    public String createProduct(
-            Model model
-    ) {
-        setMenu(model,"products.create");
-
+    public String createProduct(Model model) {
+        setMenu(model, "products.create");
         model.addAttribute("product", new Product());
         setObjectRelateToModel(model);
-
         return "/admin/product.create";
     }
 
@@ -81,7 +75,7 @@ public class ProductManager extends AbstractManger {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            setMenu(model,"products.create");
+            setMenu(model, "products.create");
             setObjectRelateToModel(model);
             return "/admin/product.create";
         }
@@ -94,7 +88,7 @@ public class ProductManager extends AbstractManger {
             @PathVariable("handle") String handle,
             Model model
     ) {
-        setMenu(model,"products.edit");
+        setMenu(model, "products.edit");
         setObjectRelateToModel(model);
 
         Product productExists = productService.findByHandleFetchEagerAll(handle);
@@ -104,41 +98,44 @@ public class ProductManager extends AbstractManger {
 
     @PostMapping("/edit")
     public String editProduct(
-           @Valid @ModelAttribute Product product,
+            @Valid @ModelAttribute Product product,
             BindingResult bindingResult,
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            setMenu(model,"products.edit");
+            setMenu(model, "products.edit");
             setObjectRelateToModel(model);
             return "/admin/product.edit";
         }
         productService.saveSpread(product);
         return "redirect:/admin/products/" + product.getHandle() + "/variants/edit.html";
     }
+
     @GetMapping("/{handle}/variants/edit.html")
     public String editVariants(@PathVariable("handle") String handle, Model model) {
-        Product product = productService.findByHandleWithVariantsAndImages( handle);
-        if(product==null) return "/admin/notFound";
+        Product product = productService.findByHandleWithVariantsAndImages(handle);
+        if (product == null) return "/admin/notFound";
         model.addAttribute("product", product);
-        setMenu(model,"products.variant");
-        return "/admin/variants.edit";
+        setMenu(model, "products.variants");
+        return "/admin/product.variants.edit";
     }
 
     @GetMapping("/edit.html")
-    public String findProductToEdit(Model model){
-        setMenu(model,"products.edit");
+    public String findProductToEdit(Model model) {
+        setMenu(model, "products.edit");
         return "/admin/product.edit";
     }
-    @GetMapping("/variant.html")
-    public String findProductToEditVariants(Model model){
-        setMenu(model,"products.variant");
+
+    @GetMapping("/variants.html")
+    public String findProductToEditVariants(Model model) {
+        setMenu(model, "products.variants");
         return "/admin/product.variants.edit";
     }
-    @PostMapping("/products/variants/edit")
-    public String editVariants(@ModelAttribute Product product,BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            setMenu(model,"products.variant");
+
+    @PostMapping("/variants/edit")
+    public String editVariants(@ModelAttribute Product product, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            setMenu(model, "products.variant");
             return "/admin/variants.edit";
         }
         List<Variant> variants = product.getVariants();
@@ -147,7 +144,7 @@ public class ProductManager extends AbstractManger {
         }
         variantService.saveAll(variants);
 
-        return "redirect:/admin/products/"+product.getHandle()+".html";
+        return "redirect:/admin/products/" + product.getHandle() + ".html";
     }
 
     @GetMapping(value = {"/products", "products/*"})
@@ -155,7 +152,7 @@ public class ProductManager extends AbstractManger {
         return "redirect:/admin/products/products.html";
     }
 
-     protected void setObjectRelateToModel(Model model) {
+    protected void setObjectRelateToModel(Model model) {
         List<ProductTag> productTags = productTagService.findAll();
         model.addAttribute("productTags", productTags);
         List<Collection> collections = collectionService.findAll();
@@ -164,5 +161,21 @@ public class ProductManager extends AbstractManger {
         model.addAttribute("vendors", vendors);
         List<ProductType> productTypes = productTypeService.findAll();
         model.addAttribute("productTypes", productTypes);
+    }
+
+    @Override
+    protected void setPageOption(Model model, Integer pageSize, Integer pageNumber,String url) {
+        List<Integer> sizeOptions = Arrays.asList(20, 30, 50);
+        PageOption pageOption = new PageOption(sizeOptions, pageSize, pageNumber, url);
+        model.addAttribute("pageOption", pageOption);
+    }
+
+    @Override
+    protected void setMenu(Model model, @Nonnull String active) {
+        setDefaultMenu(model, active, "/admin/products/index.htm");
+    }
+
+    protected void setMenu(Model model, @Nonnull String active, String url) {
+        setDefaultMenu(model, active, url);
     }
 }

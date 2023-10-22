@@ -20,6 +20,8 @@ import java.util.*;
 @Service
 public class ProductService {
     private final String wordErrorForHandle = "[#%{}\\\\^~\\[\\]`]";
+
+    private final String dirUploadProductImage = "/files/images/products";
     @Autowired
     private ImageRepository imageRepository;
     @Autowired
@@ -274,7 +276,7 @@ public class ProductService {
                 boolean srcIsBase64 = image.getSrc().contains("base64");
                 if (srcIsBase64) {
                     try {
-                        String src = FilesProcessor.saveFileByDataUrl(image.getSrc());
+                        String src = FilesProcessor.saveFileByDataUrl(image.getSrc(),dirUploadProductImage);
                         image.setSrc(src);
                         Image imageSaved = imageRepository.save(image);
                         imagesIds.add(imageSaved.getId());

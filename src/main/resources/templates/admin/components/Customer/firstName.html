@@ -1,0 +1,17 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="customerFirstName(firstName,view)" class="mb-3 customerFirstName">
+    <label for="firstName" class="form-label">First name</label>
+    <input
+            type="text"
+            class="form-control error"
+            id="firstName"
+            name="firstName"
+            th:value="${firstName}"
+            th:readonly="${view == null}"
+    />
+    <p th:if="${#fields.hasErrors('customer.firstName')}" th:errorclass="error" th:errors="${customer.firstName}"></p>
+</div>
+</html>

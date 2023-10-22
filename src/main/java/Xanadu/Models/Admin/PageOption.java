@@ -13,5 +13,5 @@ public class PageOption {
     private List<Integer> sizeOptions;
     private Integer pageSize;
     private Integer pageNumber;
-    private String urlCurrent;
+    private String url;
 }

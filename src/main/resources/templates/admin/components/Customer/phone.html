@@ -1,0 +1,18 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="customerPhone(phone,view)" class="mb-3 d-flex align-items-start align-items-sm-center gap-4 customerPhone">
+    <label for="phone" class="form-label">Phone</label>
+    <input
+            type="text"
+            class="form-control error"
+            id="phone"
+            name="phone"
+            th:value="${phone}"
+            th:readonly="${view == null}"
+    />
+    <p th:if="${#fields.hasErrors('customer.phone')}" th:errorclass="error" th:errors="${customer.phone}"></p>
+</div>
+
+</html>

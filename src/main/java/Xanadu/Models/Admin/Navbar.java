@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.lang.model.element.Name;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,14 +18,18 @@ public class Navbar {
     private Boolean status = false;
     private List<Navbar> navbars;
 
+    public Navbar(String title, String url) {
+        this.url = url;
+        this.title = title;
+    }
 
     public static Navbar create() {
         Navbar navbar = new Navbar();
         navbar.setTitle("menu");
         navbar.setUrl("/admin/products/index.html");
         navbar.setStatus(true);
-        List<Navbar> navbarMap = createNavbars();
-        navbar.setNavbars(navbarMap);
+        List<Navbar> navbars = createNavbars();
+        navbar.setNavbars(navbars);
         return navbar;
     }
 
@@ -35,22 +40,31 @@ public class Navbar {
     }
 
     private static List<Navbar> createNavbars() {
-        List<Navbar> navbarMap = new ArrayList<>();
-        Navbar dashboard = new Navbar("dashboard", "/admin/home.html", false, null);
-        navbarMap.add(dashboard);
+        List<Navbar> navbars = new ArrayList<>();
+        Navbar dashboard = new Navbar("dashboard", "/admin/home.html");
+        navbars.add(dashboard);
 
         Navbar productNavbar = new Navbar();
         productNavbar.setTitle("products");
-        List<Navbar> productSubNavbar = new ArrayList<>();
-        productSubNavbar.add(new Navbar("list", "/admin/products/index.html", false, null));
-        productSubNavbar.add(new Navbar("create", "/admin/products/create.html", false, null));
-        productSubNavbar.add(new Navbar("edit", "/admin/products/edit.html", false, null));
-        productSubNavbar.add(new Navbar("variant", "/admin/products/variant.html", false, null));
-        productNavbar.setNavbars(productSubNavbar);
-        navbarMap.add(productNavbar);
+        List<Navbar> productsSubNavbar = new ArrayList<>();
+        productsSubNavbar.add(new Navbar("list", "/admin/products/index.html"));
+        productsSubNavbar.add(new Navbar("create", "/admin/products/create.html"));
+        productsSubNavbar.add(new Navbar("edit", "/admin/products/edit.html"));
+        productsSubNavbar.add(new Navbar("variants", "/admin/products/variants.html"));
+        productNavbar.setNavbars(productsSubNavbar);
+        navbars.add(productNavbar);
 
+        Navbar customerNavbar = new Navbar();
+        customerNavbar.setTitle("customers");
+        List<Navbar> customersSubNavbar = new ArrayList<>();
+        customersSubNavbar.add(new Navbar("list", "/admin/customers/index.html"));
+        customersSubNavbar.add(new Navbar("create", "/admin/customers/create.html"));
+        customersSubNavbar.add(new Navbar("edit", "/admin/customers/edit.html"));
+        customersSubNavbar.add(new Navbar("orders", "/admin/customers/orders.html"));
+        customerNavbar.setNavbars(customersSubNavbar);
+        navbars.add(customerNavbar);
 
-        return navbarMap;
+        return navbars;
     }
 
     public void setActive(@Nonnull String active) {

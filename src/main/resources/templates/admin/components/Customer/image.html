@@ -1,0 +1,19 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="customerImage(image,view)"
+     class="mb-3 customerImage "
+>
+    <div class=" mb-3">
+        <img th:src="${image}" alt="user-avatar" class="d-block rounded" height="200"
+             width="200" id="avatarImage" src=""
+        >
+        <input type="hidden" name="image" th:value="${image}">
+    </div>
+    <label for="uploadInput" class="btn btn-info  btn-sm " tabindex="0">
+        <span class="d-none d-sm-block">Avatar</span>
+        <input name="imageFile" type="file" id="uploadInput" hidden accept="image/png, image/jpeg">
+    </label>
+</div>
+</html>
