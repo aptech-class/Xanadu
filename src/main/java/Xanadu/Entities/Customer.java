@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,6 +24,7 @@ public class Customer extends EntityBasic {
 
     @NotNull
     @NotBlank(message = "Username is required!")
+    @Pattern(regexp = "[^#%{}\\\\^~\\[\\]`].*", message = "Username cannot contain character: #%{}^~[]\\`")
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -48,7 +50,7 @@ public class Customer extends EntityBasic {
     private String email;
     private String image;
     private String phone;
-    private Boolean status;
+    private Boolean status = false;
     private Date lastLogin;
     private Boolean verifiedEmail;
     private Boolean emailMarketingConsent;
@@ -82,7 +84,7 @@ public class Customer extends EntityBasic {
     private List<VoucherItem> voucherItems;
 
     @Transient
-    MultipartFile imageFile ;
+    MultipartFile imageFile;
 }
 
 

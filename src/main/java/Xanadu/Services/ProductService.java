@@ -38,6 +38,11 @@ public class ProductService {
 
     @Autowired
     private OptionValueRepository optionValueRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private  CartItemRepository cartItemRepository;
 
     @Transactional
     public Product save(Product product) {
@@ -60,7 +65,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product findByHandleFetchEagerAll(String handle) {
         Product product = productRepository.findByHandle(handle);
-        if(product==null) return null;
+        if (product == null) return null;
         product.getImages().forEach(Image::getId);
         product.getCollections().forEach(Collection::getId);
         product.getProductTags().forEach(ProductTag::getId);
@@ -173,11 +178,14 @@ public class ProductService {
 
         if (index == 0) {
             List<Long> variantsIds = variants.stream().map(Variant::getId).toList();
-            if (variantsIds.isEmpty()) {
-                variantRepository.deleteByProduct(product);
-            } else {
-                variantRepository.deleteByProductAndIdNotIn(product, variantsIds);
-            }
+            List<Variant> variantsNeedDelete = variantsIds.isEmpty() ? variantRepository.findByProduct(product) : variantRepository.findByProductAndIdNotIn(product, variantsIds);
+            List<OrderItem> orderItemsRelate   = orderItemRepository.findByVariantIn(variantsNeedDelete);
+            orderItemsRelate.forEach(orderItem -> {
+                orderItem.setVariant(null);
+            });
+            orderItemRepository.saveAllAndFlush(orderItemsRelate);
+            variantRepository.deleteAllInBatch(variantsNeedDelete);
+
         }
         return variants;
     }
@@ -276,7 +284,7 @@ public class ProductService {
                 boolean srcIsBase64 = image.getSrc().contains("base64");
                 if (srcIsBase64) {
                     try {
-                        String src = FilesProcessor.saveFileByDataUrl(image.getSrc(),dirUploadProductImage);
+                        String src = FilesProcessor.saveFileByDataUrl(image.getSrc(), dirUploadProductImage);
                         image.setSrc(src);
                         Image imageSaved = imageRepository.save(image);
                         imagesIds.add(imageSaved.getId());

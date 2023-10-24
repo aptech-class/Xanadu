@@ -8,7 +8,7 @@
     <div class="row">
         <div class="">
 
-            <div th:if="${product!=null}" class="card mb-4">
+            <div th:if="${product}" class="card mb-4">
                 <h5 class="card-header text-center">Product</h5>
                 <form th:action="@{/admin/products/edit}" th:class="enterDisable" enctype="multipart/form-data"
                       method="post">
@@ -39,7 +39,7 @@
                     </div>
                 </form>
             </div>
-            <div th:else="${product==null}">
+            <div th:unless="${product}">
                 <form action="">
                     <h5 th:class="text-center">Find product to edit</h5>
                     <div class="mb-3 px-5">

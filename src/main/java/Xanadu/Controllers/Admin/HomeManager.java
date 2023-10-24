@@ -24,8 +24,13 @@ public class HomeManager extends AbstractManager {
         return "redirect:/admin/home.html";
     }
 
-    @Override
+    @RequestMapping("/*")
+    public String notFound(Model model){
+        setMenu(model,"");
+        return "admin/notFound";
+    }
 
+    @Override
     protected void setMenu(Model model, @Nonnull String active) {
         setDefaultMenu(model,active,"/admin/home.htm");
     }

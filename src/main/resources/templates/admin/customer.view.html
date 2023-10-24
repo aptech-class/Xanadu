@@ -1,0 +1,50 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}" lang="en"
+      xmlns:th="http://WWW.thymeleaf.org"
+>
+<body>
+
+<div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="">
+            <div class="card mb-4">
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="card-header ">Customer</h5>
+                    </div>
+                    <div class="col-6 demo-inline-spacing text-right">
+                        <a th:href="@{'/admin/customers/' + ${customer.username} + '/edit.html'}"
+                           class="btn btn-warning">Edit</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName})}"></div>
+                    <div layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName})}"></div>
+                    <div layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username})}"></div>
+                    <div layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email})}"></div>
+                    <div layout:replace="~{/admin/components/customer/phone :: customerPhone(${customer.phone})}"></div>
+                    <div layout:replace="~{/admin/components/customer/status :: customerStatus(${customer.status})}"></div>
+                    <div class="mb-3 productOptions">
+                        <label class="form-label">Total order</label>:
+                        <a class="btn btn-secondary btn-sm mx-5"
+                           th:href="${'/admin/customers/'+ customer.username +'/orders.html'}"
+                           th:text="${customer.orders.size()}"></a>
+                    </div>
+                    <div layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image})}"></div>
+                    <div class="mb-3 customerAction">
+                        <div class="row">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6 demo-inline-spacing text-right">
+                                <a th:href="@{'/admin/customers/' + ${customer.username} + '/edit.html'}"
+                                   class="btn btn-warning">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
