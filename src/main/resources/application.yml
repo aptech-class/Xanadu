@@ -11,3 +11,8 @@ spring:
 #  level:
 #    sql: debug
 #    org.hibernate.orm.jdbc.bind: trace
+server.servlet.session:
+  timeout: 30000000
+  cookie:
+    http-only: true
+    secure: true

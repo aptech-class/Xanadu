@@ -26,7 +26,8 @@ public class CollectionCrawler {
         return client
                 .mutate()
                 .codecs(config -> config.defaultCodecs().maxInMemorySize(5 * 1024 * 1024))
-                .build().method(HttpMethod.GET)
+                .build()
+                .method(HttpMethod.GET)
                 .uri(new URI(endpoint + ".json?" + filter))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()

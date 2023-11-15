@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div
+        layout:fragment="banner"
+        style="
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+        "
+        class="banner__content banner__content--bottom-center page-width one-hundred pad-fix"
+>
+    <img
+            style="width: 100%"
+            src="https://unitedbyblue.com/cdn/shop/files/UBB_Bottles_to_bags_Desktop.jpg?v=1683555833&width=3000"
+            alt=""
+    />
+    <div
+            style="left: 0; position: absolute; right: 0; bottom: 0"
+            class="banner__box content-container content-container--full-width-mobile color-accent-1 gradient one-hundred pad-fix bottom-center"
+    >
+        <div class="banner__buttons one-hundred">
+            <a
+                    href="/collections/bottles-to-bags/products.html"
+                    class="button btn btn-inverse button--secondary btn-spacing"
+            >Shop Now</a
+            >
+        </div>
+        <h2 class="banner__heading h0">
+            <span></span>
+        </h2>
+    </div>
+</div>
+
+</body>
+</html>

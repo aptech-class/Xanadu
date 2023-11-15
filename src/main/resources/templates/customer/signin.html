@@ -1,0 +1,56 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{customer/layout}"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+</head>
+<body>
+<main
+        id="MainContent"
+        class="content-for-layout focus-none"
+        role="main"
+        tabindex="-1"
+        style="background: #e9ffec; padding-top: 115px !important"
+        layout:fragment="main"
+>
+    <div class="container p-5">
+        <div style="box-shadow: #225106 0px 7px 20px 0px;" class="login">
+            <div class="login-triangle"></div>
+            <h2 style="background-color: #383a39" class="login-header">
+                Sign in to XANADU
+            </h2>
+            <form action="/login" method="post" class="login-container">
+                <div>
+                    <input name="username" type="text" placeholder="Username"/>
+                </div>
+                <div>
+                    <input name="password" type="password" placeholder="Password"/>
+                </div>
+                <div th:if="${message}">
+                    <p
+                            style="color: rgb(240, 41, 41)"
+                            class="error"
+                            th:text="${message}"
+                    ></p>
+                </div>
+                <div>
+                    <input
+                            style="border: solid #07642f; background-color: #07642f"
+                            type="submit"
+                            value="Sing in"
+                    />
+                </div>
+              <div class="text-center">
+                <a style="color:rgb(43, 43, 43); text-decoration: underline;" href="/signup.html">signup</a>
+              </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

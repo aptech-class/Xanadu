@@ -6,6 +6,7 @@ import Xanadu.Repositories.*;
 import Xanadu.Utils.FilesProcessor;
 import Xanadu.Utils.StringProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +43,7 @@ public class ProductService {
     private OrderItemRepository orderItemRepository;
 
     @Autowired
-    private  CartItemRepository cartItemRepository;
+    private CartItemRepository cartItemRepository;
 
     @Transactional
     public Product save(Product product) {
@@ -179,7 +180,7 @@ public class ProductService {
         if (index == 0) {
             List<Long> variantsIds = variants.stream().map(Variant::getId).toList();
             List<Variant> variantsNeedDelete = variantsIds.isEmpty() ? variantRepository.findByProduct(product) : variantRepository.findByProductAndIdNotIn(product, variantsIds);
-            List<OrderItem> orderItemsRelate   = orderItemRepository.findByVariantIn(variantsNeedDelete);
+            List<OrderItem> orderItemsRelate = orderItemRepository.findByVariantIn(variantsNeedDelete);
             orderItemsRelate.forEach(orderItem -> {
                 orderItem.setVariant(null);
             });
@@ -328,7 +329,62 @@ public class ProductService {
         return imagesSaved;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findByTitleContains(String title) {
+        List<Product> products = productRepository.findByTitleContains(title);
+        products.forEach(product -> {
+            product.getImages().forEach(Image::getId);
+            product.getOptions().forEach(Option::getOptionValues);
+            product.getVariants().forEach(variant -> variant.getOptionValues());
+        });
+        return products;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findBestSellerProducts() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.MONTH, -6);
+//        Date startDate = calendar.getTime();
+//        Date endDate = new Date();
+//
+        Pageable pageable = PageRequest.of(0, 12);
+//        List<Product> products = productRepository.findBestSellerProducts(startDate, endDate, pageable);
+        List<Product> products = productRepository.findAll(pageable).stream().toList();
+        products.forEach(product -> {
+            product.getImages().forEach(Image::getId);
+            product.getVariants().forEach(Variant::getId);
+            product.getOptions().forEach(option -> option.getOptionValues().forEach(optionValue -> optionValue.getVariants().forEach(Variant::getId)));
+        });
+        return products;
+    }
+
+    @Transactional(readOnly = true)
+    public Product findByHandleWithImagesAndOptionsAndVariantsAndCollections(String handle) {
+        Product product = productRepository.findByHandle(handle);
+        product.getOptions().forEach(option -> option.getOptionValues().forEach(optionValue -> optionValue.getVariants().forEach(Variant::getId)));
+        product.getImages().forEach(Image::getId);
+        product.getVariants().forEach(variant -> variant.getOptionValues().forEach(OptionValue::getId));
+        product.getCollections().forEach(Collection::getId);
+        return product;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findAlsoLikeProducts(List<Collection> collections, Product product) {
+        int size = productRepository.countDistinctByCollectionsInAndIdNot(collections, product.getId());
+        Random random = new Random();
+        int pageNumber = random.nextInt((int) Math.ceil(size / 8));
+        Pageable pageable = PageRequest.of(pageNumber > 1 ? pageNumber - 1 : pageNumber, 8);
+        Page<Product> products = productRepository.findDistinctByCollectionsInAndIdNot(collections, product.getId(), pageable);
+        products.forEach(p -> {
+            p.getImages().forEach(Image::getId);
+            p.getVariants().forEach(Variant::getId);
+            p.getOptions().forEach(option -> option.getOptionValues().forEach(optionValue -> optionValue.getVariants().forEach(Variant::getId)));
+        });
+        return products.toList();
     }
 }

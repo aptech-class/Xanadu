@@ -44,6 +44,13 @@ public class OrderManager extends AbstractManager {
         return "/admin/order.view";
     }
 
+    @GetMapping("/create.html")
+    public String createOrder(Model model){
+        setMenu(model,"orders.create");
+        model.addAttribute("order",new Order());
+
+        return "/admin/order.create";
+    }
 
     @Override
     protected void setMenu(Model model, @Nonnull String active) {

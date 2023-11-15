@@ -1,0 +1,124 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{customer/layout}"
+  xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Checkout</title>
+  </head>
+  <body>
+    <main
+      id="MainContent"
+      class="content-for-layout focus-none"
+      role="main"
+      tabindex="-1"
+      style="background: #e9ffec; padding-top: 115px !important"
+      layout:fragment="main"
+    >
+      <div class="container">
+        <div style="max-width: 800px; margin: auto" class="checkout p-5">
+          <h1
+            style="
+              font-weight: 700;
+              background: #041f40;
+              margin: 0;
+              color: white;
+            "
+            class="text-center"
+          >
+            Checkout
+          </h1>
+          <div style="border-radius: 0" class="order card p-5">
+            <div
+              style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
+              class="row pb-1"
+              th:each="cartItem : ${customer.cart.cartItems}"
+            >
+              <div class="col-sm-10">
+                <div style="display: flex; align-items: center">
+                  <div style="position: relative">
+                    <div
+                      style="
+                        position: absolute;
+                        background: gray;
+                        color: white;
+                        height: 1.5rem;
+                        width: 1.5rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        overflow: hidden;
+                        border-radius: 50%;
+                        top: -0.8rem;
+                        left: -0.8rem;
+                      "
+                      th:text="${cartItem.quantity}"
+                    ></div>
+                    <a th:href="${cartItem.variant.product.handle}" href="">
+                      <img
+                        style="
+                          max-width: 60px;
+                          overflow: hidden;
+                          border-radius: 5%;
+                        "
+                        th:src="${cartItem.variant.image} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
+                        src=""
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                  <div style="padding-left: 4px; font-size: 14px" class="ml-2">
+                    <a
+                      th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
+                      th:text="${cartItem.variant.product.title}"
+                    ></a>
+                    <div
+                      style="font-weight: 600; color: gray"
+                      th:text="${cartItem.variant.title}"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div
+                  style="
+                    color: gray;
+                    font-size: 14px;
+                    margin: 0px;
+                    display: flex;
+                    align-items: end;
+                    height: 100%;
+                  "
+                >
+                  <p th:text="${cartItem.subTotalPrice} + '$'"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <h3>Total:</h3>
+              </div>
+              <div class="col-2">
+                <h3 th:text="${customer.cart.totalPrice}+'$'"></h3>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-radius: 0" class="order card p-3 ">
+            <h3>Shipping address</h3>
+            <div class="card">
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

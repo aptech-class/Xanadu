@@ -1,0 +1,32 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{customer/layout}"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title th:text="${collection.title}">Document</title>
+</head>
+<body>
+<main
+        id="MainContent"
+        class="content-for-layout focus-none"
+        role="main"
+        tabindex="-1"
+        style="background: #e9ffec; padding-top: 115px !important"
+        layout:fragment="main"
+>
+    <div class="container px-5 py-2">
+        <h1 style="font-family: fantasy;" class="my-5" th:text="${collection.title}"></h1>
+        <div layout:replace="~{/customer/components/products/filter :: filter}"></div>
+        <div layout:replace="~{/customer/components/products/content :: content}"></div>
+    </div>
+</main>
+</body>
+</html>

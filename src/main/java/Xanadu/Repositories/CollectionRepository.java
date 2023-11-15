@@ -1,5 +1,6 @@
 package Xanadu.Repositories;
 
+import Xanadu.Entities.Category;
 import Xanadu.Entities.Collection;
 import Xanadu.Entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
     List<Collection> findByProductsIn(List<Product> products);
 
     Collection findByTitle(String title);
+
+    List<Collection> findByCategoriesInAndStatus(List<Category> list, Boolean status);
 }

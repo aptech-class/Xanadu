@@ -67,12 +67,45 @@ public class Main implements ApplicationRunner {
     private void crawling() throws InterruptedException, URISyntaxException {
         List<Thread> threads = new ArrayList<>();
         List<Collection> collections = collectionCrawler.gets(collectionCrawler.getCollectionsEndpoint(), "limit=50");
-
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/accessories"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/shop-all-bags"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/new-bags"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/revolution-collection"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/reactive"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/backpacks"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/duffle-bags"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/tote-bags"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/water-bottle-slings-pouches"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/socks-hats"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/shoes"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/pets"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/reusable-kits-drinkware"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/fanny-packs"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/bison"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/household"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/new-household"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/rugs-decor"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/reusable-kits-drinkware"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/ceramics"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/drinkware"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/womens"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/mens"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/all-apparel"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/shop-all-sale"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/new-womens"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/new-mens"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/unisex"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/bag-accessories-sale"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/womens-tops"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/impact-collection"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/household-sale"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/womens-bottoms"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/mens-tops"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/mens-bottoms"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/womens-outerwear"));
+        collections.add(collectionCrawler.get("https://unitedbyblue.com/collections/mens-outerwear"));
         for (Collection collection : collections) {
-            Collection collectionExited = collectionService.findByHandle(collection.getHandle());
-            if (collectionExited != null) {
-                continue;
-            }
+
             Runnable task = () -> {
                 try {
                     String productsEndpoint = collectionCrawler.getCollectionsEndpoint() + "/" + collection.getHandle() + "/products";
@@ -80,12 +113,13 @@ public class Main implements ApplicationRunner {
                     if (resProducts.getProducts().isEmpty()) {
                         return;
                     }
-                    Collection collectionSaved = collectionService.save(collection);
-
-                    HashSet<Category> categories = resProducts.getCategories();
-                    List<Category> categoriesOnCollection = new ArrayList<>();
 
                     synchronized (lockProcessCategory) {
+                        Collection collectionExited = collectionService.findByHandle(collection.getHandle());
+                        Collection collectionSaved = collectionExited != null ? collectionExited : collectionService.save(collection);
+
+                        HashSet<Category> categories = resProducts.getCategories();
+                        List<Category> categoriesOnCollection = new ArrayList<>();
                         for (Category category : categories) {
                             Category categoryExisted = categoryService.findByTitle(category.getTitle());
                             if (categoryExisted != null) {
@@ -164,40 +198,46 @@ public class Main implements ApplicationRunner {
             }
             product.setProductTags(productTags);
 
-            Product productSaved = productService.save(product);
+            try {
+                Product productSaved = productService.save(product);
+                List<Option> options = product.getOptions();
+                options.forEach(option -> {
+                    option.setProduct(productSaved);
+                    Option optionSaved = optionService.save(option);
+                    for (OptionValue optionValue : option.getOptionValues()) {
+                        optionValue.setOption(optionSaved);
+                        optionValueService.save(optionValue);
+                    }
 
-            List<Option> options = product.getOptions();
-            options.forEach(option -> {
-                option.setProduct(productSaved);
-                Option optionSaved = optionService.save(option);
-                for (OptionValue optionValue : option.getOptionValues()) {
-                    optionValue.setOption(optionSaved);
-                    optionValueService.save(optionValue);
+                });
+
+                for (Image image : product.getImages()) {
+                    image.setProduct(productSaved);
+                    imageService.save(image);
                 }
 
-            });
+                List<Variant> variants = product.getVariants();
+                for (Variant variant : variants) {
+                    variant.setProduct(productSaved);
+                    if (variant.getImage() != null) {
+                        Image imageSaved = imageService.findBySrc(variant.getImage().getSrc());
+                        variant.setImage(imageSaved);
+                    }
+                    List<OptionValue> optionValuesSaved = new ArrayList<>();
+                    for (OptionValue optionValue : variant.getOptionValues()) {
 
-            for (Image image : product.getImages()) {
-                image.setProduct(productSaved);
-                imageService.save(image);
+                        OptionValue optionValueSaved = optionValueService.findByValueAndProduct(optionValue.getValue(), productSaved);
+                        optionValuesSaved.add(optionValueSaved);
+                    }
+                    variant.setOptionValues(optionValuesSaved);
+                    Variant variantSaved = variantService.save(variant);
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                log.info("product: {}", product);
             }
 
-            List<Variant> variants = product.getVariants();
-            for (Variant variant : variants) {
-                variant.setProduct(productSaved);
-                if (variant.getImage() != null) {
-                    Image imageSaved = imageService.findBySrc(variant.getImage().getSrc());
-                    variant.setImage(imageSaved);
-                }
-                List<OptionValue> optionValuesSaved = new ArrayList<>();
-                for (OptionValue optionValue : variant.getOptionValues()) {
 
-                    OptionValue  optionValueSaved = optionValueService.findByValueAndProduct(optionValue.getValue(),productSaved);
-                    optionValuesSaved.add(optionValueSaved);
-                }
-                variant.setOptionValues(optionValuesSaved);
-                Variant variantSaved = variantService.save(variant);
-            }
         }
     }
 }

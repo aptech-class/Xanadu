@@ -126,7 +126,7 @@ public class ProductManager extends AbstractManager {
         return "/admin/product.edit";
     }
 
-    @GetMapping("/variants.html")
+    @GetMapping("/orderItems.html")
     public String findProductToEditVariants(Model model) {
         setMenu(model, "products.variants");
         return "/admin/product.variants.edit";
@@ -172,7 +172,7 @@ public class ProductManager extends AbstractManager {
 
     @Override
     protected void setMenu(Model model, @Nonnull String active) {
-        setDefaultMenu(model, active, "/admin/products/index.htm");
+        setDefaultMenu(model, active, "/admin/products/index.html");
     }
 
     protected void setMenu(Model model, @Nonnull String active, String url) {

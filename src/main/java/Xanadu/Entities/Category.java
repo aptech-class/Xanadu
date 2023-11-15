@@ -1,6 +1,7 @@
 package Xanadu.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,11 +15,12 @@ import java.util.List;
 @Table(indexes = {@Index(columnList = "title")})
 public class Category extends EntityBasic {
 
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
-    private Boolean status;
+    private Boolean status = false;
 
     @Column(length = 10000)
     @Lob

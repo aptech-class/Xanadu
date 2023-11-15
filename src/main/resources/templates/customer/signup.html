@@ -1,0 +1,77 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{customer/layout}"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Document</title>
+</head>
+<body>
+<main
+        id="MainContent"
+        class="content-for-layout focus-none"
+        role="main"
+        tabindex="-1"
+        style="background: #e9ffec; padding-top: 115px !important"
+        layout:fragment="main"
+>
+    <div class="container p-5">
+        <div layout:replace="~{/customer/components/adminSourceBegin :: adminSourceBegin}"></div>
+        <div class="registration">
+            <div class="card mb-4">
+                <h5 style="color: #07642f;" class="card-header text-center">Signup</h5>
+                <form
+                        th:action="@{/signup.html}"
+                        th:class="enterDisable"
+                        enctype="multipart/form-data"
+                        method="post"
+                >
+                    <div class="card-body">
+                        <div
+                                layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/password :: customerPassword(${customer.password})}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/confirmPassword :: customerConfirmPassword(${customer.confirmPassword})}"
+                        ></div>
+                        <div
+                                layout:replace="~{/admin/components/customer/phone :: customerPhone(${customer.phone}, 'edit')}"
+                        ></div>
+                        <input type="hidden" value="1" name="status">
+                        <div
+                                layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"
+                        ></div>
+                        <div class="mb-3 createAction">
+                            <div class="demo-inline-spacing text-right">
+                                <button style="background-color: #07642f;" type="submit" class="btn btn-primary">
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div layout:replace="~{/customer/components/adminSourceEnd :: adminSourceEnd}"></div>
+    </div>
+</main>
+</body>
+</html>

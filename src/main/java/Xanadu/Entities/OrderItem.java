@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString(callSuper = true, exclude = {"order", "variant"})
 @Entity
 public class OrderItem extends EntityBasic {
+    private  String title;
 
     @Column(nullable = false)
     private Integer quantity;

@@ -1,0 +1,103 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{customer/layout}"
+  xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="pt-5" layout:fragment="content">
+      <script th:inline="javascript">
+        /*<![CDATA[*/
+        const product = /*[[${product}]]*/ {};
+        /*]]>*/
+      </script>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="mainImage">
+            <img
+              style="width: 100%"
+              th:src="${product.images[0].src}"
+              src=""
+              alt=""
+            />
+          </div>
+          <div class="listImage py-3">
+            <div
+              th:each="image : ${product.images}"
+              class="productImageItem px-3"
+            >
+              <img
+                role="button"
+                class="imageItem"
+                th:src="${image.src}"
+                src=""
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <h3 th:text="${product.title}">title</h3>
+          <h3 th:text="${product.variants[0].price} + '$'">price</h3>
+          <div th:each="option : ${product.options}">
+            <div class="mb-3" style="font-weight: 600; color: gray">
+              <span th:text="${option.name}+':' ">optionName</span>
+            </div>
+            <div class="mb-3 px-2">
+              <div
+                th:each="optionValue : ${option.optionValues}"
+                class="form-check form-check-inline"
+              >
+                <input
+                  class="form-check-input optionValue"
+                  type="radio"
+                  th:name="${option.name}"
+                  th:id="${optionValue.value}"
+                  th:value="${optionValue.value}"
+                  checked
+                />
+                <label
+                  style="font-family: Arial, Helvetica, sans-serif"
+                  th:text="${optionValue.value}"
+                  class="form-check-label"
+                  th:for="${optionValue.value}"
+                  >1</label
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            style="display: flex; flex-direction: column; flex-wrap: nowrap"
+            class="quantity mb-3 mt-5"
+          >
+            <label style="font-weight: 600; color: gray">Quantity: </label>
+            <div style="display: flex" class="addQuantityGroup mt-2">
+              <div class="quantityBtn quantityMinus">-</div>
+              <input
+                style="text-align: center; border-width: 1px 0"
+                type="number"
+                max="100"
+                min="1"
+                value="1"
+              />
+              <div class="quantityBtn quantityPlus">+</div>
+            </div>
+          </div>
+          <div class="text-center mt-5 mb-5">
+            <button id="addToCart" class="btn" style="border-radius: 0">Add to cart</button>
+          </div>
+          <div th:utext="${product.bodyHtml}"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

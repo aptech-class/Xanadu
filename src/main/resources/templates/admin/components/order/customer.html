@@ -1,0 +1,30 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="orderCustomer(customer,view)" class="mb-3 orderCustomer">
+    <label for="customerInputSearch" class="form-label">Customer</label>
+    <div id="customerSelected" style="overflow: hidden;" class="customerSelected  card mx-2 mb-3 ">
+        <div th:if="${customer}" class="row">
+            <input type="hidden" name="customer.id" th:value="${customer.id}">
+            <div class="col-sm-2">
+                <img style="width: 100%;"
+                     src="	http://localhost:8080/files/images/customers/88273811859472596919.jpg" alt="img">
+            </div>
+            <div th:text="${customer.username}" style="display: flex; align-items: center;" class="col-sm-10 username">username</div>
+        </div>
+    </div>
+    <div th:if="${view}" th:class="searchGroup">
+        <input
+                type="text"
+                class="form-control error"
+                id="customerInputSearch"
+        />
+        <p th:if="${#fields.hasErrors('order.customer')}" th:errorclass="error" th:errors="${order.customer}"></p>
+        <div style="display:none" class="listSearchCustomer card p-2">
+            <ul></ul>
+        </div>
+    </div>
+
+</div>
+</html>

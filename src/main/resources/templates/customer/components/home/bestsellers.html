@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>Document</title>
+</head>
+<body>
+<section layout:fragment="bestsellers">
+    <div style="padding:0 8rem 0 8rem" class=" mt-3">
+        <div>
+            <h2 class="title">Best Sellers</h2>
+        </div>
+        <div class="listProducts row">
+            <div th:each="product : ${bestSellerProducts}" class="productItem col-sm-3 mb-5">
+                <div style="background-color: white;height:100%">
+                    <a th:href="@{'/products/'+ ${product.handle} + '.html'}">
+                        <img
+                                style="width: 100%"
+                                th:src="${product.images[0].src}"
+                                src="https://unitedbyblue.com/cdn/shop/products/9l_sidekick_814-152-06313_00.jpg"
+                                alt=""
+                        />
+                    </a>
+                    <div style="background-color: white" class="p-2">
+                        <a th:href="@{'/products/'+ ${product.handle} + '.html'}"><p th:text="${product.title}">Deadstock (R)evolution™ 9L Sidekick</p></a>
+                        <p th:text="${product.variants[0].price} + '$' " style="font-weight: bold">89$</p>
+                        <div
+                                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  flex-direction: row;
+                  justify-content: flex-start;
+                "
+                                class="listColor"
+                        >
+                            <div th:each="option : ${product.options}">
+
+                                <img
+                                        th:if="${option.name.toUpperCase() == 'COLOR' || option.optionValues.size() == 1}"
+                                        th:each="optionValue : ${option.optionValues}"
+                                        role="button"
+                                        style="
+                      width: 1.5rem;
+                      height: 1.5rem;
+                      border-radius: 50%;
+                      overflow: hidden;
+                    "
+                                        th:src="${optionValue.variants[0].image.src}"
+                                        src="https://unitedbyblue.com/cdn/shop/products/9l_sidekick_814-152-06313_00.jpg"
+                                        alt=""
+                                        class="m-1 optionItem"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="center collection__view-all small-hide medium-hide">-->
+<!--            <a-->
+<!--                    href="/collections/best-sellers"-->
+<!--                    class="button btn"-->
+<!--                    aria-label="View all products in the Best Sellers collection"-->
+<!--            >-->
+<!--                View all-->
+<!--            </a>-->
+<!--        </div>-->
+    </div>
+</section>
+</body>
+</html>

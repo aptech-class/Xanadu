@@ -1,5 +1,6 @@
 package Xanadu.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -17,8 +18,8 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "carts", "voucherItems"})
-@ToString(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "carts", "voucherItems"})
+@EqualsAndHashCode(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "cart", "voucherItems"})
+@ToString(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "cart", "voucherItems"})
 @Table(indexes = {@Index(columnList = "username")})
 public class Customer extends EntityBasic {
 
@@ -29,11 +30,12 @@ public class Customer extends EntityBasic {
     private String username;
 
     @NotBlank(message = "Password is required!")
-    @Length(min = 6, max = 50)
+    @Length(min = 6, max = 100)
     @Column(nullable = false)
     private String password;
 
     @Transient
+    @JsonIgnore
     private String confirmPassword;
 
     @NotNull
@@ -60,6 +62,10 @@ public class Customer extends EntityBasic {
     @Column(length = 10000)
     private String node;
 
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private  Cart cart;
+
     @ManyToMany
     @JoinTable(joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "customer_tag_id"))
     private List<CustomerTag> customerTags;
@@ -77,13 +83,12 @@ public class Customer extends EntityBasic {
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Cart> carts;
 
     @OneToMany(mappedBy = "customer")
     private List<VoucherItem> voucherItems;
 
     @Transient
+    @JsonIgnore
     MultipartFile imageFile;
 }
 

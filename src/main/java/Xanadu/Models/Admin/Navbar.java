@@ -50,7 +50,7 @@ public class Navbar {
         productsSubNavbar.add(new Navbar("list", "/admin/products/index.html"));
         productsSubNavbar.add(new Navbar("create", "/admin/products/create.html"));
         productsSubNavbar.add(new Navbar("edit", "/admin/products/edit.html"));
-        productsSubNavbar.add(new Navbar("variants", "/admin/products/variants.html"));
+        productsSubNavbar.add(new Navbar("variants", "/admin/products/orderItems.html"));
         productNavbar.setNavbars(productsSubNavbar);
         navbars.add(productNavbar);
 
@@ -63,6 +63,26 @@ public class Navbar {
         customersSubNavbar.add(new Navbar("orders", "/admin/customers/orders.html"));
         customerNavbar.setNavbars(customersSubNavbar);
         navbars.add(customerNavbar);
+
+        Navbar ordersNavbar = new Navbar();
+        ordersNavbar.setTitle("orders");
+        List<Navbar> ordersSubNavbar = new ArrayList<>();
+        ordersSubNavbar.add(new Navbar("list", "/admin/orders/index.html"));
+        ordersSubNavbar.add(new Navbar("create", "/admin/orders/create.html"));
+        ordersSubNavbar.add(new Navbar("edit", "/admin/orders/edit.html"));
+        ordersSubNavbar.add(new Navbar("items", "/admin/orders/items.html"));
+        ordersNavbar.setNavbars(ordersSubNavbar);
+        navbars.add(ordersNavbar);
+
+        Navbar categoriesNavbar = new Navbar();
+        categoriesNavbar.setTitle("categories");
+        List<Navbar> categoriesSubNavbar = new ArrayList<>();
+        categoriesSubNavbar.add(new Navbar("list", "/admin/categories/index.html"));
+        categoriesSubNavbar.add(new Navbar("create", "/admin/categories/create.html"));
+//        categoriesSubNavbar.add(new Navbar("edit", "/admin/categories/edit.html"));
+//        categoriesSubNavbar.add(new Navbar("items", "/admin/categories/items.html"));
+        categoriesNavbar.setNavbars(categoriesSubNavbar);
+        navbars.add(categoriesNavbar);
 
         return navbars;
     }

@@ -176,3 +176,30 @@ input {
 .page-link:hover {
   background-color: #b8b8b8;
 }
+/** order.create **/
+.searchGroup {
+  position: relative;
+}
+.listSearchCustomer {
+  background: #ffffff;
+  width: 100%;
+  z-index: 100;
+  position: absolute;
+}
+.listSearchCustomer img {
+  border-radius: 0.5rem;
+  width: 100%;
+}
+.listSearchCustomer ul {
+  list-style: none;
+  padding: 0;
+}
+.listSearchCustomer li {
+  border-radius: 0.5rem;
+  background-color: rgb(54, 131, 198);
+}
+.listSearchCustomer .username {
+  align-items: center;
+  display: flex;
+  color: rgb(255, 255, 255);
+}

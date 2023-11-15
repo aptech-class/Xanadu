@@ -1,0 +1,66 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}" lang="en"
+      xmlns:th="http://WWW.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Category</title>
+</head>
+<body>
+<div layout:fragment="container" class="container-fluid flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="">
+            <div class="card mb-4">
+                <h5 class="card-header text-center" th:text="${category.title}">Category</h5>
+                <div class="card-body">
+                    <div class="mb-3 categoryTitle">
+                        <label for="title" class="form-label">Title</label>
+                        <input
+                                type="text"
+                                class="form-control error"
+                                id="title"
+                                name="title"
+                                th:value="${category.title}"
+                                readonly
+                        />
+                        <p th:if="${#fields.hasErrors('category.title')}" th:errorclass="error" th:errors="${category.title}"></p>
+                    </div>
+                    <div class="mb-3 categoryDescription">
+                        <label for="description" class="form-label">Description</label>
+                        <input
+                                type="text"
+                                class="form-control error"
+                                id="description"
+                                name="description"
+                                th:value="${category.description}"
+                                readonly
+                        />
+                        <p th:if="${#fields.hasErrors('category.description')}" th:errorclass="error" th:errors="${category.description}"></p>
+                    </div>
+                    <div  class="mb-3 categoryStatus form-check form-switch mb-3">
+                        <input th:checked="${category.status}" name="status"  onclick="return false;"
+                               class="form-check-input" type="checkbox" id="status">
+                        <label class="form-check-label" for="status">Status</label>
+                    </div>
+                    <div layout:replace="~{/admin/components/category/collections :: categoryCollections(${category.collections})}"></div>
+
+                    <div class="mb-3 customerAction">
+                        <div class="row">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6 demo-inline-spacing text-right">
+                                <a th:href="@{'/admin/categories/' + ${category.id} + '/edit.html'}"
+                                   class="btn btn-warning">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

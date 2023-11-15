@@ -1,0 +1,132 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{customer/layout}"
+  xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Cart</title>
+  </head>
+  <body>
+    <main
+      id="MainContent"
+      class="content-for-layout focus-none"
+      role="main"
+      tabindex="-1"
+      style="background: #e9ffec; padding-top: 115px !important"
+      layout:fragment="main"
+    >
+      <div class="container py-5">
+        <div th:unless="${customer.cart != null && customer.cart.cartItems.size() != 0}">
+          <h1 class="text-center">Empty</h1>
+        </div>
+        <div th:if="${customer.cart != null && customer.cart.cartItems.size() != 0}" id="cart">
+          <div style="background-color: white" class="p-3 my-5">
+            <table style="padding: 20px" class="table card-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Remove</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+                <tr class="cartItem" th:id="${cartItem.id}" th:each="cartItem : ${customer.cart.cartItems}">
+                  <td style="vertical-align: middle">
+                    <div
+                      style="
+                        display: flex;
+                        align-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <div>
+                        <a
+                          th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
+                        >
+                          <img
+                            class="variantImage"
+                            style="max-width: 100px"
+                            th:src="${cartItem.variant.image} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
+                            src=""
+                            alt=""
+                        /></a>
+                      </div>
+                      <div class="px-3">
+                        <a
+                          th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
+                          th:text="${cartItem.variant.product.title}"
+                        ></a>
+                        <div
+                          style="font-weight: 600; color: gray"
+                          th:text="${cartItem.variant.title}"
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle">
+                    <div style="display: flex" class="addQuantityGroup mt-2">
+                      <div class="quantityBtn quantityMinus">-</div>
+                      <input
+                        style="text-align: center; border-width: 1px 0"
+                        type="number"
+                        max="100"
+                        min="1"
+                        th:value="${cartItem.quantity}"
+                      />
+                      <div class="quantityBtn quantityPlus">+</div>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle">
+                    <div
+                      style="color: gray"
+                      th:text="${cartItem.variant.price}+'$'"
+                    ></div>
+                  </td>
+                  <td style="vertical-align: middle">
+                    <div>
+                      <img
+                        class="btnRemoveCartItem m-2"
+                        role="button"
+                        src="/admin/assets/img/icons/myicon/delete.svg"
+                        alt=""
+                      />
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle">
+                    <h3 class="subTotalPrice" th:text="${cartItem.subTotalPrice}+'$'"></h3>
+                  </td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th><h3 style="color: #a80400;" class="totalPrice" th:text="${customer.cart.totalPrice}+'$'"></h3></th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="text-align: right">
+            <a
+              style="text-decoration: underline; color: green"
+              id="checkout"
+              href="/checkout.html"
+              class="cart__checkout-button button"
+            >
+              Check out
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

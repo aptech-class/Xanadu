@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString(callSuper = true, exclude = {"variant", "cart"})
 @Entity
 public class CartItem extends EntityBasic {
+    private String title;
 
     @Column(nullable = false)
     private Integer quantity;

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section layout:fragment="categories">
+      <div style="padding:0 8rem 0 8rem"  class="mt-3">
+        <div>
+          <h2 class="title">Top Collections</h2>
+        </div>
+
+        <div class="listCategories row">
+          <div
+            th:each="collection : ${topCollections}"
+            class="categoryItem mb-4 col-md-3"
+          >
+            <div class="multicolumn-card content-container">
+              <div
+                class="multicolumn-card__image-wrapper multicolumn-card__image-wrapper--full-width"
+              >
+                <div class="media media--transparent media--square">
+                  <img
+                    th:src="${collection.products[0].images[0].src}"
+                    loading="lazy"
+                    th:onclick="@{|window.location.href='/collections/${collection.handle}/products.html'|}"
+                    style="cursor: pointer"
+                    alt=""
+                    src=""
+                  />
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-around;
+                  align-items: center;
+                  background-color: white;
+                "
+                class="multicolumn-card__info"
+              >
+                <h3
+                  style="
+                    width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                  "
+                  th:text="${collection.title}"
+                  class="text-center"
+                ></h3>
+                <a
+                  class="button btn"
+                  th:href="@{'/collections/' + ${collection.handle} + '/products.html'}"
+                >
+                  shop
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

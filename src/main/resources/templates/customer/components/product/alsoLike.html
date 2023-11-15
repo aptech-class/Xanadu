@@ -1,0 +1,68 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{customer/layout}"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="mt-5 " layout:fragment="alsoLike">
+    <h3 class="mb-4" style="font-family: fantasy;">You may also like</h3>
+    <div class="listProducts row">
+        <div th:each="product : ${alsoLikeProducts}" class="productItem col-sm-3 mb-5">
+            <div style="background-color: #f7ffdc;height:100%">
+                <a th:href="@{'/products/'+ ${product.handle} + '.html'}">
+                    <img
+                            style="width: 100%"
+                            th:src="${product.images[0].src}"
+                            src="https://unitedbyblue.com/cdn/shop/products/9l_sidekick_814-152-06313_00.jpg"
+                            alt=""
+                            loading="lazy"
+                    />
+                </a>
+                <div  class="p-2">
+                    <a th:href="@{'/products/'+ ${product.handle} + '.html'}"><p th:text="${product.title}">Deadstock (R)evolution™ 9L Sidekick</p></a>
+                    <p style="font-weight:500;font-size:0.8rem" th:text="${product.variants[0].price} + '$' " >89$</p>
+                    <div
+                            style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  flex-direction: row;
+                  justify-content: flex-start;
+                "
+                            class="listColor"
+                    >
+                        <div th:each="option : ${product.options}">
+
+                            <img
+                                    th:if="${option.name.toUpperCase() == 'COLOR' || option.optionValues.size() == 1}"
+                                    th:each="optionValue : ${option.optionValues}"
+                                    role="button"
+                                    style="
+                      width: 1.5rem;
+                      height: 1.5rem;
+                      border-radius: 50%;
+                      overflow: hidden;
+                    "
+                                    th:src="${optionValue.variants[0].image != null?optionValue.variants[0].image.src:product.images[0].src}"
+                                    src="https://unitedbyblue.com/cdn/shop/products/9l_sidekick_814-152-06313_00.jpg"
+                                    alt=""
+                                    class="m-1 optionItem"
+                                    loading="lazy"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

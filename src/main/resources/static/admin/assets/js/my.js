@@ -156,8 +156,8 @@ const collectionHandler = () => {
   if (!addToCollectionBtn) {
     return;
   }
-  addToCollectionBtn.onclick = (e) => {
-    const inputNewCollection = document.getElementById("inputNewCollection");
+  const inputNewCollection = document.getElementById("inputNewCollection");
+  const addCollection = () => {
     const newCollectionValue = inputNewCollection.value;
     if (newCollectionValue === "") {
       console.log("new collection value is empty!");
@@ -183,8 +183,16 @@ const collectionHandler = () => {
     collectionsList.innerHTML += content;
     collectionLength = collectionLength + 1;
     inputNewCollection.value = "";
-
+    inputNewCollection.focus();
     collectionHandler();
+  };
+  addToCollectionBtn.onclick = (e) => {
+    addCollection();
+  };
+  inputNewCollection.onkeyup = (e) => {
+    if (e.code === "Enter") {
+      addCollection();
+    }
   };
 };
 const productTagsHandler = () => {
@@ -223,8 +231,8 @@ const productTagsHandler = () => {
   if (!addTagBtn) {
     return;
   }
-  addTagBtn.onclick = (e) => {
-    const inputNewProductTag = document.getElementById("inputNewProductTag");
+  const inputNewProductTag = document.getElementById("inputNewProductTag");
+  const addProductTag = () => {
     const newProductTagValue = inputNewProductTag.value;
     if (newProductTagValue === "") {
       console.log("new product tag value is empty!");
@@ -250,8 +258,16 @@ const productTagsHandler = () => {
     productTagsList.innerHTML += content;
     productTagsLength = productTagsLength + 1;
     inputNewProductTag.value = "";
-
+    inputNewProductTag.focus();
     productTagsHandler();
+  };
+  addTagBtn.onclick = (e) => {
+    addProductTag();
+  };
+  inputNewProductTag.onkeyup = (e) => {
+    if (e.code === "Enter") {
+      addProductTag();
+    }
   };
 };
 const optionsHandler = () => {
@@ -278,10 +294,8 @@ const optionsHandler = () => {
       box.remove();
       optionsHandler();
     };
-
-    addOptionValueBtn.onclick = (e) => {
-      const inputOptionValue =
-        e.target.parentElement.querySelector(".inputOptionValue");
+    
+    const addOptionValue = (inputOptionValue) => {
       const optionValue = inputOptionValue.value;
       if (!optionValue) {
         return;
@@ -293,8 +307,20 @@ const optionsHandler = () => {
                       </div>`;
       optionValuesList.innerHTML += content;
       inputOptionValue.value = "";
+      inputOptionValue.focus()
       optionsHandler();
     };
+    addOptionValueBtn.onclick = (e) => {
+      const inputOptionValue =
+      e.target.parentElement.querySelector(".inputOptionValue");
+      addOptionValue(inputOptionValue);
+    };
+    const inputOptionValue = box.querySelector(".inputOptionValue")
+    inputOptionValue.onkeyup =(e)=>{
+      if(e.code ==="Enter"){
+        addOptionValue(inputOptionValue);
+      }
+    }
   });
 
   const addOptionBtn = document.getElementById("addOptionBtn");
@@ -421,24 +447,96 @@ const uploadAvatar = () => {
 };
 const togglePwd = () => {
   const togglePwd = document.querySelectorAll(".togglePassword ");
-  if(!togglePwd){
+  if (!togglePwd) {
     return;
   }
   togglePwd.forEach((item) => {
     item.onclick = (e) => {
       const input = e.target.closest("div").querySelector("input");
       input.type = input.type == "text" ? "password" : "text";
-      e.target.closest("div")
+      e.target
+        .closest("div")
         .querySelector("i")
         .classList.remove(input.type == "text" ? "bx-hide" : "bx-show");
-      e.target.closest("div")
+      e.target
+        .closest("div")
         .querySelector("i")
         .classList.add(input.type == "text" ? "bx-show" : "bx-hide");
     };
   });
 };
+// order
+const searchCustomerHandler = () => {
+  console.log("ioio");
+  const customerInputSearch = document.getElementById("customerInputSearch");
+  console.log(customerInputSearch);
+  if (!customerInputSearch) {
+    return;
+  }
+  const listSearchCustomer = document.querySelector(".listSearchCustomer");
 
+  customerInputSearch.onkeyup = async (e) => {
+    const name = e.target.value;
+    listSearchCustomer.style.display = "block";
+    const customers = await searchCustomer(name);
+    const ulElement = listSearchCustomer.querySelector("ul");
+    ulElement.innerHTML = "";
+    if (customers.length === 0) {
+      ulElement.innerHTML += `<h6 class="text-center">Not found</h6> `;
+    }
+    customers.forEach((customer) => {
+      const content = `<li id="${customer.id}" role="button">
+                        <div class="cart mb-3">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <img src="${customer.image}"
+                                        alt="img">
+                                </div>
+                                <div class="col-sm-10 username">${customer.username}</div>
+                            </div>
+                        </div>
+                      </li>`;
+      ulElement.innerHTML += content;
+    });
+    selectCustomerHandler();
+  };
+  customerInputSearch.onblur = () => {
+    setTimeout(() => {
+      listSearchCustomer.style.display = "none";
+    }, 1000);
+  };
+  const searchCustomer = async (value) => {
+    const res = await fetch(`/admin/api/customers.json?name=${value}`);
+    const data = await res.json();
+    return data;
+  };
+};
+const selectCustomerHandler = () => {
+  const customerSelected = document.getElementById("customerSelected");
+  const listSearchCustomer = document.querySelector(".listSearchCustomer");
+  const customersBox = listSearchCustomer.querySelectorAll("li");
+  customersBox.forEach((li) => {
+    li.onclick = (e) => {
+      console.log(e);
+      listSearchCustomer.style.display = "none";
+      const liElement = e.target.closest("li");
+      const id = liElement.id;
+      const image = liElement.querySelector("img").src;
+      const username = liElement.querySelector(".username").innerText;
+      const content = `<div  class="row">
+                        <input type="hidden" name="customer.id" value="${id}">
+                        <div class="col-sm-2">
+                            <img style="width: 100%;"
+                                src="${image}" alt="img">
+                        </div>
+                        <div style="display: flex; align-items: center;" class="col-sm-10 username">${username}</div>
+                      </div>`;
+      customerSelected.innerHTML = content;
+    };
+  });
+};
 const load = () => {
+  // product
   imageHandler();
   collectionHandler();
   productTagsHandler();
@@ -448,6 +546,9 @@ const load = () => {
   // customer
   uploadAvatar();
   togglePwd();
+  // order
+  searchCustomerHandler();
+
   const forms = document.querySelectorAll("form.enterDisable");
   forms.forEach((item) => {
     item.onkeydown = (e) => {

@@ -1,0 +1,31 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{customer/layout}"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div layout:fragment="adminSourceEnd">
+    <script
+            th:src="@{/admin/assets/vendor/libs/jquery/jquery.js}"
+    ></script>
+    <script
+            th:src="@{/admin/assets/vendor/libs/popper/popper.js}"
+    ></script>
+    <script th:src="@{/admin/assets/vendor/js/bootstrap.js}"></script>
+    <script
+            th:src="@{/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"
+    ></script>
+    <script th:src="@{/admin/assets/vendor/js/menu.js}"></script>
+    <script th:src="@{/admin/assets/js/main.js}"></script>
+    <script th:src="@{/admin/assets/js/my.js}"></script>
+</div>
+</body>
+</html>
