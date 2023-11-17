@@ -47,7 +47,7 @@
         </div>
         <div class="col-sm-6">
           <h3 th:text="${product.title}">title</h3>
-          <h3 th:text="${product.variants[0].price} + '$'">price</h3>
+          <h3 id="price" th:text="${product.variants[0].price} + '$'">price</h3>
           <div th:each="option : ${product.options}">
             <div class="mb-3" style="font-weight: 600; color: gray">
               <span th:text="${option.name}+':' ">optionName</span>

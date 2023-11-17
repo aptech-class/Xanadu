@@ -41,7 +41,7 @@ public class CollectionService {
 
     @Transactional(readOnly = true)
     public List<Collection> findTopCollections() {
-        List<Collection> collections = collectionRepository.findAll(PageRequest.of(0,8)).toList();
+        List<Collection> collections = collectionRepository.findAll(PageRequest.of(3,8)).toList();
         collections.forEach(collection -> {
            collection.getProducts().forEach(product -> product.getImages().forEach(Image::getId));
         });

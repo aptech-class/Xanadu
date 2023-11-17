@@ -88,7 +88,7 @@ public class ProductManager extends AbstractManager {
             @PathVariable("handle") String handle,
             Model model
     ) {
-        setMenu(model, "products.edit");
+        setMenu(model, "products");
         setObjectRelateToModel(model);
 
         Product productExists = productService.findByHandleFetchEagerAll(handle);
@@ -116,7 +116,7 @@ public class ProductManager extends AbstractManager {
         Product product = productService.findByHandleWithVariantsAndImages(handle);
         if (product == null) return "/admin/notFound";
         model.addAttribute("product", product);
-        setMenu(model, "products.variants");
+        setMenu(model, "products");
         return "/admin/product.variants.edit";
     }
 

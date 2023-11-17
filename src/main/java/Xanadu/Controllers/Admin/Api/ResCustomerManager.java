@@ -27,7 +27,7 @@ public class ResCustomerManager {
 
         customers.parallelStream().forEach(customer -> {
             try {
-                hibernateProcessor.unProxy(customer, new HashMap<>(), new StringBuilder());
+                hibernateProcessor.unProxy(customer, new HashMap<>(), Customer.class.getName()+"/");
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }

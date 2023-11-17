@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Controller
@@ -26,7 +27,7 @@ public class HomeController extends AbstractController {
     private ProductService productService;
 
     @GetMapping("home.html")
-    public String home(Model model) {
+    public String home(Model model) throws InvocationTargetException, IllegalAccessException {
         setMenu(model);
         List<Collection> collections = collectionService.findTopCollections();
         model.addAttribute("topCollections", collections);

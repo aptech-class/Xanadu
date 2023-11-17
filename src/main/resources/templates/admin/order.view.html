@@ -1,0 +1,336 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+  lang="en"
+  xmlns:th="http://WWW.thymeleaf.org"
+>
+  <body>
+    <div
+      layout:fragment="container"
+      class="container-fluid flex-grow-1 container-p-y"
+    >
+      <div class="row">
+        <div class="">
+          <div class="card mb-4">
+            <div class="row">
+              <div class="col-6">
+                <h5 class="card-header">Order</h5>
+              </div>
+              <div class="col-6 demo-inline-spacing text-right">
+                <a
+                  th:href="@{'/admin/orders/' + ${order.id} + '/edit.html'}"
+                  class="btn btn-warning"
+                  >Edit</a
+                >
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="p-5">
+                <div
+                  style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
+                  class="row pb-1"
+                  th:each="order : ${order.orderItems}"
+                >
+                  <div
+                    style="display: flex; align-items: center"
+                    class="col-sm-10"
+                  >
+                    <div style="display: flex; align-items: center">
+                      <div style="position: relative">
+                        <div
+                          style="
+                            position: absolute;
+                            background: gray;
+                            color: white;
+                            height: 1.5rem;
+                            width: 1.5rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            overflow: hidden;
+                            border-radius: 50%;
+                            top: -0.8rem;
+                            left: -0.8rem;
+                          "
+                          th:text="${order.quantity}"
+                        ></div>
+                        <a
+                          th:href="@{'/products/' + ${order.variant.product.handle} + '.html'}"
+                        >
+                          <img
+                            style="
+                              max-width: 60px;
+                              overflow: hidden;
+                              border-radius: 5%;
+                            "
+                            th:src="${order.variant.image} ? ${order.variant.image.src} : ${order.variant.product.images[0].src}"
+                            src=""
+                            alt=""
+                          />
+                        </a>
+                      </div>
+                      <div
+                        style="padding-left: 4px; font-size: 14px"
+                        class="ml-2"
+                      >
+                        <a
+                          th:href="@{'/products/' + ${order.variant.product.handle} + '.html'}"
+                          th:text="${order.variant.product.title}"
+                        ></a>
+                        <div
+                          style="font-weight: 600; color: gray"
+                          th:text="${order.variant.title}"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div
+                      style="
+                        color: gray;
+                        font-size: 14px;
+                        margin: 0px;
+                        display: flex;
+                        align-items: end;
+                        height: 100%;
+                      "
+                    >
+                      <p th:text="${order.subTotalPrice} + '$'"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-10">
+                    <label>Shipping fee</label>
+                  </div>
+                  <div class="col-2">
+                    <span th:text="${order.shippingFee}+'$'"></span>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-10">
+                    <label>Total</label>
+                  </div>
+                  <div class="col-2">
+                    <span th:text="${order.amount}+'$'"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border-top: solid 1px" class="order p-5">
+                <h3
+                  style="
+                    text-decoration: underline;
+                    color: #0964c3;
+                    text-transform: uppercase;
+                    font-size: 15px;
+                  "
+                >
+                  Shipping address:
+                </h3>
+
+                <div class="p-2">
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >first name:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.firstName}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >last name:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.lastName}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >phone:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.phone}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >email:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.email}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >city:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.city}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >district:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.district}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >company:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.company}"></span>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      class="col-sm-2 col-form-label"
+                      for="basic-default-name"
+                      >Detail:</label
+                    >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <span th:text="${order.shippingAddress.detail}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="border-top: solid 1px" class="order p-5 row">
+                <h3
+                  style="
+                    text-decoration: underline;
+                    color: #0964c3;
+                    text-transform: uppercase;
+                    font-size: 15px;
+                  "
+                >
+                  Order info:
+                </h3>
+                <div class="row mb-3">
+                  <label
+                    class="col-sm-2 col-form-label"
+                    for="basic-default-name"
+                    >Status:</label
+                  >
+                  <div
+                    style="display: flex; align-items: center"
+                    class="col-sm-10"
+                  >
+                    <span
+                      class="badge bg-warning"
+                      th:text="${order.fulfillmentStatus}"
+                    ></span>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label
+                    class="col-sm-2 col-form-label"
+                    for="basic-default-name"
+                    >note:</label
+                  >
+                  <div
+                    style="display: flex; align-items: center"
+                    class="col-sm-10"
+                  >
+                    <span th:text="${order.note}"></span>
+                  </div>
+                </div>
+                <div class="row  mb-3">
+                  <div class="col-2">
+                    <label class="form-check-label" for="paymentStatus"
+                      >Payment status:</label
+                    >
+                  </div>
+                  <div class="col-10">
+                    <p th:text="${order.paymentStatus}"></p>
+                  </div>
+                </div>
+              </div>
+              <div style="border-top: solid 1px" class="p-5">
+                <h3
+                  style="
+                    text-decoration: underline;
+                    color: #0964c3;
+                    text-transform: uppercase;
+                    font-size: 15px;
+                  "
+                >
+                  Transaction:
+                </h3>
+                <div class="mb-3">
+                  <span
+                    th:each="transaction : ${order.transactions}"
+                    th:class="${transaction.status} ? 'badge bg-success' :'badge bg-danger'"
+                    th:text="${transaction.status}"
+                    >Success</span
+                  >
+                </div>
+                <div style="text-align: right" class="mb-3">
+                  <a
+                    class="btn btn-info btn-sm"
+                    th:href="${'/admin/transactions/create.html?orderId='+ order.id}"
+                  >
+                    Create transaction</a
+                  >
+                </div>
+              </div>
+              <div class="mp-3">
+                <div class="row">
+                  <div class="col-6"></div>
+                  <div class="col-6 demo-inline-spacing text-right">
+                    <a
+                      th:href="@{'/admin/orders/' + ${order.id} + '/edit.html'}"
+                      class="btn btn-warning"
+                      >Edit</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

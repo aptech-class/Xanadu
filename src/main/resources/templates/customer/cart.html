@@ -55,7 +55,7 @@
                           <img
                             class="variantImage"
                             style="max-width: 100px"
-                            th:src="${cartItem.variant.image} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
+                            th:src="${cartItem.variant.image!=null} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
                             src=""
                             alt=""
                         /></a>

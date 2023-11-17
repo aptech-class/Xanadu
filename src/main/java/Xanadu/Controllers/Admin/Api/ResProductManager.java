@@ -28,7 +28,7 @@ public class ResProductManager{
         List<Product> products = productService.findByTitleContains(title);
         products.parallelStream().forEach(product -> {
             try {
-                hibernateProcessor.unProxy(product, new HashMap<>(), new StringBuilder());
+                hibernateProcessor.unProxy(product, new HashMap<>(), Product.class.getName()+"/");
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }

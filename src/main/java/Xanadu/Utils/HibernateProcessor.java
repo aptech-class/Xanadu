@@ -16,10 +16,9 @@ import java.util.stream.Stream;
 @Component
 public class HibernateProcessor {
 
-    public <T> T unProxy(T t, Map<String, T> objectIsUnProxy, StringBuilder path) throws IllegalAccessException, InvocationTargetException {
+    public <T> T unProxy(T t, Map<String, T> objectIsUnProxy, String path) throws IllegalAccessException, InvocationTargetException {
         if (t == null) return null;
-        path.append(t.getClass().getName());
-        path.append("/");
+
         objectIsUnProxy.put(t.toString(), t);
         Field[] fields = t.getClass().getDeclaredFields();
         Method[] methods = t.getClass().getDeclaredMethods();
@@ -30,18 +29,27 @@ public class HibernateProcessor {
         for (Field field : fields) {
             field.setAccessible(true);
             if (field.getType().getDeclaredAnnotation(Entity.class) != null && field.get(t) != null) {
+
                 String className = field.getType().getName();
                 String key = field.get(t).toString();
-                if (path.toString().contains(className + "/") && objectIsUnProxy.get(key) != null) {
-                    field.set(t, null);
+
+                if (path.contains(className + "/") && objectIsUnProxy.get(key) != null) {
+                    try {
+                        field.set(t, clone(field.get(t)));
+                    } catch (Exception e) {
+                        field.set(t, null);
+                        e.printStackTrace();
+                    }
                 } else {
-                    field.set(t, unProxy((T) field.get(t), new HashMap<>(objectIsUnProxy), new StringBuilder(path.toString())));
+                    String newPath = path + className + "/";
+                    field.set(t, unProxy((T) field.get(t), objectIsUnProxy, newPath));
                 }
             }
 
             if (Collection.class.isAssignableFrom(field.getType())) {
 
                 Collection<T> collection = (Collection<T>) field.get(t);
+
                 if (collection != null) {
                     try {
                         Collection<T> newCollection = new ArrayList<>();
@@ -49,10 +57,11 @@ public class HibernateProcessor {
                             String className = _t.getClass().getName();
                             String key = _t.toString();
 
-                            if (path.toString().contains(className + "/") && objectIsUnProxy.get(key) != null) {
+                            if (path.contains(className + "/") && objectIsUnProxy.get(key) != null) {
                                 newCollection.add(clone(_t));
                             } else {
-                                newCollection.add(unProxy(_t, new HashMap<>(objectIsUnProxy), new StringBuilder(path.toString())));
+                                String newPath = path + className + "/";
+                                newCollection.add(unProxy(_t, objectIsUnProxy, newPath));
                             }
 
                         }
@@ -75,25 +84,33 @@ public class HibernateProcessor {
         constructor.setAccessible(true);
         T tClone = (T) constructor.newInstance();
         Field[] fields = Stream.concat(Arrays.stream(clazz.getSuperclass().getDeclaredFields()), Arrays.stream(clazz.getDeclaredFields())).toArray(Field[]::new);
+        Method[] methods = t.getClass().getDeclaredMethods();
+        Map<String,Method> methodsMap = new HashMap<>();
+        for (Method method : methods) {
+            methodsMap.put(method.getName(), method);
+        }
         for (Field field : fields) {
             field.setAccessible(true);
             if (Collection.class.isAssignableFrom(field.getType())) {
                 Collection<?> collection = (Collection<?>) field.get(t);
-                Collection<Object> newCollection = new ArrayList<>();
-                boolean check = true;
-                for (Object o : collection) {
-                    if (o.getClass().getDeclaredAnnotation(Entity.class) == null) {
-                        newCollection.add(clone(o));
-                        check = false;
-                    } else {
+                try{
+                    boolean check = true;
+                    for (Object o : collection) {
+                        if (o.getClass().getDeclaredAnnotation(Entity.class) == null) {
+                            field.set(tClone, collection);
+                            check = false;
+                        }
                         break;
                     }
+                    if (check) {
+                        field.set(tClone, null);
+                    }
+                }catch (Exception e) {
+                    String methodName = "set" + Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
+                    Method method = methodsMap.get(methodName);
+                    method.invoke(tClone,(Object) null);
                 }
-                if (check) {
-                    field.set(tClone, collection);
-                } else {
-                    field.set(tClone, newCollection);
-                }
+
             } else {
                 field.set(tClone, field.get(t));
             }
@@ -102,4 +119,6 @@ public class HibernateProcessor {
 
         return tClone;
     }
+
+
 }

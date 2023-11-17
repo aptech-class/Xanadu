@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.lang.reflect.InvocationTargetException;
+
 
 @Controller
 @RequestMapping("/collections")
@@ -19,7 +21,7 @@ public class CollectionController extends AbstractController{
     @Autowired
     CollectionService collectionService ;
     @GetMapping("/{handle}/products.html")
-    public String getProducts (@PathVariable("handle") String handle, Model model){
+    public String getProducts (@PathVariable("handle") String handle, Model model) throws InvocationTargetException, IllegalAccessException {
         setMenu(model);
         Collection collection =  collectionService.findByHandleWithProducts(handle);
         model.addAttribute("collection", collection);

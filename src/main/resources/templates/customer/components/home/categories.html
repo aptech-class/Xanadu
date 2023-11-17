@@ -26,7 +26,7 @@
               >
                 <div class="media media--transparent media--square">
                   <img
-                    th:src="${collection.products[0].images[0].src}"
+                    th:src="${collection.products[collection.products.size()-1].images[0].src}"
                     loading="lazy"
                     th:onclick="@{|window.location.href='/collections/${collection.handle}/products.html'|}"
                     style="cursor: pointer"

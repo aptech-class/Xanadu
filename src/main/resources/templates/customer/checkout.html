@@ -23,101 +23,401 @@
       layout:fragment="main"
     >
       <div class="container">
-        <div style="max-width: 800px; margin: auto" class="checkout p-5">
-          <h1
-            style="
-              font-weight: 700;
-              background: #041f40;
-              margin: 0;
-              color: white;
-            "
-            class="text-center"
-          >
-            Checkout
-          </h1>
-          <div style="border-radius: 0" class="order card p-5">
-            <div
-              style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
-              class="row pb-1"
-              th:each="cartItem : ${customer.cart.cartItems}"
+        <h1
+          class="text-center m-5"
+          th:unless="${customer.cart!=null&&customer.cart.cartItems!=null&&!customer.cart.cartItems.isEmpty()}"
+        >
+          Cart is empty
+        </h1>
+        <form
+          th:if="${customer.cart!=null&&customer.cart.cartItems!=null&&!customer.cart.cartItems.isEmpty()}"
+          action="/checkout.html"
+          method="post"
+        >
+          <script th:inline="javascript">
+            /*<![CDATA[*/
+            const shippingAddresses = /*[[${shippingAddresses}]]*/ [];
+            /*]]>*/
+          </script>
+          <div style="max-width: 800px; margin: auto" class="checkout p-5">
+            <h1
+              style="
+                font-weight: 700;
+                background: #041f40;
+                margin: 0;
+                color: white;
+              "
+              class="text-center"
             >
-              <div class="col-sm-10">
-                <div style="display: flex; align-items: center">
-                  <div style="position: relative">
-                    <div
-                      style="
-                        position: absolute;
-                        background: gray;
-                        color: white;
-                        height: 1.5rem;
-                        width: 1.5rem;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        overflow: hidden;
-                        border-radius: 50%;
-                        top: -0.8rem;
-                        left: -0.8rem;
-                      "
-                      th:text="${cartItem.quantity}"
-                    ></div>
-                    <a th:href="${cartItem.variant.product.handle}" href="">
-                      <img
+              Checkout
+            </h1>
+            <div style="border-radius: 0" class="order card p-5">
+              <div
+                style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
+                class="row pb-1"
+                th:each="cartItem : ${customer.cart.cartItems}"
+              >
+                <div class="col-sm-10">
+                  <div style="display: flex; align-items: center">
+                    <div style="position: relative">
+                      <div
                         style="
-                          max-width: 60px;
+                          position: absolute;
+                          background: gray;
+                          color: white;
+                          height: 1.5rem;
+                          width: 1.5rem;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
                           overflow: hidden;
-                          border-radius: 5%;
+                          border-radius: 50%;
+                          top: -0.8rem;
+                          left: -0.8rem;
                         "
-                        th:src="${cartItem.variant.image} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
-                        src=""
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div style="padding-left: 4px; font-size: 14px" class="ml-2">
-                    <a
-                      th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
-                      th:text="${cartItem.variant.product.title}"
-                    ></a>
+                        th:text="${cartItem.quantity}"
+                      ></div>
+                      <a
+                        th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
+                      >
+                        <img
+                          style="
+                            max-width: 60px;
+                            overflow: hidden;
+                            border-radius: 5%;
+                          "
+                          th:src="${cartItem.variant.image} ? ${cartItem.variant.image.src} : ${cartItem.variant.product.images[0].src}"
+                          src=""
+                          alt=""
+                        />
+                      </a>
+                    </div>
                     <div
-                      style="font-weight: 600; color: gray"
-                      th:text="${cartItem.variant.title}"
-                    ></div>
+                      style="padding-left: 4px; font-size: 14px"
+                      class="ml-2"
+                    >
+                      <a
+                        th:href="@{'/products/' + ${cartItem.variant.product.handle} + '.html'}"
+                        th:text="${cartItem.variant.product.title}"
+                      ></a>
+                      <div
+                        style="font-weight: 600; color: gray"
+                        th:text="${cartItem.variant.title}"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <div
+                    style="
+                      color: gray;
+                      font-size: 14px;
+                      margin: 0px;
+                      display: flex;
+                      align-items: end;
+                      height: 100%;
+                    "
+                  >
+                    <p th:text="${cartItem.subTotalPrice} + '$'"></p>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-2">
-                <div
-                  style="
-                    color: gray;
-                    font-size: 14px;
-                    margin: 0px;
-                    display: flex;
-                    align-items: end;
-                    height: 100%;
-                  "
-                >
-                  <p th:text="${cartItem.subTotalPrice} + '$'"></p>
+              <div class="row mb-3">
+                <div class="col-10">
+                  <h3>Total:</h3>
+                </div>
+                <div class="col-2">
+                  <h3 th:text="${customer.cart.totalPrice}+'$'"></h3>
+                </div>
+              </div>
+              <div th:if="${message}">
+                <p class="error" th:text="${message}"></p>
+                <a href="/cart.html">Back to cart to edit</a>
+              </div>
+            </div>
+
+            <div style="border-radius: 0" class="order card p-3">
+              <h3
+                style="
+                  text-decoration: underline;
+                  color: #0964c3;
+                  text-transform: uppercase;
+                "
+              >
+                Shipping address:
+              </h3>
+              <div
+                th:if="${shippingAddresses!=null&&!shippingAddresses.isEmpty()}"
+                class="mb-3 row"
+              >
+                <div class="col-sm-8">
+                  <p></p>
+                </div>
+                <div class="col-sm-4">
+                  <label
+                    style="color: gray; font-weight: 500"
+                    class="form-label"
+                    for="id"
+                    >Select address:</label
+                  >
+                  <select
+                    class="form-select selectAddress"
+                    aria-label="Default select example"
+                    name="id"
+                    id="id"
+                  >
+                    <option
+                      th:each="shippingAddress,stat : ${shippingAddresses}"
+                      th:value="${shippingAddress.id}"
+                      th:text="${stat.index+1}"
+                      th:selected="${stat.index==0}"
+                    ></option>
+                  </select>
+                </div>
+              </div>
+              <div class="p-2">
+                <div class="mb-3 row">
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="firstName"
+                      >First Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      name="firstName"
+                      placeholder=""
+                      th:value="${shippingAddress.firstName}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.firstName')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.firstName}"
+                    ></p>
+                  </div>
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="lastName"
+                      >Last Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      name="lastName"
+                      placeholder=""
+                      th:value="${shippingAddress.lastName}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.lastName')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.lastName}"
+                    ></p>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label
+                    style="color: gray; font-weight: 500"
+                    class="form-label"
+                    for="email"
+                    >Email</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder=""
+                    th:value="${shippingAddress.email}"
+                  />
+                  <p
+                    th:if="${#fields.hasErrors('shippingAddress.email')}"
+                    th:errorclass="error"
+                    th:errors="${shippingAddress.email}"
+                  ></p>
+                </div>
+                <div class="mb-3 row">
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="phone"
+                      >Phone</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="phone"
+                      name="phone"
+                      placeholder=""
+                      th:value="${shippingAddress.phone}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.phone')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.phone}"
+                    ></p>
+                  </div>
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="city"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city"
+                      name="city"
+                      placeholder=""
+                      th:value="${shippingAddress.city}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.city')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.city}"
+                    ></p>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="district"
+                      >District</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="district"
+                      name="district"
+                      placeholder=""
+                      th:value="${shippingAddress.district}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.district')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.district}"
+                    ></p>
+                  </div>
+                  <div class="col-sm-6">
+                    <label
+                      style="color: gray; font-weight: 500"
+                      class="form-label"
+                      for="company"
+                      >Company</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="company"
+                      name="company"
+                      placeholder=""
+                      th:value="${shippingAddress.company}"
+                    />
+                    <p
+                      th:if="${#fields.hasErrors('shippingAddress.company')}"
+                      th:errorclass="error"
+                      th:errors="${shippingAddress.company}"
+                    ></p>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label
+                    style="color: gray; font-weight: 500"
+                    class="form-label"
+                    for="detail"
+                    >Detail</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="detail"
+                    name="detail"
+                    placeholder=""
+                    th:value="${shippingAddress.detail}"
+                  />
+                  <p
+                    th:if="${#fields.hasErrors('shippingAddress.detail')}"
+                    th:errorclass="error"
+                    th:errors="${shippingAddress.detail}"
+                  ></p>
+                </div>
+                <div class="mb-3">
+                  <label
+                    style="color: gray; font-weight: 500"
+                    class="form-label"
+                    for="note"
+                    >Note</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="note"
+                    name="note"
+                    placeholder=""
+                    th:text="${note}"
+                  />
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-10">
-                <h3>Total:</h3>
+            <div style="border-radius: 0" class="order card p-3">
+              <h3
+                style="
+                  text-decoration: underline;
+                  color: #0964c3;
+                  text-transform: uppercase;
+                "
+              >
+                Payment method:
+              </h3>
+              <div class="mb-3 row">
+                <div class="col-sm-8">
+                  <p></p>
+                </div>
+                <div class="col-sm-4">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="paymentMethod"
+                  >
+                    <option
+                      th:each="paymentMethod : ${paymentMethods}"
+                      th:value="${paymentMethod}"
+                      th:text="${paymentMethod}"
+                      th:selected="${paymentMethod=='NORMAL'}"
+                    ></option>
+                  </select>
+                </div>
               </div>
-              <div class="col-2">
-                <h3 th:text="${customer.cart.totalPrice}+'$'"></h3>
+              <div class="mb-3 mt-5">
+                <div class="text-center">
+                  <style></style>
+                  <button
+                    class="pay"
+                    style="
+                      font-weight: 700;
+                      margin: 0;
+                      color: white;
+                      padding: 1rem;
+                      width: 50%;
+                    "
+                    type="submit"
+                  >
+                    Pay now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-
-          <div style="border-radius: 0" class="order card p-3 ">
-            <h3>Shipping address</h3>
-            <div class="card">
-                
-            </div>
-          </div>
-        </div>
+        </form>
       </div>
     </main>
   </body>

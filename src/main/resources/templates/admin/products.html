@@ -56,7 +56,6 @@
                     <th>#</th>
                     <th>Title</th>
                     <th>ID</th>
-                    <th>Handle</th>
                     <th>Images</th>
                     <th>Rating</th>
                     <th>Published</th>
@@ -67,44 +66,14 @@
                 <tbody>
                 <tr th:each="product,stat : ${products}" th:object="${product}">
                     <th scope="row" th:text="${stat.index + 1}"></th>
-                    <td th:text="*{title}"></td>
+                    <td>
+                        <a th:href="*{'/admin/products/' + handle + '.html'}" th:text="*{title}"></a>
+                    </td>
                     <td th:text="*{id}"></td>
                     <td>
-                        <a th:href="*{'/admin/products/' + handle + '.html'}" th:text="*{handle}"></a>
-                    </td>
-                    <td>
-                        <div
-                                th:attr="id=${product.handle}"
-                                class="carousel carousel-dark slide carousel-fade"
-                                data-bs-ride="carousel"
-                        >
-                            <ol class="carousel-indicators">
-                                <li
-                                        th:each="image,_stat : ${product.images}"
-                                        th:object="${image}"
-                                        th:attr="data-bs-target=${'javascript:void(0);' + product.handle}, data-bs-slide-to=${_stat.index}"
-                                        th:class="${_stat.index == 0} ? 'active' : ''">
-
-                                </li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div th:each="image,_stat : ${product.images}"
-                                     th:object="${image}" class="carousel-item active"
-                                     th:class="${_stat.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                                    <img class="d-block w-100" th:src="*{src}" src="" alt="First slide"/>
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" th:href="${'#' + product.handle}" role="button"
-                               data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" th:href="${'#' + product.handle}" role="button"
-                               data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </a>
-                        </div>
+                        <a th:href="*{'/admin/products/' + handle + '.html'}" >
+                            <img style="max-width:100px" src="" th:src="*{images[0].src}" th:alt="*{title}" alt="">
+                        </a>
                     </td>
                     <td th:text="*{rating}"></td>
                     <td th:text="*{published}"></td>

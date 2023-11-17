@@ -1,7 +1,9 @@
 package Xanadu.Services;
 
+import Xanadu.Entities.Role;
 import Xanadu.Entities.User;
 import Xanadu.Repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class UserAuthService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
@@ -25,6 +28,7 @@ public class UserAuthService implements UserDetailsService {
                 .builder()
                 .password(user.getPassword())
                 .username(user.getUsername())
+                .authorities(Role.ADMIN.name())
                 .build();
     }
 }

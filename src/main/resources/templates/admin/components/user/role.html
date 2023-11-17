@@ -1,0 +1,22 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="userRole(roleSelected, view)" class="mb-3 userRole">
+    <label for="vendor" class="form-label">Role</label>
+    <select th:if="${view !=null}" name="role" class="form-select" id="vendor"
+            aria-label="Default select example">
+        <option th:each="role : ${roles}"
+                th:value="${role}"
+                th:text="${role}"
+                th:selected="${roleSelected !=null && role == roleSelected}"
+        ></option>
+    </select>
+    <input th:if="${view == null}"
+           type="text"
+           class="form-control"
+           disabled
+           th:value="${roleSelected}"
+    />
+</div>
+</html>

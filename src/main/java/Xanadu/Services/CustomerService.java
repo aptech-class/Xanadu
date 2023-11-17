@@ -33,11 +33,11 @@ public class CustomerService {
 
     @Transactional
     public Customer save(Customer customer) {
-        if (customer.getId() != null && customer.getPassword() != null) {
+        if (customer.getPassword() != null && !customer.getPassword().isEmpty()) {
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        } else {
             Optional<Customer> customerOptionalExists = customerRepository.findById(customer.getId());
             customerOptionalExists.ifPresent(value -> customer.setPassword(value.getPassword()));
-        } else {
-            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         }
 
         MultipartFile imageFile = customer.getImageFile();
@@ -88,7 +88,7 @@ public class CustomerService {
     public Customer findByUsernameWithCart(String username) {
         Customer customer = customerRepository.findByUsername(username);
         if (customer != null && customer.getCart() != null) {
-            customer.getCart().getCartItems().forEach(EntityBasic::getId);
+            customer.getCart().getCartItems().forEach(cartItem -> cartItem.getVariant().getProduct().getImages().forEach(EntityBasic::getId));
         }
         return customer;
     }

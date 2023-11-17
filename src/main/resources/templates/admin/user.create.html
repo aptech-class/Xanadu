@@ -1,0 +1,71 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+  lang="en"
+  xmlns:th="http://WWW.thymeleaf.org"
+>
+  <body>
+    <div
+      layout:fragment="container"
+      class="container-fluid flex-grow-1 container-p-y"
+    >
+      <div class="row">
+        <div class="">
+          <div class="card mb-4">
+            <h5 class="card-header text-center">Users</h5>
+            <form
+              th:action="@{/admin/users/create.html}"
+              th:class="enterDisable"
+              enctype="multipart/form-data"
+              method="post"
+            >
+              <div class="card-body">
+                <div
+                  layout:replace="~{/admin/components/user/firstName :: userFirstName(${user.firstName}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/lastName :: userLastName(${user.lastName}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/username :: userUsername(${user.username}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/email :: userEmail(${user.email}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/password :: userPassword(${user.password})}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/confirmPassword :: userConfirmPassword(${user.confirmPassword})}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/phone :: userPhone(${user.phone}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/role :: userRole(${user.role}, 'create')}"
+                ></div>
+                
+                <div
+                  layout:replace="~{/admin/components/user/status :: userStatus(${user.status}, 'create')}"
+                ></div>
+                <div
+                  layout:replace="~{/admin/components/user/image :: userImage(${user.image}, 'create')}"
+                ></div>
+                <div class="mb-3 createAction">
+                  <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6 demo-inline-spacing text-right">
+                      <button type="submit" class="btn btn-primary">
+                        Create
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

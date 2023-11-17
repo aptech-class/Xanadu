@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"createdAt","updateAt"})
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class EntityBasic {

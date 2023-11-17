@@ -1,0 +1,17 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+>
+<div layout:fragment="userEmail(email,view)" class="mb-3 userEmail">
+    <label for="email" class="form-label">Email</label>
+    <input
+            type="text"
+            class="form-control error"
+            id="email"
+            name="email"
+            th:value="${email}"
+            th:readonly="${view == null}"
+    />
+    <p th:if="${#fields.hasErrors('user.email')}" th:errorclass="error" th:errors="${user.email}"></p>
+</div>
+</html>

@@ -28,7 +28,7 @@ public class ProductController extends AbstractController{
         setMenu(model);
         Product product = productService.findByHandleWithImagesAndOptionsAndVariantsAndCollections(handle);
 
-        model.addAttribute("product", hibernateProcessor.unProxy(product,new HashMap<>(),new StringBuilder()));
+        model.addAttribute("product", hibernateProcessor.unProxy(product,new HashMap<>(),Product.class.getName()+"/"));
         List<Product> products  = productService.findAlsoLikeProducts(product.getCollections(),product);
         model.addAttribute("alsoLikeProducts",products);
 

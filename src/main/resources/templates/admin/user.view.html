@@ -1,0 +1,59 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}"
+        lang="en"
+        xmlns:th="http://WWW.thymeleaf.org"
+>
+<body>
+<div
+        layout:fragment="container"
+        class="container-fluid flex-grow-1 container-p-y"
+>
+    <div class="row">
+        <div class="">
+            <div class="card mb-4">
+                <h5 class="card-header text-center">Users</h5>
+                <div class="card-body">
+                    <div
+                            layout:replace="~{/admin/components/user/firstName :: userFirstName(${user.firstName})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/lastName :: userLastName(${user.lastName})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/username :: userUsername(${user.username})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/email :: userEmail(${user.email})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/phone :: userPhone(${user.phone})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/role :: userRole(${user.role})}"
+                    ></div>
+
+                    <div
+                            layout:replace="~{/admin/components/user/status :: userStatus(${user.status})}"
+                    ></div>
+                    <div
+                            layout:replace="~{/admin/components/user/image :: userImage(${user.image})}"
+                    ></div>
+                    <div class="mb-3 createAction">
+                        <div class="row">
+                            <div class="col-6"></div>
+                            <div class="col-6 demo-inline-spacing text-right">
+                                <a th:href="@{'/admin/users/'+  ${user.username} + '/edit.html'}" type="submit"
+                                   class="btn btn-warning">
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

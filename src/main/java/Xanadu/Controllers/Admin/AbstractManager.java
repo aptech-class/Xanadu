@@ -1,13 +1,17 @@
 package Xanadu.Controllers.Admin;
 
 import Xanadu.Models.Admin.Navbar;
+import Xanadu.Utils.HibernateProcessor;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 import java.util.List;
 
 public abstract class AbstractManager {
 
+    @Autowired
+    protected HibernateProcessor hibernateProcessor;
 
     void setDefaultMenu(Model model,@Nonnull String active,@Nonnull String url) {
         Navbar navbar = Navbar.create(url);

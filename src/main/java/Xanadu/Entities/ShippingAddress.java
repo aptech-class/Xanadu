@@ -1,11 +1,13 @@
 package Xanadu.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
@@ -14,22 +16,32 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true,exclude = {"customer","orders"})
 @Data
 public class ShippingAddress extends EntityBasic{
-    @NotNull
-    @NotBlank(message = "First name is required!")
+    @NotBlank
     @Column(nullable = false)
     private String firstName;
 
-    @NotNull
-    @NotBlank(message = "Last name is required!")
+    @NotBlank
     @Column(nullable = false)
     private String lastName;
 
-    @NotNull
+    @NotBlank
     @Column(nullable = false)
     private String phone;
 
+    @NotBlank
+    @Email
+    @Column(nullable = false)
+    private String email;
+
+    @NotBlank
+    @Column(nullable = false)
     private String city;
 
+    @NotBlank
+    @Column(nullable = false)
+    private String district;
+
+    @NotBlank
     @Lob
     @Column(length =10000)
     private String detail;

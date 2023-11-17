@@ -1,8 +1,10 @@
 package Xanadu.Controllers.Customer;
 
-import Xanadu.Entities.Customer;
-import Xanadu.Entities.ShippingAddress;
+import Xanadu.Entities.*;
+import Xanadu.Exceptions.OutOfStockException;
 import Xanadu.Services.CustomerService;
+import Xanadu.Services.OrderService;
+import Xanadu.Services.ShippingAddressService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -23,22 +28,30 @@ public class CustomerController extends AbstractController {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private ShippingAddressService shippingAddressService;
+
 
     @GetMapping("/signin.html")
     public String signin(
             @ModelAttribute("message") String message,
             @AuthenticationPrincipal UserDetails customer,
             Model model
-    ) {
-        if (customer != null) {
-            return "redirect:/home.html";
+    ) throws InvocationTargetException, IllegalAccessException {
+        if (customer == null ||
+                (message != null && !message.isEmpty()) ||
+                customer.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("USER"))
+        ) {
+            model.addAttribute("message", message);
+            setMenu(model);
+            return "/customer/signin";
         }
-        setMenu(model);
-        model.addAttribute("message", message);
-        return "/customer/signin";
+        return "redirect:/home.html";
     }
 
-    @PostMapping("/signin")
+    @RequestMapping("/signin")
     public String signin(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String message = (String) request.getAttribute("message");
         redirectAttributes.addFlashAttribute("message", message);
@@ -49,14 +62,17 @@ public class CustomerController extends AbstractController {
     public String signup(
             Model model,
             @AuthenticationPrincipal UserDetails customer
-    ) {
-        if (customer != null) {
-            return "redirect:/home.html";
+    ) throws InvocationTargetException, IllegalAccessException {
+        if (customer == null ||
+                customer.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("USER"))
+        ) {
+            setMenu(model);
+            model.addAttribute("customer", new Customer());
+            return "/customer/signup";
         }
-        setMenu(model);
-        model.addAttribute("customer", new Customer());
 
-        return "/customer/signup";
+        return "redirect:/home.html";
+
     }
 
     @PostMapping("/signup.html")
@@ -64,7 +80,7 @@ public class CustomerController extends AbstractController {
             @Valid @ModelAttribute Customer customer,
             BindingResult bindingResult,
             Model model
-    ) {
+    ) throws InvocationTargetException, IllegalAccessException {
         if (bindingResult.hasErrors()) {
             setMenu(model);
             return "/customer/signup";
@@ -75,14 +91,34 @@ public class CustomerController extends AbstractController {
     }
 
     @GetMapping("/cart.html")
-    public String getCart(Model model) {
+    public String getCart(Model model) throws InvocationTargetException, IllegalAccessException {
         setMenu(model);
         return "/customer/cart";
     }
 
     @GetMapping("/checkout.html")
-    public String checkout(Model model) {
+    public String checkout(Model model, @AuthenticationPrincipal UserDetails userDetails) throws InvocationTargetException, IllegalAccessException {
         setMenu(model);
+
+
+        List<String> paymentMethods = new ArrayList<>();
+        paymentMethods.add(TransactionKind.NORMAL.name());
+//        paymentMethods.add(TransactionKind.MOMO_GATEWAY.name());
+        model.addAttribute("paymentMethods", paymentMethods);
+        List<ShippingAddress> shippingAddresses = shippingAddressService.findByCustomer(userDetails.getUsername());
+        if (shippingAddresses != null) {
+            shippingAddresses.parallelStream().forEach(shippingAddress -> {
+                try {
+                    hibernateProcessor.unProxy(shippingAddress, new HashMap<>(), ShippingAddress.class.getName()+"/");
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        model.addAttribute("shippingAddresses", shippingAddresses);
+        model.addAttribute("shippingAddress", shippingAddresses != null && !shippingAddresses.isEmpty() ? shippingAddresses.get(0) : new ShippingAddress());
+
+
         return "/customer/checkout";
     }
 
@@ -90,11 +126,46 @@ public class CustomerController extends AbstractController {
     public String checkout(
             Model model,
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @ModelAttribute("shippingAddress") ShippingAddress shippingAddress,
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam("note") String note,
+            @Valid @ModelAttribute ShippingAddress shippingAddress,
             BindingResult bindingResult
 
-    ) {
-        return "/checkout";
+    ) throws InvocationTargetException, IllegalAccessException {
+        setMenu(model);
+        List<String> paymentMethods = new ArrayList<>();
+        paymentMethods.add(TransactionKind.NORMAL.name());
+//          paymentMethods.add(TransactionKind.MOMO_GATEWAY.name());
+        model.addAttribute("paymentMethods", paymentMethods);
+        List<ShippingAddress> shippingAddresses = shippingAddressService.findByCustomer(userDetails.getUsername());
+        if (shippingAddresses != null) {
+            shippingAddresses.parallelStream().forEach(address -> {
+                try {
+                    hibernateProcessor.unProxy(address, new HashMap<>(), ShippingAddress.class.getName()+"/");
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        model.addAttribute("shippingAddresses", shippingAddresses);
+
+        if (bindingResult.hasErrors()) {
+            return "/customer/checkout";
+        }
+
+        Customer customer = customerService.findByUsername(userDetails.getUsername());
+        try {
+            orderService.save(customer, shippingAddress, note);
+        } catch (OutOfStockException e) {
+            model.addAttribute("message", e.getMessage());
+            return "/customer/checkout";
+        }
+
+        if(paymentMethod.equals(TransactionKind.MOMO_GATEWAY.name())){
+            return "redirect:/momo/transaction.html";
+        }
+
+        return "redirect:/orders";
     }
 
 

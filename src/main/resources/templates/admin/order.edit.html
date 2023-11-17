@@ -1,0 +1,393 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+  lang="en"
+  xmlns:th="http://WWW.thymeleaf.org"
+>
+  <body>
+    <div
+      layout:fragment="container"
+      class="container-fluid flex-grow-1 container-p-y"
+    >
+      <div class="row">
+        <div class="">
+          <div th:if="${order}" class="card mb-4">
+            <h5 class="card-header text-center">Order</h5>
+            <form
+              th:action="@{'/admin/orders/'+ ${order.id} +'/edit.html'}"
+              th:class="enterDisable"
+              enctype="multipart/form-data"
+              method="post"
+            >
+              <div class="card-body">
+                <input type="hidden" name="id" th:value="${order.id}" />
+                <div class="mb-3 p-5">
+                  <div
+                    style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
+                    class="row pb-1"
+                    th:each="orderItem,stat: ${order.orderItems}"
+                  >
+                    <div
+                      style="display: flex; align-items: center"
+                      class="col-sm-10"
+                    >
+                      <div style="display: flex; align-items: center">
+                        <div style="position: relative">
+                          <div
+                            style="
+                              position: absolute;
+                              background: gray;
+                              color: white;
+                              height: 1.5rem;
+                              width: 1.5rem;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              overflow: hidden;
+                              border-radius: 50%;
+                              top: -0.8rem;
+                              left: -0.8rem;
+                            "
+                            th:text="${orderItem.quantity}"
+                          ></div>
+                          <a
+                            th:href="@{'/products/' + ${orderItem.variant.product.handle} + '.html'}"
+                          >
+                            <img
+                              style="
+                                max-width: 60px;
+                                overflow: hidden;
+                                border-radius: 5%;
+                              "
+                              th:src="${orderItem.variant.image} ? ${orderItem.variant.image.src} : ${orderItem.variant.product.images[0].src}"
+                              src=""
+                              alt=""
+                            />
+                          </a>
+                          <input
+                            th:if="${orderItem.variant.image}"
+                            type="hidden"
+                            th:name="${'order.orderItems[' + stat.index + '].variant.image.src'}"
+                            th:value="${orderItem.variant.image.src}"
+                          />
+                          <input
+                            type="hidden"
+                            th:name="${'order.orderItems[' + stat.index + '].variant.product.images[0].src'}"
+                            th:value="${orderItem.variant.product.images[0].src}"
+                          />
+                        </div>
+                        <div
+                          style="padding-left: 4px; font-size: 14px"
+                          class="ml-2"
+                        >
+                          <a
+                            th:href="@{'/products/' + ${orderItem.variant.product.handle} + '.html'}"
+                            th:text="${orderItem.variant.product.title}"
+                          ></a>
+                          <input
+                            type="hidden"
+                            th:value="${orderItem.variant.product.title}"
+                            th:name="${'order.orderItems[' + stat.index + '].variant.product.title'}"
+                          />
+                          <div
+                            style="font-weight: 600; color: gray"
+                            th:text="${orderItem.variant.title}"
+                          ></div>
+                          <input
+                            type="hidden"
+                            th:value="${orderItem.variant.title}"
+                            th:name="${'order.orderItems[' + stat.index + '].variant.title'}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div
+                        style="
+                          color: gray;
+                          font-size: 14px;
+                          margin: 0px;
+                          display: flex;
+                          align-items: end;
+                          height: 100%;
+                        "
+                      >
+                        <p th:text="${orderItem.subTotalPrice} + '$'"></p>
+                        <input
+                          type="hidden"
+                          th:value="${orderItem.subTotalPrice}"
+                          th:name="${'order.orderItems[' + stat.index + '].subTotalPrice'}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="shippingFee"
+                      >Shipping fee</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="shippingFee"
+                        name="shippingFee"
+                        th:value="${order.shippingFee}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="amount"
+                      >Total</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="amount"
+                        th:value="${order.amount}"
+                        name="amount"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div style="border-top: solid 1px" class="p-5">
+                  <h3
+                    style="
+                      text-decoration: underline;
+                      color: #0964c3;
+                      text-transform: uppercase;
+                      font-size: 15px;
+                    "
+                  >
+                    Shipping address:
+                  </h3>
+                  <input
+                    type="hidden"
+                    name="shippingAddress.id"
+                    th:value="${order.shippingAddress.id}"
+                  />
+                  <div class="mb-3">
+                    <label class="form-label" for="firstName">First name</label>
+                    <input
+                      th:value="${order.shippingAddress.firstName}"
+                      name="shippingAddress.firstName"
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.firstName')}"
+                      th:errors="${order.shippingAddress.firstName}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="lastName">Last name</label>
+                    <input
+                      th:value="${order.shippingAddress.lastName}"
+                      name="shippingAddress.lastName"
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.lastName')}"
+                      th:errors="${order.shippingAddress.lastName}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input
+                      th:value="${order.shippingAddress.email}"
+                      name="shippingAddress.email"
+                      type="text"
+                      class="form-control"
+                      id="email"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.email')}"
+                      th:errors="${order.shippingAddress.email}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="phone">Phone</label>
+                    <input
+                      th:value="${order.shippingAddress.phone}"
+                      name="shippingAddress.phone"
+                      type="text"
+                      class="form-control"
+                      id="phone"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.phone')}"
+                      th:errors="${order.shippingAddress.phone}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="city">City</label>
+                    <input
+                      th:value="${order.shippingAddress.city}"
+                      name="shippingAddress.city"
+                      type="text"
+                      class="form-control"
+                      id="city"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.city')}"
+                      th:errors="${order.shippingAddress.city}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="district">District</label>
+                    <input
+                      th:value="${order.shippingAddress.district}"
+                      name="shippingAddress.district"
+                      type="text"
+                      class="form-control"
+                      id="district"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.district')}"
+                      th:errors="${order.shippingAddress.district}"
+                    ></p>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="detail">Detail</label>
+                    <input
+                      th:value="${order.shippingAddress.detail}"
+                      name="shippingAddress.detail"
+                      type="text"
+                      class="form-control"
+                      id="detail"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.shippingAddress.detail')}"
+                      th:errors="${order.shippingAddress.detail}"
+                    ></p>
+                  </div>
+                </div>
+                <div style="border-top: solid 1px" class="p-5">
+                  <h3
+                    style="
+                      text-decoration: underline;
+                      color: #0964c3;
+                      text-transform: uppercase;
+                      font-size: 15px;
+                    "
+                  >
+                    Order info:
+                  </h3>
+                  <div class="mb-3">
+                    <label for="fulfillmentStatus" class="form-label"
+                      >Status</label
+                    >
+                    <select
+                      name="fulfillmentStatus"
+                      id="fulfillmentStatus"
+                      class="form-select"
+                    >
+                      <option
+                        th:each="fulfillmentStatus : ${fulfillmentStatuses}"
+                        th:value="${fulfillmentStatus}"
+                        th:selected="${fulfillmentStatus==order.fulfillmentStatus.name()}"
+                        th:text="${fulfillmentStatus}"
+                      >
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="note">note</label>
+                    <input
+                      th:value="${order.note}"
+                      type="text"
+                      class="form-control"
+                      id="note"
+                      name="note"
+                    />
+                    <p
+                      class="error"
+                      th:if="${#fields.hasErrors('order.note')}"
+                      th:errors="${note}"
+                    ></p>
+                  </div>
+                  <div class="form-check form-switch mb-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="paymentStatus"
+                      name="paymentStatus"
+                      th:check="${order.paymentStatus}"
+                    />
+                    <label class="form-check-label" for="paymentStatus"
+                      >Payment status</label
+                    >
+                  </div>
+                </div>
+                <div style="border-top: solid 1px" class="p-5">
+                  <h3
+                    style="
+                      text-decoration: underline;
+                      color: #0964c3;
+                      text-transform: uppercase;
+                      font-size: 15px;
+                    "
+                  >
+                    Transaction:
+                  </h3>
+                  <div class="mb-3">
+                    <span
+                      th:each="transaction : ${order.transactions}"
+                      th:class="${transaction.status} ? 'badge bg-success' :'badge bg-danger'"
+                      >Success</span
+                    >
+                  </div>
+                  <div style="text-align: right" class="mb-3">
+                    <a
+                      class="btn btn-info btn-sm"
+                      th:href="${'/admin/transactions/create.html?orderId='+ order.id}"
+                    >
+                      Create transaction</a
+                    >
+                  </div>
+                </div>
+
+                <div class="mb-3 editAction">
+                  <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6 demo-inline-spacing text-right">
+                      <button type="submit" class="btn btn-primary">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div th:unless="${order}">
+            <form action="">
+              <h5 th:class="text-center">Find order to edit</h5>
+              <div class="mb-3 px-5">
+                <input
+                  type="text"
+                  class="form-control border-0 shadow-none mx-5"
+                  placeholder="Search..."
+                  aria-label="Search..."
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

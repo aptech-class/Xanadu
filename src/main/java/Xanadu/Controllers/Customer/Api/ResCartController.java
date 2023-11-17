@@ -41,7 +41,7 @@ public class ResCartController {
     ) throws InvocationTargetException, IllegalAccessException {
         Customer customer = customerService.findByUsername(userDetails.getUsername());
         Cart cart = cartService.addToCart(cartItem, customer);
-        return ResponseEntity.status(200).body(hibernateProcessor.unProxy(cart, new HashMap<>(), new StringBuilder()));
+        return ResponseEntity.status(200).body(hibernateProcessor.unProxy(cart, new HashMap<>(), Cart.class.getName()+"/"));
     }
 
     @PutMapping("/cartItems/{id}.json")
@@ -53,7 +53,7 @@ public class ResCartController {
         cartItem.setId(id);
         Customer customer = customerService.findByUsername(userDetails.getUsername());
         CartItem cartItemSaved = cartItemService.save(cartItem, customer);
-        return ResponseEntity.status(200).body(hibernateProcessor.unProxy(cartItemSaved, new HashMap<>(), new StringBuilder()));
+        return ResponseEntity.status(200).body(hibernateProcessor.unProxy(cartItemSaved, new HashMap<>(), CartItem.class.getName()+"/"));
     }
 
     @DeleteMapping("/cartItems/{id}.json")

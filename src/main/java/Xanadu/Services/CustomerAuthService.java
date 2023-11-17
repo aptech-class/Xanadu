@@ -27,6 +27,7 @@ public class CustomerAuthService implements UserDetailsService {
         return User.builder()
                 .username(customer.getUsername())
                 .password(customer.getPassword())
+                .authorities("USER")
                 .build();
     }
 }

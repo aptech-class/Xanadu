@@ -1,5 +1,6 @@
 const viewProductHandler = () => {
   const productItems = document.querySelectorAll(".productItem");
+  if (!productItems) return;
   productItems.forEach((item) => {
     const imgMain = item.querySelector("img");
     const srcMain = imgMain.src;
@@ -27,6 +28,8 @@ let currentVariant;
 const selectVariantHandler = () => {
   const mainImage = document.querySelector(".mainImage img");
   const options = document.querySelectorAll(".optionValue");
+  const price = document.getElementById('price');
+
   const title = Array.from(options).reduce((prev, option) => {
     if (option.checked) {
       if (prev.length === 0) {
@@ -42,7 +45,8 @@ const selectVariantHandler = () => {
     product.variants.forEach((variant) => {
       if (variant.title === title) {
         currentVariant = variant;
-        mainImage.src = variant.image.src;
+        mainImage.src = variant.image?.src ?? product.images[0]?.src;
+        price.textContent = variant.price.toFixed(1) + "$"
       }
     });
   }
@@ -186,15 +190,34 @@ const editCartItem = async (cartItem) => {
   const data = await res.json();
   return data;
 };
-const checkoutHandler = ()=>{
+const checkoutHandler = () => {
+  selectShippingAddressHandler();
+};
+const selectShippingAddressHandler = () => {
+  const selectAddressElement = document.querySelector(".selectAddress");
+  if (selectAddressElement) {
+    selectAddressElement.onchange = () => {
+      const shippingAddressId = selectAddressElement.value;
+      const address = shippingAddresses.find(
+        (i) => i.id * 1 === shippingAddressId * 1
+      );
+      Object.keys(address).forEach((key) => {
+        const filedElement = document.getElementById(key);
+        if (filedElement) {
+          filedElement.value = address[key];
+        }
+      });
+    };
+  }
+};
 
-}
 const load = () => {
   viewProductHandler();
   selectQuantityHandler();
-  selectVariantHandler();
   addToCartHandler();
   cartHandler();
   checkoutHandler();
+  checkoutHandler();
+  selectVariantHandler();
 };
 load();

@@ -68,7 +68,7 @@ public class CustomerManager extends AbstractManager {
 
     @GetMapping("/{username}/edit.html")
     public String editCustomer(Model model, @PathVariable("username") String username) {
-        setMenu(model, "customers.edit");
+        setMenu(model, "customers");
         Customer customer = customerService.findByUsername(username);
         model.addAttribute("customer", customer);
 

@@ -10,35 +10,35 @@
   display: flex;
   justify-content: center;
 }
-.quantityBtn:hover{
-    cursor: pointer;
-    background-color: aquamarine;
+.quantityBtn:hover {
+  cursor: pointer;
+  background-color: aquamarine;
 }
 .addQuantityGroup {
   height: 40px;
   display: flex;
 }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .listImage {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: flex-end;
-    overflow: auto;
-    padding: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  overflow: auto;
+  padding: 10px;
 }
 .listImage .imageItem {
-    max-width: 6rem;
+  max-width: 6rem;
 }
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
 body {
   background: #456;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .login {
@@ -130,7 +130,17 @@ a:hover {
   color: #07642f;
   text-decoration: underline;
 }
-a:not([href]){
+a:not([href]) {
   color: #07642f;
   text-decoration: none;
+}
+
+.pay:hover {
+  background: #042d5f;
+}
+.pay {
+  background: #041f40;
+}
+p.error{
+  color: red;
 }
