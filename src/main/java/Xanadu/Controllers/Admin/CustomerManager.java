@@ -91,7 +91,7 @@ public class CustomerManager extends AbstractManager {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 String field = fieldError.getField();
                 if (!field.equals("password")) {
-                    setMenu(model, "customers.edit");
+                    setMenu(model, "customers");
                     return "/admin/customer.edit";
                 }
             }

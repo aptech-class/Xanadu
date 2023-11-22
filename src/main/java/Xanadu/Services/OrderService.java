@@ -55,21 +55,11 @@ public class OrderService {
     @Transactional(rollbackFor = {RuntimeException.class, OutOfStockException.class})
     public void save(Customer customer, ShippingAddress shippingAddress, String note) throws OutOfStockException {
         shippingAddress.setCustomer(customer);
-        if (shippingAddress.getId() == null) {
-            shippingAddress = shippingAddressRepository.save(shippingAddress);
-        } else {
-            ShippingAddress shippingAddressSaved = shippingAddressRepository.findById(shippingAddress.getId()).orElse(null);
-            if (shippingAddressSaved != null && !shippingAddressSaved.equals(shippingAddress)) {
-                shippingAddress.setId(null);
-                shippingAddress = shippingAddressRepository.save(shippingAddress);
-            }else {
-                shippingAddress = shippingAddressSaved;
-            }
-        }
+        ShippingAddress shippingAddressSaved = processShippingAddress(shippingAddress);
 
         Cart cart = cartRepository.findByCustomer(customer);
         Order order = new Order();
-        order.setShippingAddress(shippingAddress);
+        order.setShippingAddress(shippingAddressSaved);
         order.setTotalPrice(cart.getTotalPrice());
         order.setOrderType(OrderType.CREATED_BY_CUSTOMER);
         order.setNote(note);
@@ -110,5 +100,41 @@ public class OrderService {
             return order;
         }
         return null;
+    }
+
+    @Transactional
+    public void save(Order order, Customer customer) {
+        ShippingAddress shippingAddress = order.getShippingAddress();
+        ShippingAddress shippingAddressSaved = processShippingAddress(shippingAddress);
+        Order orderSaved = orderRepository.findById(order.getId()).orElse(null);
+        assert orderSaved != null;
+        orderSaved.setNote(order.getNote());
+        orderSaved.setAmount(order.getAmount());
+        orderSaved.setShippingFee(order.getShippingFee());
+        orderSaved.setShippingAddress(shippingAddressSaved);
+        orderSaved.setPaymentStatus(order.getPaymentStatus());
+        orderSaved.setFulfillmentStatus(order.getFulfillmentStatus());
+        orderRepository.save(orderSaved);
+
+
+    }
+
+    private ShippingAddress processShippingAddress(ShippingAddress shippingAddress) {
+        if (shippingAddress.getId() == null) {
+            return shippingAddressRepository.save(shippingAddress);
+        } else {
+            ShippingAddress shippingAddressSaved = shippingAddressRepository.findById(shippingAddress.getId()).orElse(null);
+            if (shippingAddressSaved != null && !shippingAddressSaved.equals(shippingAddress)) {
+                shippingAddress.setId(null);
+                return shippingAddressRepository.save(shippingAddress);
+            } else {
+                return shippingAddressSaved;
+            }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findByCustomer(Customer customer) {
+        return orderRepository.findByCustomer(customer);
     }
 }

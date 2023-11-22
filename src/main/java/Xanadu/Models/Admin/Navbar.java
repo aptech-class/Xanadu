@@ -68,7 +68,7 @@ public class Navbar {
         ordersNavbar.setTitle("orders");
         List<Navbar> ordersSubNavbar = new ArrayList<>();
         ordersSubNavbar.add(new Navbar("list", "/admin/orders/index.html"));
-        ordersSubNavbar.add(new Navbar("create", "/admin/orders/create.html"));
+//        ordersSubNavbar.add(new Navbar("create", "/admin/orders/create.html"));
         // ordersSubNavbar.add(new Navbar("edit", "/admin/orders/edit.html"));
         // ordersSubNavbar.add(new Navbar("items", "/admin/orders/items.html"));
         ordersNavbar.setNavbars(ordersSubNavbar);
@@ -84,15 +84,25 @@ public class Navbar {
         categoriesNavbar.setNavbars(categoriesSubNavbar);
         navbars.add(categoriesNavbar);
 
-        Navbar usersNavbar = new Navbar();
-        usersNavbar.setTitle("users");
-        List<Navbar> usersSubNavbar = new ArrayList<>();
-        usersSubNavbar.add(new Navbar("list", "/admin/users/index.html"));
-        usersSubNavbar.add(new Navbar("create", "/admin/users/create.html"));
-        // usersSubNavbar.add(new Navbar("edit", "/admin/users/edit.html"));
-        // usersSubNavbar.add(new Navbar("items", "/admin/users/items.html"));
-        usersNavbar.setNavbars(usersSubNavbar);
-        navbars.add(usersNavbar);
+//        Navbar usersNavbar = new Navbar();
+//        usersNavbar.setTitle("users");
+//        List<Navbar> usersSubNavbar = new ArrayList<>();
+//        usersSubNavbar.add(new Navbar("list", "/admin/users/index.html"));
+//        usersSubNavbar.add(new Navbar("create", "/admin/users/create.html"));
+//        // usersSubNavbar.add(new Navbar("edit", "/admin/users/edit.html"));
+//        // usersSubNavbar.add(new Navbar("items", "/admin/users/items.html"));
+//        usersNavbar.setNavbars(usersSubNavbar);
+//        navbars.add(usersNavbar);
+
+        Navbar transactionsNavbar = new Navbar();
+        transactionsNavbar.setTitle("transactions");
+        List<Navbar> transactionsSubNavbar = new ArrayList<>();
+        transactionsSubNavbar.add(new Navbar("list", "/admin/transactions/index.html"));
+        transactionsSubNavbar.add(new Navbar("create", "/admin/transactions/create.html"));
+        // transactionsSubNavbar.add(new Navbar("edit", "/admin/transactions/edit.html"));
+        // transactionsSubNavbar.add(new Navbar("items", "/admin/transactions/items.html"));
+        transactionsNavbar.setNavbars(transactionsSubNavbar);
+        navbars.add(transactionsNavbar);
 
         return navbars;
     }

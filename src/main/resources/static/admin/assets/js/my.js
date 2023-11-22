@@ -294,7 +294,7 @@ const optionsHandler = () => {
       box.remove();
       optionsHandler();
     };
-    
+
     const addOptionValue = (inputOptionValue) => {
       const optionValue = inputOptionValue.value;
       if (!optionValue) {
@@ -307,20 +307,20 @@ const optionsHandler = () => {
                       </div>`;
       optionValuesList.innerHTML += content;
       inputOptionValue.value = "";
-      inputOptionValue.focus()
+      inputOptionValue.focus();
       optionsHandler();
     };
     addOptionValueBtn.onclick = (e) => {
       const inputOptionValue =
-      e.target.parentElement.querySelector(".inputOptionValue");
+        e.target.parentElement.querySelector(".inputOptionValue");
       addOptionValue(inputOptionValue);
     };
-    const inputOptionValue = box.querySelector(".inputOptionValue")
-    inputOptionValue.onkeyup =(e)=>{
-      if(e.code ==="Enter"){
+    const inputOptionValue = box.querySelector(".inputOptionValue");
+    inputOptionValue.onkeyup = (e) => {
+      if (e.code === "Enter") {
         addOptionValue(inputOptionValue);
       }
-    }
+    };
   });
 
   const addOptionBtn = document.getElementById("addOptionBtn");
@@ -535,6 +535,16 @@ const selectCustomerHandler = () => {
     };
   });
 };
+const editOrderHandler = () => {
+  const shippingFee = document.getElementById("shippingFee");
+  const amount = document.getElementById("amount");
+  if (!shippingFee) return;
+  shippingFee.onkeyup = () => {
+    const value =
+      order.amount * 1 - order.shippingFee * 1 + shippingFee.value * 1;
+    amount.value = value;
+  };
+};
 const load = () => {
   // product
   imageHandler();
@@ -548,6 +558,7 @@ const load = () => {
   togglePwd();
   // order
   searchCustomerHandler();
+  editOrderHandler();
 
   const forms = document.querySelectorAll("form.enterDisable");
   forms.forEach((item) => {

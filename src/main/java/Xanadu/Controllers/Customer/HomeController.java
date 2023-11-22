@@ -1,16 +1,11 @@
 package Xanadu.Controllers.Customer;
 
 import Xanadu.Entities.Collection;
-import Xanadu.Entities.Customer;
 import Xanadu.Entities.Product;
-import Xanadu.Repositories.ProductRepository;
 import Xanadu.Services.CollectionService;
 import Xanadu.Services.ProductService;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

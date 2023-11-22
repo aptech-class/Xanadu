@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -82,6 +83,11 @@ public class CustomerController extends AbstractController {
             Model model
     ) throws InvocationTargetException, IllegalAccessException {
         if (bindingResult.hasErrors()) {
+            ObjectError error = bindingResult.getGlobalError();
+            if (error != null) {
+                String message = error.getDefaultMessage();
+                bindingResult.rejectValue("confirmPassword","null", message == null ? "" : message);
+            }
             setMenu(model);
             return "/customer/signup";
         }
@@ -109,7 +115,7 @@ public class CustomerController extends AbstractController {
         if (shippingAddresses != null) {
             shippingAddresses.parallelStream().forEach(shippingAddress -> {
                 try {
-                    hibernateProcessor.unProxy(shippingAddress, new HashMap<>(), ShippingAddress.class.getName()+"/");
+                    hibernateProcessor.unProxy(shippingAddress, new HashMap<>(), ShippingAddress.class.getName() + "/");
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -141,7 +147,7 @@ public class CustomerController extends AbstractController {
         if (shippingAddresses != null) {
             shippingAddresses.parallelStream().forEach(address -> {
                 try {
-                    hibernateProcessor.unProxy(address, new HashMap<>(), ShippingAddress.class.getName()+"/");
+                    hibernateProcessor.unProxy(address, new HashMap<>(), ShippingAddress.class.getName() + "/");
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -161,12 +167,21 @@ public class CustomerController extends AbstractController {
             return "/customer/checkout";
         }
 
-        if(paymentMethod.equals(TransactionKind.MOMO_GATEWAY.name())){
+        if (paymentMethod.equals(TransactionKind.MOMO_GATEWAY.name())) {
             return "redirect:/momo/transaction.html";
         }
 
-        return "redirect:/orders";
+        return "redirect:/orders.html";
     }
 
+    @GetMapping("/orders.html")
+    public String getOrders(Model model, @AuthenticationPrincipal UserDetails userDetails) throws InvocationTargetException, IllegalAccessException {
+        Customer customer = customerService.findByUsername(userDetails.getUsername());
+        setMenu(model);
+        List<Order> orders = orderService.findByCustomer(customer);
+        model.addAttribute("orders", orders);
+
+        return "/customer/orders";
+    }
 
 }

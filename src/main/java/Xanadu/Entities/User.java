@@ -1,5 +1,9 @@
 package Xanadu.Entities;
 
+import Xanadu.Repositories.UserRepository;
+import Xanadu.Validation.Phone;
+import Xanadu.Validation.Reconfirm;
+import Xanadu.Validation.Unique;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,9 +20,11 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = {"logs"})
 @Table(indexes = {@Index(columnList = "username",unique = true)})
+@Reconfirm(confirm = "password",confirmWith = "confirmPassword")
 public class User extends EntityBasic {
 
     @NotBlank
+    @Unique(repository = UserRepository.class,methodCheck="getByUsername")
     @Column(nullable = false)
     private String username;
 
@@ -43,6 +49,7 @@ public class User extends EntityBasic {
     private String image = "/files/images/users/default.png";
 
     @NotBlank
+    @Phone
     @Column(nullable = false)
     private String phone;
 

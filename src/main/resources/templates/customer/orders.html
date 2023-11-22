@@ -1,0 +1,47 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{customer/layout}"
+  lang="en"
+  xmlns:th="http://WWW.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders</title>
+  </head>
+  <body>
+    <main
+      id="MainContent"
+      class="content-for-layout focus-none"
+      role="main"
+      tabindex="-1"
+      style="background: #e9ffec; padding-top: 115px !important"
+      layout:fragment="main"
+    >
+      <div class="p-5">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Time</th>
+              <th scope="col">Shipping fee</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Payment status</th>
+              <th scope="col">Fulfillment status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="order,stat : ${orders}">
+              <th scope="row" th:text="${stat.index+1}"></th>
+              <td th:text="${order.createdAt}">Mark</td>
+              <td th:text="${order.shippingFee}">Mark</td>
+              <td th:text="${order.amount}">Mark</td>
+              <td th:text="${order.paymentStatus}">Mark</td>
+              <td th:text="${order.fulfillmentStatus}">Mark</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

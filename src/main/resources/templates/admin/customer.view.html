@@ -26,9 +26,9 @@
                     <div layout:replace="~{/admin/components/customer/status :: customerStatus(${customer.status})}"></div>
                     <div class="mb-3 productOptions">
                         <label class="form-label">Total order</label>:
-                        <a class="btn btn-secondary btn-sm mx-5"
+                        <span class="btn btn-secondary btn-sm mx-5"
                            th:href="${'/admin/customers/'+ customer.username +'/orders.html'}"
-                           th:text="${customer.orders.size()}"></a>
+                           th:text="${customer.orders.size()}"></span>
                     </div>
                     <div layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image})}"></div>
                     <div class="mb-3 customerAction">

@@ -25,7 +25,7 @@ const viewProductHandler = () => {
 };
 
 let currentVariant;
-const selectVariantHandler = () => {
+const selectVariantHandler = (click) => {
   const mainImage = document.querySelector(".mainImage img");
   const options = document.querySelectorAll(".optionValue");
   const price = document.getElementById('price');
@@ -52,7 +52,7 @@ const selectVariantHandler = () => {
   }
   options.forEach((option) => {
     option.onclick = () => {
-      selectVariantHandler();
+      selectVariantHandler(true);
     };
   });
 };
@@ -213,7 +213,7 @@ const selectShippingAddressHandler = () => {
 
 const load = () => {
   viewProductHandler();
-  selectQuantityHandler();
+  selectQuantityHandler();  
   addToCartHandler();
   cartHandler();
   checkoutHandler();

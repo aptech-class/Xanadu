@@ -103,7 +103,7 @@ public class ProductManager extends AbstractManager {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            setMenu(model, "products.edit");
+            setMenu(model, "products");
             setObjectRelateToModel(model);
             return "/admin/product.edit";
         }

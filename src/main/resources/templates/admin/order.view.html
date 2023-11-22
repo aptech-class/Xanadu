@@ -26,6 +26,10 @@
             </div>
             <div class="card-body">
               <div class="p-5">
+                <div class="mb-5">
+                  <p th:text="${order.createdAt}"></p>
+                  <input type="hidden" name="createdAt" th:value="${order.createdAt}">
+                </div>
                 <div
                   style="border-bottom: solid 0.5px gray; margin-bottom: 2rem"
                   class="row pb-1"
@@ -301,7 +305,7 @@
                 <div class="mb-3">
                   <span
                     th:each="transaction : ${order.transactions}"
-                    th:class="${transaction.status} ? 'badge bg-success' :'badge bg-danger'"
+                    th:class="${transaction.status=='TRUE'} ? 'badge bg-success' :'badge bg-danger'"
                     th:text="${transaction.status}"
                     >Success</span
                   >

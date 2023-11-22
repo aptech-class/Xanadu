@@ -2,7 +2,6 @@ package Xanadu.Utils;
 
 import jakarta.persistence.Entity;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
@@ -85,7 +84,7 @@ public class HibernateProcessor {
         T tClone = (T) constructor.newInstance();
         Field[] fields = Stream.concat(Arrays.stream(clazz.getSuperclass().getDeclaredFields()), Arrays.stream(clazz.getDeclaredFields())).toArray(Field[]::new);
         Method[] methods = t.getClass().getDeclaredMethods();
-        Map<String,Method> methodsMap = new HashMap<>();
+        Map<String, Method> methodsMap = new HashMap<>();
         for (Method method : methods) {
             methodsMap.put(method.getName(), method);
         }
@@ -93,7 +92,7 @@ public class HibernateProcessor {
             field.setAccessible(true);
             if (Collection.class.isAssignableFrom(field.getType())) {
                 Collection<?> collection = (Collection<?>) field.get(t);
-                try{
+                try {
                     boolean check = true;
                     for (Object o : collection) {
                         if (o.getClass().getDeclaredAnnotation(Entity.class) == null) {
@@ -105,14 +104,18 @@ public class HibernateProcessor {
                     if (check) {
                         field.set(tClone, null);
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     String methodName = "set" + Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
                     Method method = methodsMap.get(methodName);
-                    method.invoke(tClone,(Object) null);
+                    method.invoke(tClone, (Object) null);
                 }
 
             } else {
-                field.set(tClone, field.get(t));
+                if (field.getType().getDeclaredAnnotation(Entity.class) == null) {
+                    field.set(tClone, field.get(t));
+                } else {
+                    field.set(tClone, null);
+                }
             }
 
         }

@@ -1,0 +1,82 @@
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/layout}"
+  lang="en"
+  xmlns:th="http://WWW.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction</title>
+  </head>
+  <body>
+    <div
+      layout:fragment="container"
+      class="container-fluid flex-grow-1 container-p-y"
+    >
+      <div class="card">
+        <h5 class="card-header text-center">Transaction</h5>
+        <div class="card-body">
+            <form action="/admin/transactions/create.html" method="post">
+                
+              <div class="mb-3">
+                <label class="form-label" for="amount">Amount</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="amount"
+                  id="amount"
+                  th:value="${transaction.amount}"
+                />
+                <p
+                  class="error"
+                  th:if="${#fields.hasErrors('transaction.amount')}"
+                  th:errors="${transaction.amount}"
+                ></p>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="description">description</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="description"
+                  id="description"
+                  th:value="${transaction.description}"
+                />
+                <p
+                  class="error"
+                  th:if="${#fields.hasErrors('transaction.description')}"
+                  th:errors="${transaction.description}"
+                ></p>
+              </div>
+              <input type="text" hidden  name="status" value="TRUE" />
+              <input
+                type="hidden"
+                name="transactionKind"
+                id="transactionKind"
+                value="NORMAL"
+              />
+              <input
+                type="hidden"
+                th:value="${transaction.order.id}"
+                name="order.id"
+              />
+              <input
+                type="hidden"
+                th:value="${transaction.customer.id}"
+                name="customer.id"
+              />
+              <div class="mb-3 createAction">
+                <div class="row">
+                  <div class="col-6"></div>
+                  <div class="col-6 demo-inline-spacing text-right">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

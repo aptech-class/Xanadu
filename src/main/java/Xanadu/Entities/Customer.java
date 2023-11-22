@@ -1,5 +1,9 @@
 package Xanadu.Entities;
 
+import Xanadu.Repositories.CustomerRepository;
+import Xanadu.Validation.Phone;
+import Xanadu.Validation.Reconfirm;
+import Xanadu.Validation.Unique;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -21,15 +25,17 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "cart", "voucherItems"})
 @ToString(callSuper = true, exclude = {"customerTags", "shippingAddresses", "orders", "transactions", "reviews", "cart", "voucherItems"})
 @Table(indexes = {@Index(columnList = "username")})
+@Reconfirm(confirm = "password",confirmWith = "confirmPassword")
 public class Customer extends EntityBasic {
 
     @NotNull
-    @NotBlank(message = "Username is required!")
+    @Unique(repository = CustomerRepository.class,methodCheck = "findByUsername")
+    @NotBlank
     @Pattern(regexp = "[^#%{}\\\\^~\\[\\]`].*", message = "Username cannot contain character: #%{}^~[]\\`")
     @Column(nullable = false, unique = true)
     private String username;
 
-    @NotBlank(message = "Password is required!")
+    @NotBlank
     @Length(min = 6, max = 100)
     @Column(nullable = false)
     private String password;
@@ -39,18 +45,20 @@ public class Customer extends EntityBasic {
     private String confirmPassword;
 
     @NotNull
-    @NotBlank(message = "First name is required!")
+    @NotBlank
     @Column(nullable = false)
     private String firstName;
 
     @NotNull
-    @NotBlank(message = "Last name is required!")
+    @NotBlank
     @Column(nullable = false)
     private String lastName;
 
     @Email
     private String email;
     private String image;
+
+    @Phone
     private String phone;
     private Boolean status = false;
     private Date lastLogin;
