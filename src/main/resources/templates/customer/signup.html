@@ -23,7 +23,7 @@
         layout:fragment="main"
 >
     <div class="container p-5">
-        <div layout:replace="~{/customer/components/adminSourceBegin :: adminSourceBegin}"></div>
+        <div layout:replace="~{customer/components/adminSourceBegin :: adminSourceBegin}"></div>
         <div class="registration">
             <div class="card mb-4">
                 <h5 style="color: #07642f;" class="card-header text-center">Signup</h5>
@@ -35,29 +35,29 @@
                 >
                     <div class="card-body">
                         <div
-                                layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"
+                                layout:replace="~{admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"
+                                layout:replace="~{admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"
+                                layout:replace="~{admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"
+                                layout:replace="~{admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/password :: customerPassword(${customer.password})}"
+                                layout:replace="~{admin/components/customer/password :: customerPassword(${customer.password})}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/confirmPassword :: customerConfirmPassword(${customer.confirmPassword})}"
+                                layout:replace="~{admin/components/customer/confirmPassword :: customerConfirmPassword(${customer.confirmPassword})}"
                         ></div>
                         <div
-                                layout:replace="~{/admin/components/customer/phone :: customerPhone(${customer.phone}, 'edit')}"
+                                layout:replace="~{admin/components/customer/phone :: customerPhone(${customer.phone}, 'edit')}"
                         ></div>
                         <input type="hidden" value="1" name="status">
                         <div
-                                layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"
+                                layout:replace="~{admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"
                         ></div>
                         <div class="mb-3 createAction">
                             <div class="demo-inline-spacing text-right">
@@ -70,7 +70,7 @@
                 </form>
             </div>
         </div>
-        <div layout:replace="~{/customer/components/adminSourceEnd :: adminSourceEnd}"></div>
+        <div layout:replace="~{customer/components/adminSourceEnd :: adminSourceEnd}"></div>
     </div>
 </main>
 </body>

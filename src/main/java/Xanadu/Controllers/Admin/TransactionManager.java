@@ -41,7 +41,7 @@ public class TransactionManager extends AbstractManager {
         transaction.setCustomer(order.getCustomer());
         transaction.setAmount(order.getAmount());
         model.addAttribute("transaction", transaction);
-        return "/admin/transaction.create";
+        return "admin/transaction.create";
     }
 
     @PostMapping("/create.html")
@@ -53,7 +53,7 @@ public class TransactionManager extends AbstractManager {
     ) {
         if (bindingResult.hasErrors()) {
             setMenu(model, "transactions.create");
-            return "/admin/transaction.create";
+            return "admin/transaction.create";
 
         }
         transactionService.save(transaction);

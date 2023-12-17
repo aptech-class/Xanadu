@@ -39,7 +39,7 @@
                             />
                             <p th:if="${#fields.hasErrors('category.description')}" th:errorclass="error" th:errors="${category.description}"></p>
                         </div>
-                        <div layout:replace="~{/admin/components/category/collections :: categoryCollections(${category.collections}, 'create')}"></div>
+                        <div layout:replace="~{admin/components/category/collections :: categoryCollections(${category.collections}, 'create')}"></div>
                         <div  class="mb-3 categoryStatus form-check form-switch mb-3">
                             <input th:checked="${category.status}" name="status"
                                    class="form-check-input" type="checkbox" id="published">

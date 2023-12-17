@@ -41,7 +41,7 @@ public class OrderManager extends AbstractManager {
         setMenu(model, "orders.list");
         Page<Order> orders = orderService.findAll(pageNumber - 1, pageSize);
         model.addAttribute("orders", orders);
-        return "/admin/orders";
+        return "admin/orders";
     }
 
     @GetMapping("/{id}.html")
@@ -50,7 +50,7 @@ public class OrderManager extends AbstractManager {
         Order order = orderService.findByIdWithOrderItemsAndTransactions(id);
         model.addAttribute("order", hibernateProcessor.unProxy(order, new HashMap<>(), Order.class.getName() + "/"));
 
-        return "/admin/order.view";
+        return "admin/order.view";
     }
 
     @GetMapping("/{id}/edit.html")
@@ -65,7 +65,7 @@ public class OrderManager extends AbstractManager {
         fulfillmentStatuses.add(FulfillmentStatus.PENDING.name());
         fulfillmentStatuses.add(FulfillmentStatus.ERROR.name());
         model.addAttribute("fulfillmentStatuses", fulfillmentStatuses);
-        return "/admin/order.edit";
+        return "admin/order.edit";
     }
 
     @PostMapping("/{id}/edit.html")
@@ -78,7 +78,7 @@ public class OrderManager extends AbstractManager {
     ) {
         if (bindingResult.hasErrors()) {
             setMenu(model, "orders");
-            return "/admin/order.edit";
+            return "admin/order.edit";
         }
         Customer customer = customerService.findByUsername(userDetails.getUsername());
         orderService.save(order, customer);
@@ -91,7 +91,7 @@ public class OrderManager extends AbstractManager {
         setMenu(model, "orders.create");
         model.addAttribute("order", new Order());
 
-        return "/admin/order.create";
+        return "admin/order.create";
     }
 
     @Override

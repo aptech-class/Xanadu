@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <input type="hidden" th:value="${product.id}" name="id">
                         <input type="hidden" th:value="${product.handle}" name="handle">
-                        <div layout:replace="~{/admin/components/product/variants :: productVariants(${product.variants}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/product/variants :: productVariants(${product.variants}, 'edit')}"></div>
                         <div class="mb-3 productEditAction">
                             <div class="row">
                                 <div class="col-6">

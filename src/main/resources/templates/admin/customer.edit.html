@@ -12,13 +12,13 @@
                 <form th:action="@{/admin/customers/edit}" th:class="enterDisable"  enctype="multipart/form-data" method="post">
                     <input type="hidden" name="id" th:value="${customer.id}" >
                     <div class="card-body">
-                        <div layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/phone :: customerPhone(${customer.phone}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/status :: customerStatus(${customer.status}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/firstName :: customerFirstName(${customer.firstName}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/lastName :: customerLastName(${customer.lastName}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/username :: customerUsername(${customer.username}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/email :: customerEmail(${customer.email}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/phone :: customerPhone(${customer.phone}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/status :: customerStatus(${customer.status}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/customer/image :: customerImage(${customer.image}, 'edit')}"></div>
                         <div class="mb-3 editAction">
                             <div class="row">
                                 <div class="col-6">

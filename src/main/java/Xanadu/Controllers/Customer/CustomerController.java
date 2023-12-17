@@ -47,7 +47,7 @@ public class CustomerController extends AbstractController {
         ) {
             model.addAttribute("message", message);
             setMenu(model);
-            return "/customer/signin";
+            return "customer/signin";
         }
         return "redirect:/home.html";
     }
@@ -69,7 +69,7 @@ public class CustomerController extends AbstractController {
         ) {
             setMenu(model);
             model.addAttribute("customer", new Customer());
-            return "/customer/signup";
+            return "customer/signup";
         }
 
         return "redirect:/home.html";
@@ -89,7 +89,7 @@ public class CustomerController extends AbstractController {
                 bindingResult.rejectValue("confirmPassword","null", message == null ? "" : message);
             }
             setMenu(model);
-            return "/customer/signup";
+            return "customer/signup";
         }
         customer.setStatus(true);
         customerService.save(customer);
@@ -99,7 +99,7 @@ public class CustomerController extends AbstractController {
     @GetMapping("/cart.html")
     public String getCart(Model model) throws InvocationTargetException, IllegalAccessException {
         setMenu(model);
-        return "/customer/cart";
+        return "customer/cart";
     }
 
     @GetMapping("/checkout.html")
@@ -125,7 +125,7 @@ public class CustomerController extends AbstractController {
         model.addAttribute("shippingAddress", shippingAddresses != null && !shippingAddresses.isEmpty() ? shippingAddresses.get(0) : new ShippingAddress());
 
 
-        return "/customer/checkout";
+        return "customer/checkout";
     }
 
     @PostMapping("/checkout.html")
@@ -156,7 +156,7 @@ public class CustomerController extends AbstractController {
         model.addAttribute("shippingAddresses", shippingAddresses);
 
         if (bindingResult.hasErrors()) {
-            return "/customer/checkout";
+            return "customer/checkout";
         }
 
         Customer customer = customerService.findByUsername(userDetails.getUsername());
@@ -164,7 +164,7 @@ public class CustomerController extends AbstractController {
             orderService.save(customer, shippingAddress, note);
         } catch (OutOfStockException e) {
             model.addAttribute("message", e.getMessage());
-            return "/customer/checkout";
+            return "customer/checkout";
         }
 
         if (paymentMethod.equals(TransactionKind.MOMO_GATEWAY.name())) {
@@ -181,7 +181,7 @@ public class CustomerController extends AbstractController {
         List<Order> orders = orderService.findByCustomer(customer);
         model.addAttribute("orders", orders);
 
-        return "/customer/orders";
+        return "customer/orders";
     }
 
 }

@@ -40,7 +40,7 @@ public class CategoryManager extends AbstractManager {
 
         setPageOption(model, pageSize, pageNumber, "/admin/customers/index.html");
 
-        return "/admin/categories";
+        return "admin/categories";
     }
 
     @GetMapping("/{id}.html")
@@ -49,7 +49,7 @@ public class CategoryManager extends AbstractManager {
         setMenu(model,"categories");
         setObjectRelateToModel(model);
         model.addAttribute("category",category);
-        return "/admin/category.view";
+        return "admin/category.view";
     }
 
     @GetMapping("/create.html")
@@ -60,7 +60,7 @@ public class CategoryManager extends AbstractManager {
         setObjectRelateToModel(model);
         model.addAttribute("category", new Category());
 
-        return "/admin/category.create";
+        return "admin/category.create";
     }
 
     @PostMapping("/create")
@@ -71,7 +71,7 @@ public class CategoryManager extends AbstractManager {
     ){
         if (bindingResult.hasErrors()) {
             setMenu(model, "categories");
-            return "/admin/category.create";
+            return "admin/category.create";
         }
         Category categorySaved = categoryService.save(category);
         return "redirect:/admin/categories/" + categorySaved.getId() + ".html";
@@ -87,7 +87,7 @@ public class CategoryManager extends AbstractManager {
         Category category = categoryService.findByIdWithCollections(id);
         model.addAttribute("category", category);
 
-        return "/admin/category.edit";
+        return "admin/category.edit";
     }
 
     @PostMapping("/edit")
@@ -99,7 +99,7 @@ public class CategoryManager extends AbstractManager {
 
         if (bindingResult.hasErrors()) {
             setMenu(model, "categories");
-            return "/admin/category.edit";
+            return "admin/category.edit";
         }
         Category categorySaved = categoryService.save(category);
         return "redirect:/admin/categories/" + categorySaved.getId() + ".html";

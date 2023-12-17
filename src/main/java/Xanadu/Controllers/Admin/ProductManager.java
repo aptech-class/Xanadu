@@ -65,7 +65,7 @@ public class ProductManager extends AbstractManager {
         setMenu(model, "products.create");
         model.addAttribute("product", new Product());
         setObjectRelateToModel(model);
-        return "/admin/product.create";
+        return "admin/product.create";
     }
 
     @PostMapping("/create")
@@ -77,7 +77,7 @@ public class ProductManager extends AbstractManager {
         if (bindingResult.hasErrors()) {
             setMenu(model, "products.create");
             setObjectRelateToModel(model);
-            return "/admin/product.create";
+            return "admin/product.create";
         }
         productService.saveSpread(product);
         return "redirect:/admin/products/" + product.getHandle() + ".html";
@@ -93,7 +93,7 @@ public class ProductManager extends AbstractManager {
 
         Product productExists = productService.findByHandleFetchEagerAll(handle);
         model.addAttribute("product", productExists);
-        return "/admin/product.edit";
+        return "admin/product.edit";
     }
 
     @PostMapping("/edit")
@@ -105,7 +105,7 @@ public class ProductManager extends AbstractManager {
         if (bindingResult.hasErrors()) {
             setMenu(model, "products");
             setObjectRelateToModel(model);
-            return "/admin/product.edit";
+            return "admin/product.edit";
         }
         productService.saveSpread(product);
         return "redirect:/admin/products/" + product.getHandle() + "/variants/edit.html";
@@ -114,29 +114,29 @@ public class ProductManager extends AbstractManager {
     @GetMapping("/{handle}/variants/edit.html")
     public String editVariants(@PathVariable("handle") String handle, Model model) {
         Product product = productService.findByHandleWithVariantsAndImages(handle);
-        if (product == null) return "/admin/notFound";
+        if (product == null) return "admin/notFound";
         model.addAttribute("product", product);
         setMenu(model, "products");
-        return "/admin/product.variants.edit";
+        return "admin/product.variants.edit";
     }
 
     @GetMapping("/edit.html")
     public String findProductToEdit(Model model) {
         setMenu(model, "products.edit");
-        return "/admin/product.edit";
+        return "admin/product.edit";
     }
 
     @GetMapping("/orderItems.html")
     public String findProductToEditVariants(Model model) {
         setMenu(model, "products.variants");
-        return "/admin/product.variants.edit";
+        return "admin/product.variants.edit";
     }
 
     @PostMapping("/variants/edit")
     public String editVariants(@ModelAttribute Product product, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             setMenu(model, "products.variant");
-            return "/admin/variants.edit";
+            return "admin/variants.edit";
         }
         List<Variant> variants = product.getVariants();
         for (Variant variant : variants) {

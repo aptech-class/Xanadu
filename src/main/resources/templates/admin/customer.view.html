@@ -18,19 +18,19 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div layout:replace="~{/admin/components/customer/firstName :: customerFirstName(${customer.firstName})}"></div>
-                    <div layout:replace="~{/admin/components/customer/lastName :: customerLastName(${customer.lastName})}"></div>
-                    <div layout:replace="~{/admin/components/customer/username :: customerUsername(${customer.username})}"></div>
-                    <div layout:replace="~{/admin/components/customer/email :: customerEmail(${customer.email})}"></div>
-                    <div layout:replace="~{/admin/components/customer/phone :: customerPhone(${customer.phone})}"></div>
-                    <div layout:replace="~{/admin/components/customer/status :: customerStatus(${customer.status})}"></div>
+                    <div layout:replace="~{admin/components/customer/firstName :: customerFirstName(${customer.firstName})}"></div>
+                    <div layout:replace="~{admin/components/customer/lastName :: customerLastName(${customer.lastName})}"></div>
+                    <div layout:replace="~{admin/components/customer/username :: customerUsername(${customer.username})}"></div>
+                    <div layout:replace="~{admin/components/customer/email :: customerEmail(${customer.email})}"></div>
+                    <div layout:replace="~{admin/components/customer/phone :: customerPhone(${customer.phone})}"></div>
+                    <div layout:replace="~{admin/components/customer/status :: customerStatus(${customer.status})}"></div>
                     <div class="mb-3 productOptions">
                         <label class="form-label">Total order</label>:
                         <span class="btn btn-secondary btn-sm mx-5"
                            th:href="${'/admin/customers/'+ customer.username +'/orders.html'}"
                            th:text="${customer.orders.size()}"></span>
                     </div>
-                    <div layout:replace="~{/admin/components/customer/image :: customerImage(${customer.image})}"></div>
+                    <div layout:replace="~{admin/components/customer/image :: customerImage(${customer.image})}"></div>
                     <div class="mb-3 customerAction">
                         <div class="row">
                             <div class="col-6">

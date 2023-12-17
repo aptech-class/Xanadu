@@ -32,7 +32,7 @@ public class ProductController extends AbstractController{
         List<Product> products  = productService.findAlsoLikeProducts(product.getCollections(),product);
         model.addAttribute("alsoLikeProducts",products);
 
-        return "/customer/product.html";
+        return "customer/product.html";
     }
 
 }

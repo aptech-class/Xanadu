@@ -25,6 +25,6 @@ public class CollectionController extends AbstractController{
         setMenu(model);
         Collection collection =  collectionService.findByHandleWithProducts(handle);
         model.addAttribute("collection", collection);
-        return "/customer/products";
+        return "customer/products";
     }
 }

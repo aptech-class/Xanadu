@@ -17,16 +17,16 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div layout:replace="~{/admin/components/product/title :: productTitle(${product.title})}"></div>
-                    <div layout:replace="~{/admin/components/product/rating :: productRating(${product.rating})}"></div>
-                    <div layout:replace="~{/admin/components/product/handle :: productHandle(${product.handle})}"></div>
-                    <div layout:replace="~{/admin/components/product/vendor :: productVendor(${product.vendor})}"></div>
-                    <div layout:replace="~{/admin/components/product/productType :: productType(${product.productType})}"></div>
-                    <div layout:replace="~{/admin/components/product/collections :: productCollections(${product.collections})}"></div>
-                    <div layout:replace="~{/admin/components/product/productTags :: productTags(${product.productTags})}"></div>
-                    <div layout:replace="~{/admin/components/product/published :: productPublished(${product.published})}"></div>
-                    <div layout:replace="~{/admin/components/product/images :: productImages(${product.images})}"></div>
-                    <div layout:replace="~{/admin/components/product/prevBodyHtml :: productPrevBodyHtml(${product.bodyHtml})}"></div>
+                    <div layout:replace="~{admin/components/product/title :: productTitle(${product.title})}"></div>
+                    <div layout:replace="~{admin/components/product/rating :: productRating(${product.rating})}"></div>
+                    <div layout:replace="~{admin/components/product/handle :: productHandle(${product.handle})}"></div>
+                    <div layout:replace="~{admin/components/product/vendor :: productVendor(${product.vendor})}"></div>
+                    <div layout:replace="~{admin/components/product/productType :: productType(${product.productType})}"></div>
+                    <div layout:replace="~{admin/components/product/collections :: productCollections(${product.collections})}"></div>
+                    <div layout:replace="~{admin/components/product/productTags :: productTags(${product.productTags})}"></div>
+                    <div layout:replace="~{admin/components/product/published :: productPublished(${product.published})}"></div>
+                    <div layout:replace="~{admin/components/product/images :: productImages(${product.images})}"></div>
+                    <div layout:replace="~{admin/components/product/prevBodyHtml :: productPrevBodyHtml(${product.bodyHtml})}"></div>
                     <div class="mb-3 productOptions">
                         <label  class="form-label">Options</label>
                         <ul>
@@ -37,7 +37,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div layout:replace="~{/admin/components/product/variants :: productVariants(${product.variants})}"></div>
+                    <div layout:replace="~{admin/components/product/variants :: productVariants(${product.variants})}"></div>
                     <div class="mp-3 productReviews"
                          th:if="${!product.reviews.isEmpty()}">
                         <p class="demo-inline-spacing">

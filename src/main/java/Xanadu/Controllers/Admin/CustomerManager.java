@@ -42,14 +42,14 @@ public class CustomerManager extends AbstractManager {
         setMenu(model, "customers");
         Customer customer = customerService.findByUsernameWithOrders(username);
         model.addAttribute("customer", customer);
-        return "/admin/customer.view";
+        return "admin/customer.view";
     }
 
     @GetMapping("/create.html")
     public String createCustomer(Model model) {
         setMenu(model, "customers.create");
         model.addAttribute("customer", new Customer());
-        return "/admin/customer.create";
+        return "admin/customer.create";
     }
 
     @PostMapping("/create")
@@ -60,7 +60,7 @@ public class CustomerManager extends AbstractManager {
     ) {
         if (bindingResult.hasErrors()) {
             setMenu(model, "customers.create");
-            return "/admin/customer.create";
+            return "admin/customer.create";
         }
         Customer customerSaved = customerService.save(customer);
         return "redirect:/admin/customers/" + customerSaved.getId() + ".html";
@@ -72,13 +72,13 @@ public class CustomerManager extends AbstractManager {
         Customer customer = customerService.findByUsername(username);
         model.addAttribute("customer", customer);
 
-        return "/admin/customer.edit";
+        return "admin/customer.edit";
     }
 
     @GetMapping("/edit.html")
     public String editCustomer(Model model) {
         setMenu(model, "customers.edit");
-        return "/admin/customer.edit";
+        return "admin/customer.edit";
     }
 
     @PostMapping("/edit")
@@ -92,7 +92,7 @@ public class CustomerManager extends AbstractManager {
                 String field = fieldError.getField();
                 if (!field.equals("password")) {
                     setMenu(model, "customers");
-                    return "/admin/customer.edit";
+                    return "admin/customer.edit";
                 }
             }
         }
@@ -104,7 +104,7 @@ public class CustomerManager extends AbstractManager {
     public String getOrders(Model model, @PathVariable("username") String username) {
         Customer customer = customerService.findByUsernameWithOrders(username);
         setMenu(model, "customers.orders");
-        return "/admin/customer.orders";
+        return "admin/customer.orders";
     }
 
     @Override

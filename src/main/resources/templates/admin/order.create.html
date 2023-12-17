@@ -11,8 +11,8 @@
                 <h5 class="card-header text-center">Order</h5>
                 <form th:action="@{/admin/orders/create}" th:class="enterDisable"  enctype="multipart/form-data" method="post">
                     <div class="card-body">
-                        <div layout:replace="~{/admin/components/order/customer :: orderCustomer(${order.customer}, 'edit')}"></div>
-                        <div layout:replace="~{/admin/components/order/orderItems :: orderItems(${order.orderItems}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/order/customer :: orderCustomer(${order.customer}, 'edit')}"></div>
+                        <div layout:replace="~{admin/components/order/orderItems :: orderItems(${order.orderItems}, 'edit')}"></div>
                         <div class="mb-3 createAction">
                             <div class="row">
                                 <div class="col-6">

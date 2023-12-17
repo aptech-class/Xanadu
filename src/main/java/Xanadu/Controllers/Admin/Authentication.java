@@ -39,7 +39,7 @@ public class Authentication {
                 })
         ) {
             model.addAttribute("message", message);
-            return "/admin/signin";
+            return "admin/signin";
         }
         return "redirect:/admin/home.html";
 

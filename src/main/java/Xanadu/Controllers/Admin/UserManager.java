@@ -30,7 +30,7 @@ public class UserManager extends AbstractManager {
     public String getUsers(Model model) {
         setMenu(model, "users.list");
 
-        return "/admin/users";
+        return "admin/users";
     }
 
     @GetMapping("/{username}.html")
@@ -38,7 +38,7 @@ public class UserManager extends AbstractManager {
         setMenu(model,"users");
         User user = userService.findByUsername(username);
         model.addAttribute("user",user);
-        return "/admin/user.view";
+        return "admin/user.view";
     }
 
     @GetMapping("/create.html")
@@ -47,7 +47,7 @@ public class UserManager extends AbstractManager {
         model.addAttribute("user", new User());
         setObjectRelateToModel(model);
 
-        return "/admin/user.create";
+        return "admin/user.create";
     }
 
     @PostMapping("/create.html")
@@ -59,7 +59,7 @@ public class UserManager extends AbstractManager {
         if (bindingResult.hasErrors()) {
             setMenu(model, "users.create");
             setObjectRelateToModel(model);
-            return "/admin/user.create";
+            return "admin/user.create";
         }
 
         User userSaved = userService.save(user);
