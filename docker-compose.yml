@@ -3,10 +3,13 @@ services:
 
   db:
     container_name: xanadu-mysql
-    image: mysql
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
+    image: duncannguyen/xanadu-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: duncan
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "3306:3306"
     networks:
@@ -19,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-app
-    image: xanadu-app
+    image: duncannguyen/xanadu-app
     ports:
       - "8080:8080"
     networks:
