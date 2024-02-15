@@ -21,7 +21,6 @@ public class PasswordConfirmValidator implements ConstraintValidator<Reconfirm, 
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         try {
             Class<?> clazz = value.getClass();
-            Field[] fields = clazz.getDeclaredFields();
             Field confirmField = clazz.getDeclaredField(confirm);
             Field confirmWithField = clazz.getDeclaredField(confirmWith);
             confirmField.setAccessible(true);
