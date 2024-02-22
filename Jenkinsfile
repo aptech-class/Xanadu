@@ -4,9 +4,6 @@ pipeline {
     tools {
         maven 'mvn'
     }
-    environment {
-        ENV_FILE = credentials('env-file')
-    }
 
     stages {
         stage('Test jenkins') {
@@ -17,8 +14,10 @@ pipeline {
 
         stage('set env') {
             steps {
-                sh 'echo \"${ENV_FILE}\"'
-                sh 'echo \"${ENV_FILE}\" > .env'
+                withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
+                    sh 'echo ${envFile}'
+                    sh 'echo ${envFile} > .env'
+                }
             }
         }
 
