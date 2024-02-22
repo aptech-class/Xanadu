@@ -16,10 +16,10 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
                     sh 'ls -la'
-                    sh "cp /$envFile envFile"
-                    sh 'cat envFile'
+                    sh "cp /$envFile .env"
+                    sh 'cat .env'
                     sh 'ls -la'
-                    sh 'chmod 400 envFile '
+                    sh 'chmod 400 .env '
                 }
             }
         }
