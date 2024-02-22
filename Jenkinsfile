@@ -18,7 +18,7 @@ pipeline {
         stage('set env') {
             steps {
                 sh 'echo \"${ENV_FILE}\"'
-                sh "echo \"${ENV_FILE}\" | sed 's/\//\\\\\//g' > .env"
+                sh 'echo \"${ENV_FILE}\" > .env'
             }
         }
 
