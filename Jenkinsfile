@@ -9,17 +9,15 @@ pipeline {
         stage('Test jenkins') {
             steps {
                 echo 'Jenkins file is ok!'
+                sh 'whoami'
             }
         }
 
         stage('set env') {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
-                    sh 'ls -la'
-                    sh "cp /$envFile .env"
+                    sh "cp ${envFile} .env"
                     sh 'cat .env'
-                    sh 'ls -la'
-                    sh 'chmod 400 .env '
                 }
             }
         }
@@ -30,6 +28,7 @@ pipeline {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
+
         stage('Packageking/push images, deploy to dev') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub', url:'https://index.docker.io/v1/') {
