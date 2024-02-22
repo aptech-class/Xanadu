@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'mvn'
+    }
     stages {
         stage('Test jenkins') {
             steps {
@@ -9,8 +12,8 @@ pipeline {
         }
         stage('Build app') {
             steps {
-                sh 'mvnw --version'
-                sh 'mvnw clean package -DskipTests=true'
+                sh 'mvn --version'
+                sh 'mvn clean package -DskipTests=true'
             }
         }
         stage('Packageking/push images, deploy to dev') {
@@ -28,9 +31,9 @@ pipeline {
         //         }
         //     }
 
-        //     steps {
-        //         withCredentials(file[credentialsId:''])
-        //     }
-        // }
+    //     steps {
+    //         withCredentials(file[credentialsId:''])
+    //     }
+    // }
     }
 }
