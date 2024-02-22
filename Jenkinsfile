@@ -5,7 +5,7 @@ pipeline {
         maven 'mvn'
     }
     environment {
-        ENV_FILE = credentails('env-file')
+        ENV_FILE = withCredentials('env-file')
     }
 
     stages {
