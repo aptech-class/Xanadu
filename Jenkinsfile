@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     stages {
-        stage(name: 'Test jenkins'){
-            steps{
+        stage('Test jenkins') {
+            steps {
                 echo 'Jenkins file is ok!'
             }
         }
@@ -28,9 +28,9 @@ pipeline {
         //         }
         //     }
 
-        //     steps {
-        //         withCredentials(file[credentialsId:''])
-        //     }
-        // }
+    //     steps {
+    //         withCredentials(file[credentialsId:''])
+    //     }
+    // }
     }
 }
