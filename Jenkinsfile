@@ -4,12 +4,23 @@ pipeline {
     tools {
         maven 'mvn'
     }
+    environment {
+        ENV_FILE = credentails('env-file')
+    }
+
     stages {
         stage('Test jenkins') {
             steps {
                 echo 'Jenkins file is ok!'
             }
         }
+
+        stage('set env') {
+            steps {
+                sh 'echo \"${ENV_FILE}\" > .env'
+            }
+        }
+
         stage('Build app') {
             steps {
                 sh 'mvn --version'
