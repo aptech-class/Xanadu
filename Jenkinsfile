@@ -50,14 +50,12 @@ pipeline {
             agent {
                 docker {
                     image 'duncannguyen/ansible'
-                    args "-v $WORKSPACE/.env:/var/xanadu/.env -v $WORKSPACE/server-docker-compose.yml:/var/xanadu/server-docker-compose.yml"
                 }
             }
             steps {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')])
-
-                sh 'cat /var/xanadu/.env'
-                sh 'cat /var/xanadu/server-docker-compose.yml'
+                sh 'ls -la'
+                sh 'ls -la ${WORKSPACE}'
                 sh 'cp ${privateKey} private-key'
                 sh 'ansible --version'
                 sh 'ansible -i hosts --private-key private-key -m ping all'
