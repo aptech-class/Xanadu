@@ -73,7 +73,7 @@ pipeline {
                     sh "cp ${envFile} .env"
                     sh 'chmod +rw .env'
                     sh 'chmod +r server-docker-compose.yml'
-                    sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
+                    sh 'ansible-playbook -i hosts --private-key private-key playbook.yml -vvv'
                 }
             }
         }
