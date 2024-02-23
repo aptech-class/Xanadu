@@ -34,6 +34,15 @@
       file:
         path: /root/project/java/xanadu
         state: directory
+
+    - name: Grant permission for file
+      shell:
+        cmd: chmod +r /server-docker-compose.yml
+
+    - name: Grant permission for file
+      shell:
+        cmd: chmod +r /.env
+
     - name: Copy docker compose
       copy:
         src: /server-docker-compose.yml
@@ -43,7 +52,7 @@
       copy:
         src: /.env
         dest: /root/project/java/xanadu/.env
-        
+
     - name: Run docker compose
       docker_compose:
         project_src: /root/project/java/xanadu
