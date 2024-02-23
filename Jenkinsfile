@@ -65,7 +65,7 @@ pipeline {
                     sh 'chmod 400 private-key'
                     sh 'cat private-key'
                     sh 'ansible --version'
-                    sh 'ansible -i hosts --private-key private-key -m ping all'
+                    sh 'ansible -i hosts --private-key private-key -m ping all -e "ansible_ssh_common_args=\'-o StrictHostKeyChecking=no\'"'
                 }
             }
         }
