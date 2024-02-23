@@ -38,19 +38,19 @@
         state: directory
 
     - name: Copy docker compose
-      template:
-        src: /server-docker-compose.yml
-        dest: /root/project/java/xanadu/
+      copy:
+        src: ./server-docker-compose.yml
+        dest: /root/project/java/xanadu/docker-compose.yml
 
     - name: Copy .env file
-      template:
-        src: /.env
-        dest: /root/project/java/xanadu/
+      copy:
+        src: ./.env
+        dest: /root/project/java/xanadu/.env
 
     - name: Run docker compose
       docker_compose:
         project_src: /root/project/java/xanadu
-        files: /server-docker-compose.yml
+        files: docker-compose.yml
         pull: true
     - name: Prune everything
       docker_prune:
