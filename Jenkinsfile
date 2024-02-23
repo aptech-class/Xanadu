@@ -50,19 +50,20 @@ pipeline {
             agent {
                 docker {
                     image 'duncannguyen/ansible'
-                    args '-v /var/jenkins_home/workspace/Xanadu_/.env:project/java/xanadu/.env'
-                    args '-v /var/jenkins_home/workspace/Xanadu_/server-docker-compose.yml:project/java/xanadu/server-docker-compose.yml'
+                    args "-v $WORKSPACE/.env:/var/xanadu/.env"
+                    args "-v $WORKSPACE/server-docker-compose.yml:/var/xanadu/server-docker-compose.yml"
                 }
             }
             steps {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')])
 
-                sh 'cat project/java/xanadu/.env'
-                sh 'cat project/java/xanadu/server-docker-compose.yml'
+                sh 'cat /var/xanadu/.env'
+                sh 'cat /var/xanadu/server-docker-compose.yml'
                 sh 'cp ${privateKey} private-key'
                 sh 'ansible --version'
                 sh 'ansible -i hosts --private-key private-key -m ping all'
             }
+            
         }
     }
 }
