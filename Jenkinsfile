@@ -50,6 +50,7 @@ pipeline {
             agent {
                 docker {
                     image 'duncannguyen/ansible'
+                    args '-u root'
                 }
             }
             steps {
