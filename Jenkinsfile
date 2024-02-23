@@ -61,6 +61,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
                     sh 'ls -la'
+                    sh 'chmod +w private-key'
                     sh 'cp ${privateKey} private-key'
                     sh 'chmod 400 private-key'
                     sh 'cat private-key'
