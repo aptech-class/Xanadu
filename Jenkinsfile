@@ -45,7 +45,12 @@ pipeline {
         //         sh 'docker cp .env ansible:/project/java/xanadu'
         //     }
         // }
-
+        stage('Pull image'){
+            steps{
+                sh 'docker pull duncannguyen/ansible'
+            }
+        }
+        
         stage('Deploy to server') {
             agent {
                 docker {
