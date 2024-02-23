@@ -16,7 +16,9 @@ pipeline {
         stage('Set env') {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
+                    sh 'chmod +w .env'
                     sh "cp ${envFile} .env"
+                    sh 'chmod 400 .env'
                     sh 'cat .env'
                 }
             }
