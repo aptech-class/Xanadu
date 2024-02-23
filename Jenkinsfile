@@ -60,6 +60,7 @@ pipeline {
                     sh 'ls -la'
                     sh "cp ${privateKey} private-key"
                     sh 'chmod 400 private-key'
+                    sh 'chmod +w private-key'
                     sh 'cat private-key'
                     sh 'ansible --version'
                     sh '''
@@ -70,7 +71,6 @@ pipeline {
                     sh 'chmod +r .env'
                     sh 'chmod +r server-docker-compose.yml'
                     sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
-                    sh 'chmod +w private-key'
                 }
             }
         }
