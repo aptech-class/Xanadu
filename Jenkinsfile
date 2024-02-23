@@ -16,9 +16,9 @@ pipeline {
         stage('Set env') {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
-                    sh 'chmod +w .env'
                     sh "cp ${envFile} .env"
                     sh 'chmod 400 .env'
+                    sh 'chmod +w .env'
                     sh 'cat .env'
                 }
             }
@@ -58,7 +58,6 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
                     sh 'ls -la'
-                    sh 'chmod +w private-key'
                     sh "cp ${privateKey} private-key"
                     sh 'chmod 400 private-key'
                     sh 'cat private-key'
@@ -70,6 +69,7 @@ pipeline {
                     sh 'chmod +r .env'
                     sh 'chmod +r server-docker-compose.yml'
                     sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
+                    sh 'chmod +w private-key'
                 }
             }
         }
