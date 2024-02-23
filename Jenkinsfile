@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage('set env') {
+        stage('Set env') {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'envFile')]) {
                     sh "cp ${envFile} .env"
