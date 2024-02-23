@@ -62,7 +62,7 @@ pipeline {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
                     sh 'ls -la'
                     sh 'cp ${privateKey} private-key'
-                    sh 'chmod +w private-key'
+                    sh 'chmod 400 private-key'
                     sh 'cat private-key'
                     sh 'ansible --version'
                     sh 'ansible -i hosts --private-key private-key -m ping all'
