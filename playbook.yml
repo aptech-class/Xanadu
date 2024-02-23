@@ -1,9 +1,54 @@
 - name: build
   hosts: all
   become: true
-  become_user: root
   tasks:
-    - name: run docker compose
+    - name: Install required system packages
+      apt:
+        pkg:
+          - python3-pip
+          - curl
+        state: latest
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+    - name: Install docker sdk
+      pip:
+        name:
+          - docker==6.1.3
+          - docker-compose
+          - PyYAML
+        state: latest
+    - name: Create dir project
+      file:
+        path: /root/project/java/xanadu
+        state: directory
+    - name: Copy docker compose
+      copy:
+        src: /server-docker-compose.yml
+        dest: /root/project/java/xanadu/docker-compose.yml
+    - name: Copy .env file
+      copy:
+        src: /.env
+        dest: /root/project/java/xanadu/.env
+
+    - name: Run docker compose
       docker_compose:
-        files: server-docker-compose.yml
+        project_src: /root/project/java/xanadu
+        files: docker-compose.yml
         pull: true
+    - name: Prune everything
+      docker_prune:
+        container: true
+        images: true

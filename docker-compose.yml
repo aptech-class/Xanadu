@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   db:
     container_name: xanadu-mysql
     build:
@@ -36,10 +35,7 @@ services:
     networks:
       - xanadu-networks
 
-      
 networks:
   xanadu-networks:
 volumes:
   xanadu-mysql:
-
-
