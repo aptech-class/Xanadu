@@ -53,14 +53,14 @@ pipeline {
                 }
             }
             steps {
-                withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')])
-                sh 'ls -la'
-                sh 'ls -la ${WORKSPACE}'
-                sh 'cp ${privateKey} private-key'
-                sh 'ansible --version'
-                sh 'ansible -i hosts --private-key private-key -m ping all'
+                withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
+                    sh 'ls -la'
+                    sh 'ls -la ${WORKSPACE}'
+                    sh 'cp ${privateKey} private-key'
+                    sh 'ansible --version'
+                    sh 'ansible -i hosts --private-key private-key -m ping all'
+                }
             }
-            
         }
     }
 }
