@@ -54,5 +54,5 @@
         pull: true
     - name: Prune everything
       docker_prune:
-        container: true
+        containers: true
         images: true
