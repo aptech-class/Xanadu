@@ -55,7 +55,6 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
                     sh 'ls -la'
-                    sh 'whoami'
                     sh 'cp ${privateKey} private-key'
                     sh 'chmod +w private-key'
                     sh 'ansible --version'
