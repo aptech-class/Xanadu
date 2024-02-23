@@ -50,7 +50,7 @@ pipeline {
                 sh 'docker pull duncannguyen/ansible'
             }
         }
-        
+
         stage('Deploy to server') {
             agent {
                 docker {
@@ -63,6 +63,7 @@ pipeline {
                     sh 'ls -la'
                     sh 'cp ${privateKey} private-key'
                     sh 'chmod +w private-key'
+                    sh 'cat private-key'
                     sh 'ansible --version'
                     sh 'ansible -i hosts --private-key private-key -m ping all'
                 }
