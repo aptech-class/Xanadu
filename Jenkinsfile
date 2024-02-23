@@ -50,8 +50,8 @@ pipeline {
             agent {
                 docker {
                     image 'duncannguyen/ansible'
-                    args '-v /var/jenkins_home/workspace/Xanadu_master/.env:project/java/xanadu/.env'
-                    args '-v /var/jenkins_home/workspace/Xanadu_master/server-docker-compose.yml:project/java/xanadu/server-docker-compose.yml'
+                    args '-v /var/jenkins_home/workspace/Xanadu_/.env:project/java/xanadu/.env'
+                    args '-v /var/jenkins_home/workspace/Xanadu_/server-docker-compose.yml:project/java/xanadu/server-docker-compose.yml'
                 }
             }
             steps {
