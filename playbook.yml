@@ -38,13 +38,11 @@
       copy:
         src: /server-docker-compose.yml
         dest: /root/project/java/xanadu/docker-compose.yml
-        remote_src: true
 
     - name: Copy .env file
       copy:
         src: /.env
         dest: /root/project/java/xanadu/.env
-        remote_src: true
         
     - name: Run docker compose
       docker_compose:

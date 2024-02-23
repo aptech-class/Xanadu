@@ -24,22 +24,22 @@ pipeline {
             }
         }
 
-        stage('Build app') {
-            steps {
-                sh 'mvn --version'
-                sh 'mvn clean package -DskipTests=true'
-            }
-        }
+        // stage('Build app') {
+        //     steps {
+        //         sh 'mvn --version'
+        //         sh 'mvn clean package -DskipTests=true'
+        //     }
+        // }
 
-        stage('Packageking/push images, deploy to dev') {
-            steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url:'https://index.docker.io/v1/') {
-                    sh 'docker compose up -d --build'
-                    sh 'docker compose push'
-                    sh 'docker system prune --force'
-                }
-            }
-        }
+        // stage('Packageking/push images, deploy to dev') {
+        //     steps {
+        //         withDockerRegistry(credentialsId: 'dockerhub', url:'https://index.docker.io/v1/') {
+        //             sh 'docker compose up -d --build'
+        //             sh 'docker compose push'
+        //             sh 'docker system prune --force'
+        //         }
+        //     }
+        // }
 
         // set up to server
         stage('Pull image') {
