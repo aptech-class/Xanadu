@@ -70,7 +70,7 @@ pipeline {
                             ansible -i hosts --private-key private-key -m ping all \
                             -e "ansible_ssh_common_args=\'-o StrictHostKeyChecking=no\'"
                         '''
-                    sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
+                    sh 'ansible-playbook -i all --private-key private-key playbook.yml'
                 }
             }
         }
