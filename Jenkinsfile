@@ -50,8 +50,7 @@ pipeline {
             agent {
                 docker {
                     image 'duncannguyen/ansible'
-                    args "-v $WORKSPACE/.env:/var/xanadu/.env"
-                    args "-v $WORKSPACE/server-docker-compose.yml:/var/xanadu/server-docker-compose.yml"
+                    args "-v $WORKSPACE/.env:/var/xanadu/.env -v $WORKSPACE/server-docker-compose.yml:/var/xanadu/server-docker-compose.yml"
                 }
             }
             steps {
