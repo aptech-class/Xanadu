@@ -1,0 +1,9 @@
+- name: build
+  hosts: hosts
+  become: true
+  become_user: root
+  tasks:
+    - name: run docker compose
+      docker_compose:
+        files: server-docker-compose.yml
+        pull: true

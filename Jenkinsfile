@@ -45,8 +45,8 @@ pipeline {
         //         sh 'docker cp .env ansible:/project/java/xanadu'
         //     }
         // }
-        stage('Pull image'){
-            steps{
+        stage('Pull image') {
+            steps {
                 sh 'docker pull duncannguyen/ansible'
             }
         }
@@ -62,11 +62,15 @@ pipeline {
                 withCredentials([file(credentialsId:'bizfly-private-key', variable:'privateKey')]) {
                     sh 'ls -la'
                     sh 'chmod +w private-key'
-                    sh 'cp ${privateKey} private-key'
+                    sh "cp ${privateKey} private-key"
                     sh 'chmod 400 private-key'
                     sh 'cat private-key'
                     sh 'ansible --version'
-                    sh 'ansible -i hosts --private-key private-key -m ping all -e "ansible_ssh_common_args=\'-o StrictHostKeyChecking=no\'"'
+                    sh '''
+                            ansible -i hosts --private-key private-key -m ping all \
+                            -e "ansible_ssh_common_args=\'-o StrictHostKeyChecking=no\'"
+                        '''
+                    sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
                 }
             }
         }
