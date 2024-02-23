@@ -1,0 +1,39 @@
+version: "3"
+services:
+
+  db:
+    container_name: xanadu-mysql
+    image: duncannguyen/xanadu-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD} ## get from .env file
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3306"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - xanadu-networks
+
+  app:
+    container_name: xanadu-app
+    depends_on:
+      db:
+        condition: service_healthy
+    image: duncannguyen/xanadu-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - xanadu-mysql:/var/lib/mysql
+    networks:
+      - xanadu-networks
+
+      
+networks:
+  xanadu-networks:
+volumes:
+  xanadu-mysql:
+
+
