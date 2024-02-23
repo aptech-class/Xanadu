@@ -71,7 +71,7 @@ pipeline {
                             -e "ansible_ssh_common_args=\'-o StrictHostKeyChecking=no\'"
                         '''
                     sh "cp ${envFile} .env"
-                    sh 'chmod +r .env'
+                    sh 'chmod +rw .env'
                     sh 'chmod +r server-docker-compose.yml'
                     sh 'ansible-playbook -i hosts --private-key private-key playbook.yml'
                 }

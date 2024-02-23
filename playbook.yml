@@ -1,6 +1,8 @@
 - name: build
   hosts: all
   become: true
+  become_user: root
+  become_method: sudo
   tasks:
     - name: Install required system packages
       apt:
