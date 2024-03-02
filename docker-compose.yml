@@ -16,6 +16,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    volumes:
+      - xanadu-mysql:/var/lib/mysql
     networks:
       - xanadu-networks
 
@@ -30,8 +32,6 @@ services:
     image: duncannguyen/xanadu-app
     ports:
       - "8080:8080"
-    volumes:
-      - xanadu-mysql:/var/lib/mysql
     networks:
       - xanadu-networks
 
