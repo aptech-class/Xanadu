@@ -8,7 +8,7 @@
       apt:
         pkg:
           - python3-pip
-          - curl
+          - curl  
         state: latest
     - name: Add Docker GPG apt Key
       apt_key:

@@ -57,7 +57,7 @@ pipeline {
             }
             steps {
                 withCredentials([
-                    file(credentialsId:'bizfly-private-key', variable:'privateKey'),
+                    file(credentialsId:'duncan-hcm-01', variable:'privateKey'),
                     file(credentialsId:'env-file', variable:'envFile'),
                 ]) {
                     sh 'ls -la'
